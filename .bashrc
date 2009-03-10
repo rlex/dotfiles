@@ -2,7 +2,7 @@
 if [[ $- != *i* ]] ; then
          return
 fi
-eval `$HOME/.toast/armed/bin/toast env`
+# eval `$HOME/.toast/armed/bin/toast env`
 # The following stuff only gets done the first time the login shell is started
 if [  ! $ENV_DONE ]; then
    export ENV_DONE=TRUE
