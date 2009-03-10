@@ -42,16 +42,8 @@ alias ..='cd ..'
 alias nsmc='cd ~/src/ruby/nsm-console'
 alias serv='cat /etc/services | grep'
 alias pg='ps aux | grep'
-alias nl='sudo netstat -tunapl'
-alias dmesg='sudo dmesg'
-alias remhex='ssh -i ~/.ssh/id_rawpacket dakrone@localhost -p 6666'
-alias remblack='ssh -i ~/.ssh/id_rawpacket hinmanm@localhost -p 7777'
-alias scsetup='sudo socat -d -d TCP4-listen:6666,fork OPENSSL:hexbit:443,cert=host.pem,verify=0'
-alias scsetup2='sudo socat -d -d TCP4-listen:7777,fork OPENSSL:blackex:443,cert=host.pem,verify=0'
-alias blackexprox='ssh -i ~/.ssh/id_rawpacket -ND 9999 hinmanm@localhost -p 7777'
-alias blackprox='ssh -i ~/.ssh/id_rawpacket -ND 9999 hinmanm@black'
 alias tcpdump='tcpdump -ttttnnn'
-
+alias nano="vim"
 # history
 HISTFILE=$HOME/.zsh-history
 HISTSIZE=5000
