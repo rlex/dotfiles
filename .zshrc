@@ -21,6 +21,12 @@ export EDITOR=vim
 export VISUAL=vim
 export PAGER=more
 
+# check for toast, if yes, env it
+if [ -f $HOME/.toast/armed/bin/toast ];
+	then
+	eval `$HOME/.toast/armed/bin/toast env`
+fi
+
 # set aliases
 alias mv='nocorrect mv'       # no spelling correction on mv
 alias cp='nocorrect cp'
@@ -201,6 +207,13 @@ function precmd() {
   title "zsh" "$USER@%m" "%55<...<%~"
 }
 
+#toast install function
+function install_toast() {
+perl -e 'socket(S,2,1,0)&&connect(S,pack("Sna4x8",2,80,gethostbyname(
+    $h="toastball.net")||die("dns")))&&syswrite(S,"GET /toast/toast "
+    ."HTTP/1.0\nHost: $h\n\n")&&open(STDIN,"<&S")&&exec($^X,qw(-x -
+    arm toast))||die($!)'
+}
 # preexec is called just before any command line is executed
 function preexec() {
   title "$1" "$USER@%m" "%35<...<%~"
