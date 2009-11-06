@@ -208,6 +208,7 @@ function preexec() {
 
 # colorful listings
 zmodload -i zsh/complist
+zstyle ':completion:*' menu select
 zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
 zstyle ':completion:*' hosts $ssh_hosts
 zstyle ':completion:*:my-accounts' users-hosts $my_accounts
