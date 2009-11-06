@@ -6,3 +6,4 @@ cp -r .screenrc ~
 cp -r .mc ~
 cp -r .nanorc ~
 cp -r .htoprc ~
+cp -r .zshrc ~
