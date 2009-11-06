@@ -1,7 +1,18 @@
+[merge]
+	summary = true
+	tool = vimdiff
+[diff]
+	renames = copy
+[i18n]
+ logoutputencoding = UTF-8
+[format]
+	numbered = true
+[status]
+	submodulesummary = -1 
 [color]
-	branch = auto
-	diff = auto
-	interactive = auto
-	status = auto
+	branch = true
+	diff = true
+	interactive = true
+	status = true
 [core]
 	editor = vim
