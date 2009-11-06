@@ -16,10 +16,8 @@ export MANPATH=$MANPATH:/usr/local/man:/opt/local/share/man
 
 # abbreviation
 export EDITOR=vim
+export VISUAL=vim
 export PAGER=more
-
-# CVS for HeX
-#export CVSROOT=:ext:dakrone@cvsup.rawpacket.org:/home/project/rawpacket/cvs
 
 # set aliases
 alias mv='nocorrect mv'       # no spelling correction on mv
@@ -39,7 +37,6 @@ alias less='less -FRX'
 alias grep='egrep -i --color=auto'
 alias cd..='cd ..'
 alias ..='cd ..'
-alias nsmc='cd ~/src/ruby/nsm-console'
 alias serv='cat /etc/services | grep'
 alias pg='ps aux | grep'
 alias tcpdump='tcpdump -ttttnnn'
@@ -80,74 +77,20 @@ function svn_up_and_log {
 function tag {
   alias $1='cd $PWD'
 }
-function bestcompress {
-Z="compress"
-gz="gzip" 
-bz="bzip2"
-Zout="/tmp/bestcompress.$$.Z"
-gzout="/tmp/bestcompress.$$.gz"
-bzout="/tmp/bestcompress.$$.bz"
-skipcompressed=1
 
-if [ "$1" = "-a" ] ; then
-  skipcompressed=0  ; shift
-fi
-
-if [ $# -eq 0 ]; then
-  echo "Usage: $0 [-a] file or files to optimally compress" >&2
-fi
-
-trap "/bin/rm -f $Zout $gzout $bzout"
-
-for name 
-do 
-  if [ ! -f "$name" ] ; then 
-    echo "$0: file $name not found. Skipped." >&2
-    continue
-  fi
-
-  if [ "$(echo $name | egrep '(\.Z$|\.gz$|\.bz2$)')" != "" ] ; then
-    if [ $skipcompressed -eq 1 ] ; then
-      echo "Skipped file ${name}: it's already compressed." 
-      continue
-    else
-      echo "Warning: Trying to double-compress $name" 
-    fi
-  fi
-
-  $Z  < "$name" > $Zout  &
-  $gz < "$name" > $gzout &
-  $bz < "$name" > $bzout &
-  
-  wait	# run compressions in parallel for speed. Wait until all are done
-
-  smallest="$(ls -l "$name" $Zout $gzout $bzout | \
-     awk '{print $5"="NR}' | sort -n | cut -d= -f2 | head -1)"
-
-  case "$smallest" in
-     1 ) echo "No space savings by compressing $name. Left as-is."
-	 ;;
-     2 ) echo Best compression is with compress. File renamed ${name}.Z
-         mv $Zout "${name}.Z" ; rm -f "$name"
-	 ;;
-     3 ) echo Best compression is with gzip. File renamed ${name}.gz
-	 mv $gzout "${name}.gz" ; rm -f "$name"
-	 ;;
-     4 ) echo Best compression is with bzip2. File renamed ${name}.bz2
-	 mv $bzout "${name}.bz2" ; rm -f "$name"
-  esac
-
-done
 }
 function dirdiff () {
         diff -yB -W 80 <(ls -1 --color=never $1) <(ls -1 --color=never $2)
+
 }
 function zomb_ps () {
         ps hr -Nos | awk '$1=="Z" {print $1}'
+
 }
 function fixtty () {
 	stty sane
 	reset
+
 }
 function ff () {
    if [[ -z $1 ]]; then
@@ -156,6 +99,7 @@ function ff () {
    fi
 
    find . -type f \( -name "*$1*" -o -name ".$1*" -o -name ".*.*$1*" -o -name "*$1*.*" \) -print
+
 }
 function fd () {
    if [[ -z $1 ]]; then
@@ -165,10 +109,12 @@ function fd () {
 
    find . -type d \( -name "*$1*" -o -name ".$1*" -o -name ".*.*$1*" -o -name "*$1*.*" \) -print
 }
+
 function wf () {
    # Use sed to replace field divider ":" with "  |  " so the output is easier to read
    find . -type f \( -name "*" -o -name ".*" \) -a -exec fgrep -n "$1" {} /dev/null \; | sed -e 's/:/  |  /g'
 }
+
 # ps grepper
 psgrep() {
         if [ ! -z $1 ] ; then
@@ -179,6 +125,7 @@ psgrep() {
         fi
 }
 # backuper
+
 bu ()
 {
     if [ "`dirname $1`" == "." ]; then
@@ -189,6 +136,7 @@ bu ()
         cp $1 ~/.backup/$1-`date +%Y%m%d%H%M`.backup;
     fi
 } 
+
 # extractor
 ee () {
     if [ -f $1 ] ; then
@@ -210,6 +158,7 @@ ee () {
         echo "'$1' is not a valid file"
     fi
 }
+
 # startup screen
 clear
 echo -e "I am: "`whoami` on `hostname` - `hostname -i`;
@@ -226,6 +175,7 @@ else
     export PS1="%{$fg[blue]%}[%{$fg[green]%}%n%{$fg[cyan]%}@%{$fg[green]%}%m%{$fg[blue]%}:%{$fg[magenta]%}%~%{$fg[blue]%}]%{$reset_color%}%# "
 fi
 export RPRMOPT="%{$reset_color%}"
+
 
 # format titles for screen and rxvt
 function title() {
@@ -253,11 +203,6 @@ function precmd() {
 # preexec is called just before any command line is executed
 function preexec() {
   title "$1" "$USER@%m" "%35<...<%~"
-}
-
-## For the "ZoomGo" ruby file
-function zg () {
-  eval cd `zg.rb $1`
 }
 
 # colorful listings
