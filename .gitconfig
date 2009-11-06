@@ -4,7 +4,7 @@
 [diff]
 	renames = copy
 [i18n]
- logoutputencoding = UTF-8
+	logoutputencoding = UTF-8
 [format]
 	numbered = true
 [status]
@@ -16,3 +16,6 @@
 	status = true
 [core]
 	editor = vim
+[user]
+	name = Lex Rivera
+	email = x-demon@x-demon.org
