@@ -8,8 +8,10 @@ promptinit
 
 # path
 export PATH=~/bin:$PATH:/usr/local/sbin:/sbin:/usr/local/bin:/usr/local/sbin:/usr/libexec:/opt/local/bin:/opt/local/sbin:/usr/local/mysql/bin
-# Path for ruby gems
-export PATH=$PATH:/var/lib/gems/1.8/bin
+# path for ruby1.8 in archlinux
+export PATH=/opt/ruby1.8/bin:$PATH
+# Path for ruby gems in ~
+export PATH=$PATH:~/.gem/ruby/1.8/bin
 
 # manpath
 export MANPATH=$MANPATH:/usr/local/man:/opt/local/share/man
