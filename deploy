@@ -1,0 +1,6 @@
+#!/bin/bash
+for n in screenrc vimrc vim zshrc mc bashrc bash_profile gemrc htoprc gitconfig
+do
+        ln -sfv -T ~/.rc/.$(basename $n .$who) ~/.$n
+done
+cd - >&/dev/null
