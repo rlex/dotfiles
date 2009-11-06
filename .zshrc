@@ -78,7 +78,6 @@ function tag {
   alias $1='cd $PWD'
 }
 
-}
 function dirdiff () {
         diff -yB -W 80 <(ls -1 --color=never $1) <(ls -1 --color=never $2)
 
