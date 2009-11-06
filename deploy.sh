@@ -7,3 +7,4 @@ cp -r .mc ~
 cp -r .nanorc ~
 cp -r .htoprc ~
 cp -r .zshrc ~
+cp -r .gitconfig ~
