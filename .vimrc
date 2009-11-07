@@ -306,9 +306,9 @@ let g:ctags_regenerate=1
 set background=dark
 syntax on " syntax highlighting
 "colorscheme ir_black
-colorscheme vividchalk 
+"colorscheme vividchalk 
 "colorscheme vibrantink
-"colorscheme railscasts 
+colorscheme railscasts2 
 
 "colorscheme wombat256
 set hls
