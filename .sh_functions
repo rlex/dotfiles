@@ -1,0 +1,113 @@
+# functions
+mdc() { mkdir -p "$1" && cd "$1" }
+setenv() { export $1=$2 }  # csh compatibility
+sdate() { date +%Y.%m.%d }
+pc() { awk "{print \$$1}" }
+rot13 () { tr "[a-m][n-z][A-M][N-Z]" "[n-z][a-m][N-Z][A-M]" }
+function maxhead() { head -n `echo $LINES - 5|bc` ; }
+function maxtail() { tail -n `echo $LINES - 5|bc` ; }
+
+# get current revision of a repo
+function svn_revision { 
+  svn info $@ | awk '/^Revision:/ {print $2}'
+}
+# print the log or 'no changes' after an update
+function svn_up_and_log {
+  local old_rev=$(svn_revision $@)
+  local first_up=$((${old_rev} + 1))
+  svn up -q $@
+  if [ $(svn_revision $@) -gt ${old_rev} ]; then
+    svn log -v -rHEAD:${first_up} $@
+  else
+    echo "No changes."
+  fi
+}
+# tag a directory in a command to come to it later
+function tag {
+  alias $1='cd $PWD'
+}
+
+function dirdiff () {
+        diff -yB -W 80 <(ls -1 --color=never $1) <(ls -1 --color=never $2)
+
+}
+function zomb_ps () {
+        ps hr -Nos | awk '$1=="Z" {print $1}'
+
+}
+function fixtty () {
+	stty sane
+	reset
+}
+function have() {
+	type "$1" &> /dev/null
+}
+
+function ff () {
+   if [[ -z $1 ]]; then
+      echo "Find files recursively starting at \`pwd\` - usage: ff pattern"
+      return
+   fi
+
+   find . -type f \( -name "*$1*" -o -name ".$1*" -o -name ".*.*$1*" -o -name "*$1*.*" \) -print
+
+}
+function fd () {
+   if [[ -z $1 ]]; then
+      echo "Find directories recursively starting at \`pwd\` - usage: fd pattern"
+      return
+   fi
+
+   find . -type d \( -name "*$1*" -o -name ".$1*" -o -name ".*.*$1*" -o -name "*$1*.*" \) -print
+}
+
+function wf () {
+   # Use sed to replace field divider ":" with "  |  " so the output is easier to read
+   find . -type f \( -name "*" -o -name ".*" \) -a -exec fgrep -n "$1" {} /dev/null \; | sed -e 's/:/  |  /g'
+}
+
+
+bu ()
+{
+    if [ "`dirname $1`" == "." ]; then
+        mkdir -p ~/.backup/`pwd`;
+        cp $1 ~/.backup/`pwd`/$1-`date +%Y%m%d%H%M`.backup;
+    else
+        mkdir -p ~/.backup/`dirname $1`;
+        cp $1 ~/.backup/$1-`date +%Y%m%d%H%M`.backup;
+    fi
+} 
+
+# extractor
+ee () {
+    if [ -f $1 ] ; then
+        case $1 in
+            *.tar.bz2)   tar xjf $1        ;;
+            *.tar.gz)    tar xzf $1     ;;
+            *.bz2)       bunzip2 $1       ;;
+            *.rar)       rar x $1     ;;
+            *.gz)        gunzip $1     ;;
+            *.tar)       tar xf $1        ;;
+            *.tbz2)      tar xjf $1      ;;
+            *.tgz)       tar xzf $1       ;;
+            *.zip)       unzip $1     ;;
+            *.Z)         uncompress $1  ;;
+            *.7z)        7z x $1    ;;
+            *)           echo "'$1' cannot be extracted via ee()" ;;
+        esac
+    else
+        echo "'$1' is not a valid file"
+    fi
+}
+
+#toast install function
+function install_toast() {
+perl -e 'socket(S,2,1,0)&&connect(S,pack("Sna4x8",2,80,gethostbyname(
+    $h="toastball.net")||die("dns")))&&syswrite(S,"GET /toast/toast "
+    ."HTTP/1.0\nHost: $h\n\n")&&open(STDIN,"<&S")&&exec($^X,qw(-x -
+    arm toast))||die($!)'
+}
+
+function history-all { 
+history -E 1 
+}
