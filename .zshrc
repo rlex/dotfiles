@@ -97,8 +97,11 @@ function zomb_ps () {
 function fixtty () {
 	stty sane
 	reset
-
 }
+function have() {
+	type "$1" &> /dev/null
+}
+
 function ff () {
    if [[ -z $1 ]]; then
       echo "Find files recursively starting at \`pwd\` - usage: ff pattern"
@@ -122,16 +125,6 @@ function wf () {
    find . -type f \( -name "*" -o -name ".*" \) -a -exec fgrep -n "$1" {} /dev/null \; | sed -e 's/:/  |  /g'
 }
 
-# ps grepper
-psgrep() {
-        if [ ! -z $1 ] ; then
-                echo "Grepping for processes matching $1..."
-                ps aux | grep $1 | grep -v grep
-        else
-                echo "!! Need name to grep for"
-        fi
-}
-# backuper
 
 bu ()
 {
