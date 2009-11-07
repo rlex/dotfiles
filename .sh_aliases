@@ -1,0 +1,22 @@
+# set aliases
+alias mv='nocorrect mv'       # no spelling correction on mv
+alias cp='nocorrect cp'
+alias mkdir='nocorrect mkdir'
+alias j=jobs
+if ls -F --color=auto >&/dev/null; then
+  alias ls="ls --color=auto -F"
+else
+  alias ls="ls -F"
+fi
+alias l.='ls -d .*'
+alias ll='ls -lh'
+alias la='ls -alh'
+alias lr='ls -lR'
+alias less='less -FRX'
+alias grep='egrep -i --color=auto'
+alias cd..='cd ..'
+alias ..='cd ..'
+alias serv='cat /etc/services | grep'
+alias pg='ps aux | grep'
+alias tcpdump='tcpdump -ttttnnn'
+alias nano="vim"
