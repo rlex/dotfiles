@@ -1,4 +1,10 @@
 ## Options ##
+# 1 for true, any other for false
+export ext_functions="1"
+export ext_alias="1"
+export ext_toast="1"
+
+## ZSH Options ##
 unsetopt BG_NICE		      # do NOT nice bg commands
 setopt EXTENDED_HISTORY		# puts timestamps in the history
 setopt NO_HUP                 # don't send kill to background jobs when exiting
@@ -35,21 +41,27 @@ export VISUAL=vim
 export PAGER=more
 
 # check for toast, if yes, env it
-if [ -f $HOME/.toast/armed/bin/toast ];
-	then
+if [ "$ext_toast" = "1" ]; then
+	if [ -f $HOME/.toast/armed/bin/toast ];
+		then
 	eval `$HOME/.toast/armed/bin/toast env`
+	fi
 fi
 
 # check for sh functions file
-if [ -f $HOME/.rc/.sh_functions ];
-	then
+if [ "$ext_functions" = "1" ]; then
+	if [ -f $HOME/.rc/.sh_functions ];
+		then
 	source $HOME/.rc/.sh_functions
+	fi
 fi
 
-# check for sh functions file
-if [ -f $HOME/.rc/.sh_aliases ];
-	then
+# check for sh aliases file
+if [ "$ext_toast" = "1" ]; then
+	if [ -f $HOME/.rc/.sh_aliases ];
+		then
 	source $HOME/.rc/.sh_aliases
+	fi
 fi
 
 # prompt (if running screen, show window #)
