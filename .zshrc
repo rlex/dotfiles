@@ -10,10 +10,11 @@ setopt EXTENDED_HISTORY		# puts timestamps in the history
 setopt NO_HUP             # don't send kill to background jobs when exiting
 
 ## History options ##
-HISTFILE=$HOME/.zsh-history		# path to history file
-HISTIGNORE=l[asl]:l:pwd:mc:su:df:clear:[fb]g:history # ignore some common commands
-HISTSIZE=5000
-SAVEHIST=1000
+export HISTFILE=$HOME/.zsh-history		# path to history file
+export HISTIGNORE=ls:l:pwd:mc:su:df:clear:fg:bg:history # ignore some common commands
+export HISTSIZE=5000
+export SAVEHIST=1000
+export HISTCONTROL=ignoreboth
 setopt appendhistory autocd extendedglob
 setopt share_history
 
