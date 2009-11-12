@@ -1,0 +1,35 @@
+[ui]
+username = Lex Rivera
+ssh = ssh -C
+
+[defaults]
+email = --diffstat --git
+
+[extensions]
+alias=
+convert=
+extdiff=
+graphlog=
+patchbomb=
+record=
+
+[alias]
+blame=annotate -u -n
+rec=record
+
+[diff]
+git=True
+
+[email]
+method = smtp
+from = Lex Rivera <x-demon@x-demon.org>
+
+[smtp]
+tls = True
+host = smtp.gmail.com
+username = x-demon@x-demon.org
+password = 
+
+[extdiff]
+cmd.sbsdiff  = diff
+opts.sbsdiff = -N -b --side-by-side --width=90
