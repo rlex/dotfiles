@@ -18,6 +18,10 @@ export HISTCONTROL=ignoreboth
 setopt appendhistory autocd extendedglob
 setopt share_history
 
+## External apps options ##
+export GREP_OPTIONS='--color=auto'
+export GREP_COLOR='1;32'
+
 ## autoloads ##
 autoload -U compinit
 autoload -U promptinit
@@ -109,9 +113,14 @@ function preexec() {
 zmodload -i zsh/complist
 zstyle ':completion:*' menu select
 zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
-zstyle ':completion:*' hosts $ssh_hosts
-zstyle ':completion:*:my-accounts' users-hosts $my_accounts
-zstyle ':completion:*:other-accounts' users-hosts $other_accounts
+# hosts autocomplete - broken!
+#export hosts=(`cat ~/.rc/.hosts`)
+#zstyle '*' hosts $hosts
+# ps autocomplete
+zstyle ':completion:*:processes' command 'ps xua'
+zstyle ':completion:*:processes' sort false
+zstyle ':completion:*:processes-names' command 'ps xho command'
+zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([0-9]#)*=0=01;31'
 
 ## Keybindings ##
 #bindkey -e
