@@ -14,13 +14,24 @@ export HISTFILE=$HOME/.zsh-history		# path to history file
 export HISTIGNORE=ls:l:pwd:mc:su:df:clear:fg:bg:history # ignore some common commands
 export HISTSIZE=5000
 export SAVEHIST=1000
-export HISTCONTROL=ignoreboth
-setopt appendhistory autocd extendedglob
-setopt share_history
+setopt append_history
+setopt inc_append_history
+setopt extended_history
+setopt hist_find_no_dups
+setopt hist_ignore_all_dups
+setopt hist_reduce_blanks
+setopt hist_ignore_space
+setopt hist_no_store
+setopt hist_no_functions
+setopt no_hist_beep
+setopt hist_save_no_dups
 
-## External apps options ##
+## External apps & env options ##
 export GREP_OPTIONS='--color=auto'
 export GREP_COLOR='1;32'
+export EDITOR="vim"
+export VISUAL="vim"
+export LESSCHARSET=UTF-8
 
 ## autoloads ##
 autoload -U compinit
