@@ -1,17 +1,17 @@
 ## Options ##
 # 1 for true, any other for false
-export ext_functions="1"
-export ext_alias="1"
-export ext_toast="1"
+export ext_functions="1"	# source ~/.rc/.sh_functions
+export ext_alias="1"			# source ~/.rc/.sh_aliases
+export ext_toast="1"			# add toast environment variables
 
 ## ZSH Options ##
-unsetopt BG_NICE		      # do NOT nice bg commands
+unsetopt BG_NICE		      # do not nice bg commands
 setopt EXTENDED_HISTORY		# puts timestamps in the history
-setopt NO_HUP                 # don't send kill to background jobs when exiting
+setopt NO_HUP             # don't send kill to background jobs when exiting
 
 ## History options ##
-HISTFILE=$HOME/.zsh-history
-HISTIGNORE=l[asl]:l:pwd:mc:su:df:clear:[fb]g:history
+HISTFILE=$HOME/.zsh-history		# path to history file
+HISTIGNORE=l[asl]:l:pwd:mc:su:df:clear:[fb]g:history # ignore some common commands
 HISTSIZE=5000
 SAVEHIST=1000
 setopt appendhistory autocd extendedglob
@@ -65,7 +65,7 @@ if [ "$ext_toast" = "1" ]; then
 	fi
 fi
 
-# prompt (if running screen, show window #)
+# prompt (if running GNU screen, show window number)
 if [ x$WINDOW != x ]; then
     # [5:xdemon@mainframe:~]% 
     export PS1="%{$fg[blue]%}[%{$fg[cyan]%}$WINDOW%{$fg[blue]%}:%{$fg[green]%}%n%{$fg[cyan]%}@%{$fg[green]%}%m%{$fg[blue]%}:%{$fg[magenta]%}%~%{$fg[blue]%}]%{$reset_color%}%# "
