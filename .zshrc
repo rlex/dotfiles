@@ -11,6 +11,7 @@ setopt NO_HUP                 # don't send kill to background jobs when exiting
 
 ## History options ##
 HISTFILE=$HOME/.zsh-history
+HISTIGNORE=l[asl]:l:pwd:mc:su:df:clear:[fb]g:history
 HISTSIZE=5000
 SAVEHIST=1000
 setopt appendhistory autocd extendedglob
