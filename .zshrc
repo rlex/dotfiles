@@ -32,7 +32,7 @@ export PATH=~/bin:$PATH:/usr/local/sbin:/sbin:/usr/local/bin:/usr/local/sbin:/us
 # path for ruby1.8 in archlinux
 export PATH=/opt/ruby1.8/bin:$PATH
 # Path for ruby gems in homedir
-export PATH=$PATH:~/.gem/ruby/1.8/bin
+export PATH=$PATH:~/.gem/ruby/1.8/bin:~/.gem/ruby/1.9.1/bin
 # path for mans
 export MANPATH=$MANPATH:/usr/local/man:/opt/local/share/man
 
