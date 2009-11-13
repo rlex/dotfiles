@@ -31,6 +31,9 @@ set scrolloff=7
 set novisualbell
 set t_vb= 
 
+" Backup dir
+set backupdir=~/.rc/.vim/swap/
+set directory=~/.rc/.vim/swap/
 " ¿¿¿¿¿¿¿¿¿ ¿¿¿¿
 "set mouse=a
 "set mousemodel=popup
