@@ -101,13 +101,15 @@ set backspace=indent,eol,start whichwrap+=<,>,[,]
 " ¿¿¿¿¿¿ ¿¿¿¿¿¿¿¿¿ ¿¿ ¿¿¿¿¿¿¿¿¿
 set shiftwidth=2
 set softtabstop=2
-set tabstop=2
+set tabstop=4
 set smarttab
 "set et
 "set ai
 "set cin
 set list
-set noexpandtab
+set expandtab
+retab 4
+
 " ¿¿¿¿¿¿ ¿¿¿¿¿¿ ¿¿¿¿¿¿¿¿¿
 set statusline=%<%f%h%m%r\ %b\ %{&encoding}\ 0x\ \ %l,%c%V\ %P 
 set laststatus=2
