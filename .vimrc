@@ -1,42 +1,40 @@
+" Set normal encoding
 set encoding=utf8
 set termencoding=utf-8
-" їїї ї її їїїїїїїїїїї).
+" No vi manner
 set nocompatible
 
-" їїїїїїїїїї їїїїїїїїї їїїїїїї їїї їїїїї.
-set ruler		
+" Turn ruler on
+set ruler
 
-" їїїїїїїїїї їїїїїїїїїїїїї їїїїїїї ї їїїїїїїїїї
-set showcmd		
+" Show commands
+set showcmd
 
-" їїїїїїїї їїїїїїїїї їїїїї
+" Copy with lines
 set nu
 
-" їїїїїїї її їїїїїїї
-"set foldmethod=indent
+" Folding method
+" set foldmethod=indent
 
-" їїїїї її їїїїїї їїїїїї (їїїїї їїїїїїїї їїїїїїї)
+" Incremental search
 set incsearch
 
-" їїїїїїїїї їїїїїїїїїї їїїїїїїїї їїїїїїїїї, ї їїї їїї їїїїї.
-set nohlsearch
+" No highlighting when search
+set nohls
 
-" їїїїїї їїї їїїїїїїїїїїїї їїїїїїїїїїї їїїїїї ї їїїї їїїїїї, їїїїї їїїїїїїїї ї їїїїїї їїїїїїїїїїїїїї
+" Jump with scroll
 set scrolljump=7
 
-" їїїїїї їїї їїїїїїїїїїїїї їїїїїїїїїїї їїїїїї ї їїїї їїїїїї, їїїїї їїїїїїїїїї ї їїїїїї їїїїїїїїїїїїїї
+" 7 lines near cursor
 set scrolloff=7
 
-" їїїїїїїїї їїїїїїїїїїї "їїїїїї"
+" Disable bell
 set novisualbell
 set t_vb= 
 
 " Backup dir
 set backupdir=~/.rc/.vim/swap/
 set directory=~/.rc/.vim/swap/
-" їїїїїїїїї їїїї
-"set mouse=a
-"set mousemodel=popup
 
 if !has('gui_running')
   set mouse=
@@ -44,7 +42,6 @@ endif
 
 
 
-set guioptions-=T
 set guioptions-=m 
 
 if has('gui')
@@ -65,40 +62,32 @@ else
   compiler gcc
 endif
 
-"map <Del> i<Del><Esc>l
+" map <Del> i<Del><Esc>l
 map <Del> "_x
-" їїїїїїїїї їїїїїї її їїїїїїїїї
+" Map del
 
-" її їїїїїїїїї їїїїї, їїїїї їїїїїїїїїїїїї її їїїїїї
-" їїї їїїїїїїїї їїїїїїїїїїїїї їїїїїїїїї їїїїїї ї їїїї ї їїї її їїїїїї їїї їїїїїїїїїїїїї їїїїїїїїїї їїїїїї їїї
-" їїїїї їїїїїїїїїїїїїї їїїїї їїїї
+" Enable unsaved buffer
 set hidden
 
-" їїїїїї їїїїїї ї gui їїїїїї їїї їїї її їїїїї
+" Remove toolbar
 set guioptions-=T
 
-" їїїїїїї їїїїїї їїїїїї їїїїїїї ї їїїї їїїїїї
+" Make command line one line high
 set ch=1
 
-" їїїїїїїї їїїїїїїїї їїїї, їїїїї їїїїїїїї
+" Hide mouse cursor
 set mousehide
 
-" їїїїїїїї їїїїїїїїїїї
+" Enable auto indentation
 set autoindent
 
-" їїїїїїї їїїїїїїїїї їїїїїїїїїї
+" Enable syntax highlight
 syntax on
-
-
-
-
 
 " allow to use backspace instead of "x"
 set backspace=indent,eol,start whichwrap+=<,>,[,]
 
-" їїїїїїїїїїїїїї їїїї ї їїїїїїї
-
-" їїїїїї їїїїїїїїї її їїїїїїїїї
+" Tabulation params
 set shiftwidth=2
 set softtabstop=2
 set tabstop=4
@@ -108,54 +97,50 @@ set smarttab
 "set cin
 set list
 set expandtab
-retab 4
 
-" їїїїїї їїїїїї їїїїїїїїї
+" Status line settings
 set statusline=%<%f%h%m%r\ %b\ %{&encoding}\ 0x\ \ %l,%c%V\ %P 
 set laststatus=2
 
-" їїїїїїїї "їїїїї" їїїїїїї ( їїїїїїїї, їїїїїїїїїї їїїїї {)
-set smartindent
+" Smart indentation
+" set smartindent
 
 " Fix <Enter> for comment
 set fo+=cr
 
-" їїїїї їїїїїїї
+" Session options
 set sessionoptions=curdir,buffers,tabpages
 
 "-------------------------
-" їїїїїїї їїїїїїї
+" Binds and other
 "-------------------------
 
-" їїїїїї ї їїїїїїїїїї їїїїїї їїїїїїїїїїїїї їїїїїїїї
-" nmap <Space> <PageDown>
-
-" CTRL-F їїї omni completion
+" CTRL-F omni completion
 imap <C-F> <C-X><C-O>
 
-" C-c and C-v - Copy/Paste ї "їїїїїїїїїї їїїїїїїї"
+" C-c and C-v - Copy/Paste
 vmap <C-C> "+yi
 imap <C-V> <esc>"+gPi
 
-" їїїїїїїїїї shift-insert їїїїїїїї їїї ї Xterm
+" shift-insert fix for Xterm
 map <S-Insert> <MiddleMouse>
 
-" C-y - їїїїїїїї їїїїїїї їїїїїї
+" C-y - vim dd
 nmap <C-y> dd
 imap <C-y> <esc>ddi
 
-" C-d - їїїїїїїїїїїї їїїїїїї їїїїїї
+" C-d - yyPi
 imap <C-d> <esc>yypi
 
-" їїїїї ї їїїїїї їїїїї їїї їїїїїїїї
+" Expand cword
 nmap > :%s/\<<c-r>=expand("<cword>")<cr>\>/
  
-" F2 - їїїїїїї їїїїїїїїїї
+" F2 - :w :)
 nmap <F2> :w<cr>
 vmap <F2> <esc>:w<cr>i
 imap <F2> <esc>:w<cr>i
 
-" F3 - їїїїїїїї їїїїїї
+" F3 - rake
 "nmap <F3> :copen<cr>
 "vmap <F3> <esc>:copen<cr>
 "imap <F3> <esc>:copen<cr>
@@ -163,43 +148,39 @@ nmap <F3> :!rake<cr>
 vmap <F3> <esc>:!rake<cr>
 imap <F3> <esc>:!rake<cr>
 
-
-
 "map <F4> [I:let nr = input("Which one: ")<Bar>exe "normal " . nr ."[\t"<CR>]]
 
-" F5 - їїїїїїїї їїїїїї їїїїїїї
+" F5 - BufExplorer
 nmap <F5> <Esc>:BufExplorer<cr>
 vmap <F5> <esc>:BufExplorer<cr>
 imap <F5> <esc><esc>:BufExplorer<cr>
 
-" F6 - їїїїїїїїїї їїїїї
+" F6 - bp...
 map <F6> :bp<cr>
 vmap <F6> <esc>:bp<cr>i
 imap <F6> <esc>:bp<cr>i
 
-" F7 - їїїїїїїїї їїїїї
+" F7 - wall make
 "map <F7> :bn<cr>
 "vmap <F7> <esc>:bn<cr>i
 "imap <F7> <esc>:bn<cr>i
-
-
 
 map <F7> :wall \| make<Cr>
 imap <F7> <ESC>:wall \| make<Cr>
 map <F4> :cn<Cr>zvzz:cc<Cr>
 map <S-F4> :cp<Cr>zvzz:cc<Cr>
 
-" F8 - їїїїїї їїїїїїїї
+" F8 - Marks Browser
 map <F8> :MarksBrowser<cr>
 vmap <F8> <esc>:MarksBrowser<cr>
 imap <F8> <esc>:MarksBrowser<cr>
 
-" F9 - "make" їїїїїїї
+" F9 - make
 map <F9> :make<cr>
 vmap <F9> <esc>:make<cr>i
 imap <F9> <esc>:make<cr>i
 
-" F10 - їїїїїїї їїїїї
+" F10 - rci...
 "map <F10> :bd<cr>
 "vmap <F10> <esc>:bd<cr>
 "imap <F10> <esc>:bd<cr>
@@ -207,25 +188,24 @@ map <F10> <leader>rci
 vmap <F10> <esc><leader>rci<cr>
 imap <F10> <esc><leader>rci<cr>
 
-
-" F11 - їїїїїїїї їїїї Taglist
+" F11 - Taglist
 map <F11> :TlistToggle<cr>
 vmap <F11> <esc>:TlistToggle<cr>
 imap <F11> <esc>:TlistToggle<cr>
 
-" F12 - їїїїїїїїїїїї їїїїїї
+" F12 - ExWhat?
 map <F12> :Ex<cr>
 vmap <F12> <esc>:Ex<cr>i
 imap <F12> <esc>:Ex<cr>i
 
-" < & > - їїїїїї їїїїїїї їїї їїїїїї
+" < & > maps
 vmap < <gv
 vmap > >gv
 
-" їїїїїїїїї їїїїїїїїїїї їїїїї їїїїїї
+" Map insert
 imap >Ins> <Esc>i
 
-" їїїї їїїїїї їїїїїїїїї їїїїїї (koi8-r, cp1251, cp866, utf8)
+" Encoding settings (koi8-r, cp1251, cp866, utf8)
 set wildmenu
 set wcm=<Tab> 
 menu Encoding.koi8-r :e ++enc=koi8-r<CR>
@@ -266,17 +246,17 @@ set complete+=b
 " її їїїїї 
 set complete+=t
 
-" їїїїїїїї filetype їїїїїї. їїїїїїїїї, їїїїїїїїїїї їїї їїїїїїїїїїїї їїїїїї її їїїїїїїї її їїїїїї їїїїїї
+" Filetype plugin
 filetype plugin on
 au BufRead,BufNewFile *.phps set filetype=php
 au BufRead,BufNewFile *.thtml set filetype=php
 au BufRead,BufNewFile *.erb set filetype=html
 
-" їїїїїїїїї їїї SessionMgr
+" SessionMgr Settings
 let g:SessionMgr_AutoManage = 0
 let g:SessionMgr_DefaultName = "mysession"
 
-" їїїїїїїїї їїї Tlist (їїїїїїїїї їїїїїї їїїїїїї їїїї ї їїїї їїїїїїїїї її їїїї)
+" Show only one file in Tlist
 let g:Tlist_Show_One_File = 1
 
 set completeopt-=preview
@@ -302,7 +282,6 @@ imap <C-N>t <esc>:TlistToggle<cr>i
 "vmap <C-N>x <esc>:TlistToggle<cr>i
 "imap <C-N>x <esc>:TlistToggle<cr>i
 
-
 let g:ctags_statusline=1
 let g:ctags_title=1
 let generate_tags=1
@@ -321,9 +300,6 @@ set hls
 let g:AutoClosePairs = {'(': ')', '{': '}', '[': ']', '"': '"', "'": "'" }
 
 autocmd BufNewFile,BufRead *.rb source ~/.vim/scripts/rubysnippets.vim
-
-
-
 
 "ie both cscope and ctag for 'ctrl-]', ':ta', and 'vim -t'
 set cscopetag
@@ -351,13 +327,8 @@ autocmd FileType php set omnifunc=phpcomplete#CompletePHP
 autocmd FileType c set omnifunc=ccomplete#Complete
 "autocmd FileType rb set omnifunc=rubycomplete#Complete
 
-
-" set
-
-"
+" set encodings
 set fileencodings=utf-8,cp1251
-
-
 
 autocmd FileType html :set omnifunc=htmlcomplete#CompleteTags
 autocmd FileType python set omnifunc=pythoncomplete#Complete
@@ -374,7 +345,6 @@ autocmd FileType ruby,eruby let g:rubycomplete_classes_in_global = 1
 nmap <leader>rci :%!ruby-code-indenter<cr>
 
 autocmd FileType rb,rake,ruby set noexpandtab
-
 
 " убираем замену таба на две точки в haml-файлах
 " autocmd FileType haml set listchars=tab:\ \ 
@@ -409,8 +379,6 @@ autocmd! bufwritepre * call BackupDir()
 "au BufRead,BufNewFile *.haml         set listchars=tab:\ \ 
 au BufEnter *        if &ft == 'haml' |  set listchars=tab:\ \  | else | set listchars=tab:··| endif
 
-
-
 nmap <PageUp> <C-U><C-U>
 imap <PageUp> <C-O><C-U><C-O><C-U>
 nmap <PageDown> <C-D><C-D>
@@ -433,8 +401,6 @@ if has("multi_lang")
 	endif
 endif
 
-
-
 if has('gui_running')
 	function TestForX()
 		return 1
@@ -456,18 +422,6 @@ else
 		return 0
 	endfunction
 endif
-
-
-
-
-
-
-
-
-
-
-
-
 
 if has("gui_running")
 
@@ -546,7 +500,6 @@ endif	" has("gui_running") ... else ...
 if !has('unix')
   set keywordprg=:help
 endif
-
 
 set ignorecase smartcase
 
