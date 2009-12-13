@@ -1,6 +1,7 @@
 " Set normal encoding
 set encoding=utf8
 set termencoding=utf-8
+
 " No vi manner
 set nocompatible
 
@@ -12,6 +13,10 @@ set showcmd
 
 " Copy with lines
 set nu
+
+" Make the window title reflect the file being edited
+set title
+set titlestring=VIM:\ %F
 
 " Folding method
 " set foldmethod=indent
