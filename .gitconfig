@@ -16,6 +16,33 @@
 	status = true
 [core]
 	editor = vim
+[alias]
+	s = status
+	b = branch
+	ba = branch -a -v -v
+	bs = !git-branch-status
+	bsi = !git-branch-status -i
+	ci = commit
+	co = checkout
+
+	d = diff -C
+	ds = diff -C --stat
+	dsp = diff -C --stat -p
+	dw = diff -C --color-words
+
+	l = log -C --decorate
+	ls = log -C --stat --decorate
+	lsp = log -C --stat -p --decorate
+	lg = log --graph '--pretty=tformat:%Cblue%h%Creset %Cgreen%ar%Creset %Cblue%d%Creset %s'
+	lga = log --graph '--pretty=tformat:%Cblue%h%Creset %Cgreen%ar%Creset %Cblue%d%Creset %s' --all
+	l19 = log --graph '--pretty=tformat:%Cblue%h%Creset %Cgreen%ar%Creset %Cblue%d%Creset %s' --all -19 # для сложных ветвлений
+	lsd = log --graph '--pretty=tformat:%Cblue%h%Creset %Cgreen%ar%Creset %Cblue%d%Creset %s' --all --simplify-by-decoration
+	ru = remote update
+	sb = show-branch --sha1-name
+	ls-del = ls-files -d
+	ls-mod = ls-files -m # включая удалённые файлы
+	ls-new = ls-files --exclude-standard -o
+	ls-ign = ls-files --exclude-standard -o -i
 [user]
 	name = Lex Rivera
 	email = x-demon@x-demon.org
