@@ -1,5 +1,5 @@
 #!/bin/bash
-dotfiles=( screenrc vimrc vim zshrc mc bashrc bash_profile gemrc htoprc gitconfig hgrc biewrc )
+dotfiles=( screenrc vimrc vim zshrc mc bashrc bash_profile gemrc htoprc gitconfig hgrc biewrc dircolors)
 for file in ${dotfiles[@]}
 do
         ln -sfv ~/.rc/.$(basename $file) ~/.$file
