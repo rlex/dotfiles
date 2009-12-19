@@ -1,6 +1,7 @@
 #!/bin/bash
-for n in screenrc vimrc vim zshrc mc bashrc bash_profile gemrc htoprc gitconfig hgrc biewrc
+dotfiles=( screenrc vimrc vim zshrc mc bashrc bash_profile gemrc htoprc gitconfig hgrc biewrc )
+for file in ${dotfiles[@]}
 do
-        ln -sfv ~/.rc/.$(basename $n .$who) ~/.$n
+        ln -sfv ~/.rc/.$(basename $file) ~/.$file
 done
 cd - >&/dev/null
