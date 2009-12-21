@@ -43,7 +43,7 @@ function have() {
 	type "$1" &> /dev/null
 }
 
-function ff () {
+function findfiles () {
    if [[ -z $1 ]]; then
       echo "Find files recursively starting at \`pwd\` - usage: ff pattern"
       return
@@ -52,7 +52,7 @@ function ff () {
    find . -type f \( -name "*$1*" -o -name ".$1*" -o -name ".*.*$1*" -o -name "*$1*.*" \) -print
 
 }
-function fd () {
+function finddirs () {
    if [[ -z $1 ]]; then
       echo "Find directories recursively starting at \`pwd\` - usage: fd pattern"
       return
@@ -61,7 +61,7 @@ function fd () {
    find . -type d \( -name "*$1*" -o -name ".$1*" -o -name ".*.*$1*" -o -name "*$1*.*" \) -print
 }
 
-function wf () {
+function findinfiles () {
    # Use sed to replace field divider ":" with "  |  " so the output is easier to read
    find . -type f \( -name "*" -o -name ".*" \) -a -exec fgrep -n "$1" {} /dev/null \; | sed -e 's/:/  |  /g'
 }
