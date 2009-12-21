@@ -93,10 +93,11 @@ syntax on
 set backspace=indent,eol,start whichwrap+=<,>,[,]
 
 " Tabulation params
-set shiftwidth=2
-set softtabstop=2
+set shiftwidth=4
+set softtabstop=4
 set tabstop=4
-set smarttab
+set sw=4
+set sts=4
 "set et
 "set ai
 "set cin
