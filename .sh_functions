@@ -45,7 +45,7 @@ function have() {
 
 function findfiles () {
    if [[ -z $1 ]]; then
-      echo "Find files recursively starting at \`pwd\` - usage: ff pattern"
+      echo "Find files recursively starting at \`pwd\` - usage: findfiles pattern"
       return
    fi
 
@@ -54,7 +54,7 @@ function findfiles () {
 }
 function finddirs () {
    if [[ -z $1 ]]; then
-      echo "Find directories recursively starting at \`pwd\` - usage: fd pattern"
+      echo "Find directories recursively starting at \`pwd\` - usage: finddirs pattern"
       return
    fi
 
