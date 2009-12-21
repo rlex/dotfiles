@@ -265,38 +265,6 @@ PS1='${debian_chroot:+($debian_chroot)}'${prompt_color}'\u@\h'${sh_norm}':'${sh_
 # Set an error flag to be used in our prompt.
 PROMPT_COMMAND='if [ $? -ne 0 ]; then ERROR_FLAG=1; else ERROR_FLAG=; fi; '
 ## functions
-# extractor
-ee () {
-    if [ -f $1 ] ; then
-        case $1 in
-            *.tar.bz2)   tar xjf $1        ;;
-            *.tar.gz)    tar xzf $1     ;;
-            *.bz2)       bunzip2 $1       ;;
-            *.rar)       rar x $1     ;;
-            *.gz)        gunzip $1     ;;
-            *.tar)       tar xf $1        ;;
-            *.tbz2)      tar xjf $1      ;;
-            *.tgz)       tar xzf $1       ;;
-            *.zip)       unzip $1     ;;
-            *.Z)         uncompress $1  ;;
-            *.7z)        7z x $1    ;;
-            *)           echo "'$1' cannot be extracted via ee()" ;;
-        esac
-    else
-        echo "'$1' is not a valid file"
-    fi
-}
-# backuper
-bu ()
-{
-    if [ "`dirname $1`" == "." ]; then
-        mkdir -p ~/.backup/`pwd`;
-        cp $1 ~/.backup/`pwd`/$1-`date +%Y%m%d%H%M`.backup;
-    else
-        mkdir -p ~/.backup/`dirname $1`;
-        cp $1 ~/.backup/$1-`date +%Y%m%d%H%M`.backup;
-    fi
-} 
 # SmiliePrompt
 smiley() { if [ $? == 0 ]; then echo '^_^'; else echo '0_o'; fi; }
 # psgrep
@@ -421,29 +389,9 @@ function h () {
 	/tmp/$$.command
 	rm -f /tmp/$$.command
 } # h
-function ff () {
-   if [[ -z $1 ]]; then
-      echo "Find files recursively starting at \`pwd\` - usage: ff pattern"
-      return
-   fi
-
-   find . -type f \( -name "*$1*" -o -name ".$1*" -o -name ".*.*$1*" -o -name "*$1*.*" \) -print
-}
-function fd () {
-   if [[ -z $1 ]]; then
-      echo "Find directories recursively starting at \`pwd\` - usage: fd pattern"
-      return
-   fi
-
-   find . -type d \( -name "*$1*" -o -name ".$1*" -o -name ".*.*$1*" -o -name "*$1*.*" \) -print
-}
-function wf () {
-   # Use sed to replace field divider ":" with "  |  " so the output is easier to read
-   find . -type f \( -name "*" -o -name ".*" \) -a -exec fgrep -n "$1" {} /dev/null \; | sed -e 's/:/  |  /g'
-}
-
-function cpx () {
-        if [ -z "$1" -o -z "$2" ]
+       
+cpx() {   
+		if [ -z "$1" -o -z "$2" ]
         then
                 echo Usage: cpx src dest
                 return 1
@@ -850,6 +798,7 @@ if [ "$noinc" = "0" -a "$failure" = "0" ] ; then
   touch -t $timestamp $tsfile
 fi
 }
+
 function ftpsyncup {
 timestamp=".timestamp"
 tempfile="/tmp/ftpsyncup.$$"
@@ -932,76 +881,4 @@ if ! ftp -n < $tempfile ; then
   echo "Done. All files on $server downloaded to $(pwd)"
 fi
 }
-function install_source {
-    if [[ $# != 1 ]]; then
-        echo "Using $PWD as source location."
-    elif [[ $# == 2 ]]; then
-        cd $2
-    fi
 
-    if [[ ! -x ./configure ]]; then
-        echo "Could not find configure script in $PWD!"
-        return 1
-    fi
-
-    ./configure
-    if [[ $? != 0 ]]; then
-        echo -e "\nA problem occured with the automated configuration.\n"
-        return 1
-    fi
-
-    make
-    if [[ $? != 0 ]]; then
-        echo -e "\nA problem happened while making this program.\n"
-        return 1
-    fi
-
-    make install
-    if [[ $? != 0 ]]; then
-        echo -e "\nA problem happened while installing the program.\n"
-        return 1
-    fi
-}
-
-# Uses the two previous functions (untar & install_source)
-function install_archive {
-    if [[ $# != 1 ]]; then
-        echo "Usage: install_archive <archive>"
-        echo "    This will untar and install a program from source"
-        return 1
-    fi
-
-    archive=$1
-    
-    untar $archive
-    install_source
-
-    return $?
-}
-
-# install a file in $spath
-function sinst { 
-    chmod +x $1
-    mv ${1} $spath
-}
-# get current revision of a repo
-function svn_revision { 
-  svn info $@ | awk '/^Revision:/ {print $2}'
-}
-
-# print the log or 'no changes' after an update
-function svn_up_and_log {
-  local old_rev=$(svn_revision $@)
-  local first_up=$((${old_rev} + 1))
-  svn up -q $@
-  if [ $(svn_revision $@) -gt ${old_rev} ]; then
-    svn log -v -rHEAD:${first_up} $@
-  else
-    echo "No changes."
-  fi
-}
-
-# tag a directory in a command to come to it later
-function tag {
-  alias $1='cd $PWD'
-}
