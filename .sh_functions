@@ -62,6 +62,11 @@ function finddirs () {
 }
 
 function findinfiles () {
+   if [[ -z $1 ]]; then
+      echo "Find text in files recursively starting at \`pwd\` - usage: findinfiles pattern. \n \
+      Output: /path/to/file | line number | line contents"
+	  return
+   fi
    # Use sed to replace field divider ":" with "  |  " so the output is easier to read
    find . -type f \( -name "*" -o -name ".*" \) -a -exec fgrep -n "$1" {} /dev/null \; | sed -e 's/:/  |  /g'
 }
