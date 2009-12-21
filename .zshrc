@@ -26,13 +26,6 @@ setopt hist_no_functions
 setopt no_hist_beep
 setopt hist_save_no_dups
 
-## External apps & env options ##
-export GREP_OPTIONS='--color=auto'
-export GREP_COLOR='1;32'
-export EDITOR="vim"
-export VISUAL="vim"
-export LESSCHARSET=UTF-8
-
 ## autoloads ##
 autoload -U compinit
 autoload -U promptinit
@@ -42,20 +35,12 @@ colors
 compinit
 promptinit
 
-## Paths ##
-# main path 
-export PATH=~/bin:$PATH:/usr/local/sbin:/sbin:/usr/local/bin:/usr/local/sbin:/usr/libexec:/opt/local/bin:/opt/local/sbin:/usr/local/mysql/bin
-# path for ruby1.8 in archlinux
-export PATH=/opt/ruby1.8/bin:$PATH
-# Path for ruby gems in homedir
-export PATH=$PATH:~/.gem/ruby/1.8/bin:~/.gem/ruby/1.9.1/bin
-# path for mans
-export MANPATH=$MANPATH:/usr/local/man:/opt/local/share/man
+# load env variables
+if [ -f $HOME/.rc/.sh_env ];
+  then
+	source $HOME/.rc/.sh_env
+fi
 
-# variables
-export EDITOR=vim
-export VISUAL=vim
-export PAGER=more
 
 # check for toast, if yes, env it
 if [ "$ext_toast" = "1" ]; then

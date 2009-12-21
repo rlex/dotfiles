@@ -1,3 +1,21 @@
+#### paths
+# main path
+export PATH=~/bin:$PATH:/usr/local/sbin:/sbin:/usr/local/bin:/usr/local/sbin:/usr/libexec:/opt/local/bin:/opt/local/sbin:/usr/local/mysql/bin
+# ruby 1.8 in /opt
+export PATH=/opt/ruby1.8/bin:$PATH
+# rubygems in $HOME
+export PATH=$PATH:~/.gem/ruby/1.8/bin:~/.gem/ruby/1.9.1/bin
+# manpages in strange locations
+export MANPATH=$MANPATH:/usr/local/man:/opt/local/share/man
+
+#### user variables
+export EDITOR="vim"
+export VISUAL="vim"
+export PAGER="less"
+export GREP_OPTIONS='--color=auto'
+export GREP_COLOR='1;32'
+export LESSCHARSET=UTF-8
+
 #### 'less' colors for colored manpages
 export LESS_TERMCAP_mb=$'\E[01;31m'
 export LESS_TERMCAP_md=$'\E[01;31m'
