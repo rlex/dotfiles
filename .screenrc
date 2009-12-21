@@ -52,9 +52,9 @@ bind 'k' kill
 bind 'l' windowlist
 bind 'i' screen -t 'irc' irssi
 bind 'm' screen -t 'log' tail -f /var/log/messages.log
-bindkey -k k1 prev
-bindkey -k k2 next
-#pow_detach_msg "Screen session of \$LOGNAME \$:cr:\$:nl:ended."
+#bindkey -k k1 prev
+#bindkey -k k2 next
+pow_detach_msg "Screen session of \$LOGNAME \$:cr:\$:nl:ended."
 # these last 2 lines are to set the focus on startup (which screen window we look at when screen finishes starting)
 focus
 select 0
