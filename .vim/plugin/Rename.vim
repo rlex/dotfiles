@@ -25,4 +25,3 @@ function! Rename(name, bang)
 		echoerr v:errmsg
 	endif
 endfunction
-
