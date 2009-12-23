@@ -1,11 +1,16 @@
 #!/bin/bash
+# dotfiles, for example .bashrc, .bash_profile... 
 dotfiles=( screenrc vimrc vim zshrc mc bashrc bash_profile gemrc htoprc gitconfig hgrc biewrc dircolors)
+# dotdirs, for example .vim, .mc...
+dotdirs=( mc vim )
+
+# dotfiles deployment
 for file in ${dotfiles[@]}
 do
         ln -sfv ~/.rc/.$(basename $file) ~/.$file
 done
 
-dotdirs=( mc vim )
+# dotdirs deployment
 for dir in ${dotdirs[@]}
 do
         ln -sfv ~/.rc/.$dir/ -t $HOME
