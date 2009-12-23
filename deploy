@@ -4,4 +4,11 @@ for file in ${dotfiles[@]}
 do
         ln -sfv ~/.rc/.$(basename $file) ~/.$file
 done
+
+dotdirs=( mc vim )
+for dir in ${dotdirs[@]}
+do
+        ln -sfv ~/.rc/.$dir/ -t $HOME
+done
+
 cd - >&/dev/null
