@@ -18,3 +18,6 @@ scriptID SourceID Filename
 1218 10318 :AutoInstall: NERD_commenter.vim
 1502 8743 :AutoInstall: vimballPlugin.vim
 1502 8743 :AutoInstall: vimball.vim
+1242 10630 :AutoInstall: mkd.vim
+1879 11894 :AutoInstall: AutoComplPop
+642 8136 :AutoInstall: getscript.vim
