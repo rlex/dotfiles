@@ -186,15 +186,11 @@ map <F9> :make<cr>
 vmap <F9> <esc>:make<cr>i
 imap <F9> <esc>:make<cr>i
 
-" F10 - rci...
-"map <F10> :bd<cr>
-"vmap <F10> <esc>:bd<cr>
-"imap <F10> <esc>:bd<cr>
-map <F10> <leader>rci
-vmap <F10> <esc><leader>rci<cr>
-imap <F10> <esc><leader>rci<cr>
+" F10 for no/numbers
+map <F10> :let &number=1-&number<CR>
 
-" F11 - Taglist
+
+" F11 - TagList
 map <F11> :TlistToggle<cr>
 vmap <F11> <esc>:TlistToggle<cr>
 imap <F11> <esc>:TlistToggle<cr>
