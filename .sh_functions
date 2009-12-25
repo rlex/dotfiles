@@ -135,3 +135,21 @@ perl -e 'socket(S,2,1,0)&&connect(S,pack("Sna4x8",2,80,gethostbyname(
 function history-all { 
 history -E 1 
 }
+
+grep() {
+        if [ ! -z $1 ] ; then
+                echo "Grepping for processes matching $1..."
+                ps aux | grep $1 | grep -v grep
+        else
+                echo "!! Need name to grep for"
+        fi
+}
+grab() {}
+        sudo chown -R ${USER} ${1:-.}
+}
+have() {
+        type "$1" &> /dev/null
+}
+function calc () {
+    gawk -v CONVFMT="%12.2f" -v OFMT="%.9g"  "BEGIN { print $* ; }"
+}
