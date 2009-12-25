@@ -100,9 +100,18 @@ function calc () {
     }
 # startup screen
 clear
+if [ "$OS" = "Linux" ]; then
 echo -e "I am: "`whoami` on `hostname` - `hostname -i`;
 echo -e "ID: "`id`;
 echo -e "Sysinfo:" `uname -o` - "Kernel" `uname -r` 
 echo -e "Status:" `uptime`
+elif [ "$OS" = "Darwin" -o "$OS" = "FreeBSD" ]; then
+echo -e "I am: "`whoami` on `hostname`
+echo -e "ID: "`id`;
+echo -e "Sysinfo:" `uname` - "Kernel" `uname -r`
+echo -e "Status:" `uptime`
+fi
+
+
 
 
