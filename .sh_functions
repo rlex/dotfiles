@@ -39,9 +39,6 @@ function fixtty () {
 	stty sane
 	reset
 }
-function have() {
-	type "$1" &> /dev/null
-}
 
 function findfiles () {
    if [[ -z $1 ]]; then
@@ -144,7 +141,7 @@ grep() {
                 echo "!! Need name to grep for"
         fi
 }
-grab() {}
+grab() {
         sudo chown -R ${USER} ${1:-.}
 }
 have() {
@@ -152,4 +149,14 @@ have() {
 }
 function calc () {
     gawk -v CONVFMT="%12.2f" -v OFMT="%.9g"  "BEGIN { print $* ; }"
+}
+cpx() {
+        if [ -z "$1" -o -z "$2" ]
+        then
+                echo Usage: cpx src dest
+                return 1
+        fi
+
+        tar cpf - $1 | (cd $2 && tar xvpBf -)
+        return $?
 }
