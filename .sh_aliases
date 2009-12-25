@@ -19,3 +19,6 @@ alias serv='cat /etc/services | grep'
 alias pg='ps aux | grep'
 alias tcpdump='tcpdump -ttttnnn'
 alias nano="vim"
+alias back="cd $OLDPWD"
+alias recent="ls -lAt | head"
+alias r='screen -DRA'
