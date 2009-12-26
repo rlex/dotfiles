@@ -36,8 +36,8 @@ function zomb_ps () {
 
 }
 function fixtty () {
-	stty sane
-	reset
+    stty sane
+    reset
 }
 
 function findfiles () {
@@ -62,7 +62,7 @@ function findinfiles () {
    if [[ -z $1 ]]; then
       echo "Find text in files recursively starting at \`pwd\` - usage: findinfiles pattern. \n \
       Output: /path/to/file | line number | line contents"
-	  return
+      return
    fi
    # Use sed to replace field divider ":" with "  |  " so the output is easier to read
    find . -type f \( -name "*" -o -name ".*" \) -a -exec fgrep -n "$1" {} /dev/null \; | sed -e 's/:/  |  /g'
@@ -107,14 +107,14 @@ ee () {
 pk () {
     if [ $1 ] ; then
         case $1 in
-            tbz)   	tar cjvf $2.tar.bz2 $2      ;;
-            tgz)   	tar czvf $2.tar.gz  $2   	;;
-            tar)  	tar cpvf $2.tar  $2       ;;
-			bz2)	bzip $2 ;;
-            gz)		gzip -c -9 -n $2 > $2.gz ;;
-			zip)	zip -r $2.zip $2   ;;
-            7z)    	7z a $2.7z $2    ;;
-            *)     	echo "'$1' cannot be packed via pk()" ;;
+            tbz)    tar cjvf $2.tar.bz2 $2      ;;
+            tgz)    tar czvf $2.tar.gz  $2     ;;
+            tar)    tar cpvf $2.tar  $2       ;;
+            bz2)    bzip $2 ;;
+            gz)     gzip -c -9 -n $2 > $2.gz ;;
+            zip)    zip -r $2.zip $2   ;;
+            7z)     7z a $2.7z $2    ;;
+            *)      echo "'$1' cannot be packed via pk()" ;;
         esac
     else
         echo "'$1' is not a valid file"
