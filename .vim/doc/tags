@@ -351,7 +351,6 @@ g:snippets_dir	snipMate.txt	/*g:snippets_dir*
 g:snips_author	snipMate.txt	/*g:snips_author*
 g:vimball_home	pi_vimball.txt	/*g:vimball_home*
 g:vimball_mkdir	pi_vimball.txt	/*g:vimball_mkdir*
-g:vimball_path_escape	pi_vimball.txt	/*g:vimball_path_escape*
 getlatestvimscripts-install	pi_getscript.txt	/*getlatestvimscripts-install*
 getscript	pi_getscript.txt	/*getscript*
 getscript-autoinstall	pi_getscript.txt	/*getscript-autoinstall*

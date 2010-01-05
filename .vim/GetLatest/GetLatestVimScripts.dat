@@ -16,6 +16,6 @@ scriptID SourceID Filename
 1643 11853 :AutoInstall: supertab.vim
 273 7701 :AutoInstall: taglist.vim
 1218 10318 :AutoInstall: NERD_commenter.vim
-1502 8743 :AutoInstall: vimball.vim
+1502 11981 :AutoInstall: vimball.vim
 1879 11894 :AutoInstall: AutoComplPop
 642 8136 :AutoInstall: getscript.vim
