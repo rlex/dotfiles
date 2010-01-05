@@ -1,5 +1,8 @@
+### VIM BLOCK ###
 .vim/swap/*
 .vim/GetLatest/Installed/*
 .vim/GetLatest/GetLatestVimScripts.dist
 .vim/backup/*
 
+### MC ###
+.mc/history
