@@ -6,7 +6,7 @@ scriptID SourceID Filename
 642 8136 :AutoInstall: GetLatestVimscripts.vim
 489 9573 :AutoInstall: Manpageview.vim
 2009 9223 :AutoInstall: autoclose.vim
-42 11905 :AutoInstall: bufexplorer.vim
+42 12104 :AutoInstall: bufexplorer.vim
 610 2529 :AutoInstall: ctags.vim
 1588 5884 :AutoInstall: scrollcolor.vim
 1879 11894 :AutoInstall: acp.vim
