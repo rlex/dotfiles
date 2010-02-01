@@ -2,6 +2,9 @@
 set encoding=utf8
 set termencoding=utf-8
 
+" Color always 256
+set t_Co=256
+
 " No vi manner
 set nocompatible
 
@@ -272,14 +275,10 @@ let g:ctags_title=1
 let generate_tags=1
 let g:ctags_regenerate=1
 
-set background=dark
+" set background=dark
+" syntax highlighting
 syntax on " syntax highlighting
-"colorscheme ir_black
-"colorscheme vividchalk 
-"colorscheme vibrantink
-colorscheme railscasts2 
-
-"colorscheme wombat256
+colorscheme xoria256
 set hls
 
 let g:AutoClosePairs = {'(': ')', '{': '}', '[': ']', '"': '"', "'": "'" }
