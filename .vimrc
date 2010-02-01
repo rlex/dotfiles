@@ -124,6 +124,11 @@ imap <C-y> <esc>ddi
 " C-d - yyPi
 imap <C-d> <esc>yypi
 
+" C-N - Toggle lines
+nmap <C-N><C-N> :set invnumber<CR>
+vmap <C-N><C-N> <esc>:set invnumber<CR>
+imap <C-N><C-N> <esc>:set invnumber<CR>
+
 " Expand cword
 nmap > :%s/\<<c-r>=expand("<cword>")<cr>\>/
  
@@ -133,9 +138,6 @@ vmap <F2> <esc>:w<cr>i
 imap <F2> <esc>:w<cr>i
 
 " F3 - rake
-"nmap <F3> :copen<cr>
-"vmap <F3> <esc>:copen<cr>
-"imap <F3> <esc>:copen<cr>
 nmap <F3> :!rake<cr>
 vmap <F3> <esc>:!rake<cr>
 imap <F3> <esc>:!rake<cr>
@@ -153,10 +155,6 @@ vmap <F6> <esc>:bp<cr>i
 imap <F6> <esc>:bp<cr>i
 
 " F7 - wall make
-"map <F7> :bn<cr>
-"vmap <F7> <esc>:bn<cr>i
-"imap <F7> <esc>:bn<cr>i
-
 map <F7> :wall \| make<Cr>
 imap <F7> <ESC>:wall \| make<Cr>
 map <F4> :cn<Cr>zvzz:cc<Cr>
@@ -167,14 +165,10 @@ map <F8> :MarksBrowser<cr>
 vmap <F8> <esc>:MarksBrowser<cr>
 imap <F8> <esc>:MarksBrowser<cr>
 
-" F9 - make
-map <F9> :make<cr>
-vmap <F9> <esc>:make<cr>i
-imap <F9> <esc>:make<cr>i
+" F9 - toggle pasting mode
+set pastetoggle=<F9>
 
-" F10 for no/numbers
-map <F10> :let &number=1-&number<CR>
-
+" F10 free
 
 " F11 - TagList
 map <F11> :TlistToggle<cr>
@@ -186,12 +180,11 @@ map <F12> :Ex<cr>
 vmap <F12> <esc>:Ex<cr>i
 imap <F12> <esc>:Ex<cr>i
 
-" < & > maps
-vmap < <gv
-vmap > >gv
-
-" Map insert
-imap >Ins> <Esc>i
+" tab navigation like firefox
+map <C-Right> :tabnext<CR>
+map <C-Left> <ESC>:tabprev<CR>
+nmap <C-t> :tabnew<CR>
+imap <C-t> <Esc>:tabnew<CR>
 
 " Encoding settings (koi8-r, cp1251, cp866, utf8)
 set wildmenu
