@@ -2,7 +2,7 @@
 # main path
 export PATH=~/bin:$PATH:/usr/local/sbin:/sbin:/usr/local/bin:/usr/local/sbin:/usr/libexec:/opt/local/bin:/opt/local/sbin:/usr/local/mysql/bin:~/.rc/.bin
 # ruby 1.8 in /opt
-export PATH=/opt/ruby1.8/bin:$PATH
+# export PATH=/opt/ruby1.8/bin:$PATH
 # rubygems in $HOME
 export PATH=$PATH:~/.gem/ruby/1.8/bin:~/.gem/ruby/1.9.1/bin
 # manpages in strange locations
