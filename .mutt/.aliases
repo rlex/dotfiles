@@ -1,0 +1,1 @@
+bind  index   \Cr      imap-fetch-mail

@@ -1,0 +1,67 @@
+set certificate_file=~/.mutt/certificates
+set abort_nosubject=no
+set alias_file = ~/.mutt/.aliases
+set attach_format = "%u%D%I %t[%1.2n] %.40d %> [ %.10m/%.14M, %s ] "
+set charset="utf-8"
+set check_new
+set confirmappend = no
+set content_type="text/plain"
+set date_format = "%d/%m/%y %H:%M"
+set delete=ask-yes
+set edit_headers="yes"
+set editor='vim + -c "set textwidth=72" -c "set wrap" -c "set nocp" -c "?^$"'
+set fast_reply
+set folder_format = "[%2C] %t %N %f %> Last modified: %-13d"
+set include=yes
+set index_format="%?M?+%2M&   ? %?E?%2e&  ? %Z %D %-20.20F (%4c) %s"
+set mail_check=90
+set mailcap_path = ~/.mailcap
+set markers
+set pager_context=0
+set pager_index_lines=6
+set pager_stop
+set pgp_sign_as=0x5B952599
+set print=ask-yes
+set print_command="a2ps -r --columns=2 -j -B|lp"
+set quit=yes
+set send_charset="utf-8"
+set sendmail="msmtp -i"
+set sleep_time=0
+set sort="threads"
+set sort_aux="last-date-received"
+set sort_browser="alpha"
+set strict_threads="yes"
+set timeout=15
+set use_envelope_from
+
+unset maildir_header_cache_verify
+unset arrow_cursor
+unset autoedit
+unset braille_friendly
+unset collapse_unread
+
+macro index C "<copy-message>" "copy a message to a mailbox"
+macro index M "<save-message>" "move a message to a mailbox"
+macro index M "<tag-pattern>.*\r<tag-prefix><clear-flag>N<untag-pattern>.*\r" "Mark all messages in this mailbox as read"
+macro index,pager   \Cb "|urlview\n"
+
+folder-hook . exec collapse-all
+bind pager s copy-message
+bind index s copy-message
+bind index - collapse-thread
+bind index _ collapse-all
+
+bind index \Cr imap-fetch-mail
+
+ignore *
+unignore from date subject to cc reply-to user-agent x-mailer message-id posted-to
+
+alternative_order text/plain text/html text/enriched
+auto_view text/html text/enriched application/x-gunzip application/postscript image/gif application/x-tar-gz application/pdf image/jpeg image/jpg
+
+source `case $TERM in\
+        (xterm-256color|xterm|rxvt|rxvt-unicode)    echo '~/.mutt/.mutt_color_256'; break;;\
+        *)                      echo '~/.mutt/.mutt_color'; break;;\
+    esac`
+
+source ~/.mutt/profile.local
