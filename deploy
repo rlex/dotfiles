@@ -1,8 +1,8 @@
 #!/bin/bash
 # dotfiles, for example .bashrc, .bash_profile... 
-dotfiles=( screenrc vimrc zshrc bashrc bash_profile gemrc htoprc gitconfig hgrc biewrc dircolors ackrc )
+dotfiles=( screenrc vimrc zshrc bashrc bash_profile gemrc htoprc gitconfig hgrc biewrc dircolors ackrc muttrc my.cnf toprc )
 # dotdirs, for example .vim, .mc...
-dotdirs=( mc vim )
+dotdirs=( mc vim mutt )
 
 # dotfiles deployment
 for file in ${dotfiles[@]}
