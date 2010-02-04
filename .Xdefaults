@@ -1,25 +1,38 @@
 !!URxvt rules
 URxvt.buffered: true
-URxvt.background: #1c1c1c
-URxvt.foreground: white
 URxvt.font: xft:Terminus:pixelsize=11:antialias=false
 URxvt.boldFont: xft:Terminus:bold:pixelsize=11:antialias=false
 URxvt.perl-ext-common: default,tabbed
-URxvt.title: urxvt Terminal
-URxvt.transparent: true
-URxvt.tintColor: #1c1c1c
-URxvt.shading: 32
-URxvt.geometry: 120x38
-URxvt.internalBorder: 5
-URxvt.saveLines: 5000
-URxvt.scrollBar:true
-URxvt.scrollBar_right:true
-URxvt.scrollstyle:plain
-Urxvt*scrollColor: #777777
+urxvt.termName: rxvt
+urxvt.title: urxvt
+urxvt.scrollBar: false
+urxvt.imLocale: en_UK.UTF-8
+urxvt.loginShell: true
+urxvt.saveLines: 512
+urxvt.geometry: 75x25
+urxvt.boldMode: false
+urxvt.inheritPixmap: true
+URxvt.transparent:false
+urxvt.shading: 40
+urxvt.xftAntialias: false
+urxvt.jumpScroll: true
+!urxvt.tintColor: black
+urxvt.internalBorder: 0
+urxvt.cursorBlink: false
+!urxvt.cursorColor: #E2BAF1
+urxvt.cursorColor: #0A832D
+urxvt.cursorColor2: #000000
+!urxvt.background: #181818
+!urxvt.foreground: #999999
+urxvt.colorBD: #aaaaaa
+urxvt.colorIT: #bbbbbb
+urxvt.colorUL: #999999
+urxvt.underlineColor: #999999
+urxvt.borderless: true
 
 !!Xterm rules
-XTerm*Background: grey6
-XTerm*Foreground: white
+!XTerm*Background: grey6
+!XTerm*Foreground: white
 XTerm*FaceName: terminus
 XTerm*FaceSize: 8
 !!Yeahconsole rules
@@ -31,3 +44,34 @@ yeahconsole*keyFull:None+F11
 yeahconsole*keySmaller:Control+KP_Subtract
 yeahconsole*keyBigger:Control+KP_Add
 yeahconsole*metaSendsEscape: true
+
+! terminal colours
+*foreground:#a0a0a0
+*background:#181818
+
+!molokai inspired colors // thayer
+
+!black
+*color0:    #181818
+*color8:    #505354
+!red
+*color1:    #ED0F32
+*color9:    #DD314C
+!green
+color2:    #407B2A
+*color10:   #60954B
+!yellow
+*color3:    #fd971f
+*color11:   #feed6c
+!blue
+*color4:    #13439A
+*color12:   #2A426D
+!magenta
+*color5:    #67479A
+*color13:   #534569
+!cyan
+*color6:    #1F8DA5
+*color14:   #468997
+!white
+*color7:    #ccccc6
+*color15:   #f8f8f2
