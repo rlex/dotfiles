@@ -1,0 +1,28 @@
+# Save this as ~/.mutt/.localprofile - this file will be sourced upon load
+# It must contain machine-specific and private data, see below for example
+
+# Main settings - mailboxes
+
+# IMAP EXAMPLE
+#set from = "user@example.org"  
+#set realname = "IMAP USER"       
+#set imap_user = "user@example.org"
+#set folder = "imaps://imap.gmail.com:993"
+#set spoolfile = "+INBOX"                 
+#set postponed ="+[Gmail]/Drafts"         
+#set trash = "imaps://imap.gmail.com/[Gmail]/Trash"
+#set smtp_url = "smtp://user@example.org@smtp.gmail.com:587/"
+
+# Various settings
+#set pgp_sign_as=0x00000000
+set delete = yes
+
+# ignores
+ignore "Authentication-Results:"
+ignore "DomainKey-Signature:"
+ignore "DKIM-Signature:"
+
+# Custom headers example
+my_hdr X-Homepage: http://example.org
+my_hdr X-PGP-Key: http://example.org/pubinfo/user.asc
+hdr_order Date From To Cc
