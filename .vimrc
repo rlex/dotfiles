@@ -2,9 +2,6 @@
 set encoding=utf8
 set termencoding=utf-8
 
-" Color always 256
-set t_Co=256
-
 " No vi manner
 set nocompatible
 
@@ -273,6 +270,14 @@ let g:ctags_regenerate=1
 syntax on " syntax highlighting
 colorscheme xoria256
 set hls
+
+" Colorscheme based on $TERM
+if $TERM == "xterm" || $TERM == "rxvt" || $TERM == "xterm-256color" || $TERM == "rxvt-unicode" || &term =~ "builtin_gui" || $TERM == "dumb"
+    set t_Co=256
+    colorscheme xoria256
+else
+    colorscheme desert
+endif
 
 let g:AutoClosePairs = {'(': ')', '{': '}', '[': ']', '"': '"', "'": "'" }
 
