@@ -20,8 +20,8 @@ Urxvt*scrollColor: #777777
 !!Xterm rules
 XTerm*Background: grey6
 XTerm*Foreground: white
-XTerm*FaceName: terminus:pixelsize=10
-
+XTerm*FaceName: terminus
+XTerm*FaceSize: 8
 !!Yeahconsole rules
 yeahconsole*term:urxvt
 yeahconsole*consoleHeight:25
