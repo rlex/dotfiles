@@ -20,7 +20,6 @@ set markers
 set pager_context=0
 set pager_index_lines=6
 set pager_stop
-set pgp_sign_as=0x5B952599
 set print=ask-yes
 set print_command="a2ps -r --columns=2 -j -B|lp"
 set quit=yes
@@ -63,5 +62,5 @@ source `case $TERM in\
         (xterm-256color|xterm|rxvt|rxvt-unicode)    echo '~/.mutt/.mutt_color_256'; break;;\
         *)                      echo '~/.mutt/.mutt_color'; break;;\
     esac`
-
+source ~/.mutt/.gpgrc
 source ~/.mutt/profile.local
