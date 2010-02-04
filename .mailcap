@@ -1,0 +1,17 @@
+# View HTML inline
+text/html; elinks %s; nametemplate=%s.html
+text/html; elinks -dump %s; nametemplate=%s.html; copiousoutput
+
+# Archives
+application/x-bzip2; octet-filter %s; copiousoutput
+application/x-cpio; cpio -tvF --quiet %s; copiousoutput
+application/x-diff-gzip; zcat %s; copiousoutput
+application/x-gtar; tar tvf %s; copiousoutput
+application/x-gunzip; gzcat; copiousoutput
+application/x-gunzip; octet-filter %s; copiousoutput
+application/x-gzip; octet-filter %s; copiousoutput
+application/x-rar-compressed; rar v %s; copiousoutput
+application/x-tar-gz; tar tvfz %s; copiousoutput
+application/x-tar; tar tvf %s; copiousoutput
+application/x-zip-compressed; unzip -v %s; copiousoutput
+application/zip; unzip -v %s; copiousoutput
