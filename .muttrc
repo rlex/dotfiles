@@ -63,4 +63,4 @@ source `case $TERM in\
         *)                      echo '~/.mutt/.mutt_color'; break;;\
     esac`
 source ~/.mutt/.gpgrc
-source ~/.mutt/profile.local
+source ~/.mutt/.localprofile

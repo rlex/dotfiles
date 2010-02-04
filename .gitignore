@@ -8,4 +8,4 @@
 .mc/history
 
 ### MUTT ###
-.mutt/profile.local
+.mutt/.localprofile
