@@ -1,0 +1,33 @@
+!!URxvt rules
+URxvt.buffered: true
+URxvt.background: #1c1c1c
+URxvt.foreground: white
+URxvt.font: xft:Terminus:pixelsize=11:antialias=false
+URxvt.boldFont: xft:Terminus:bold:pixelsize=11:antialias=false
+URxvt.perl-ext-common: default,tabbed
+URxvt.title: urxvt Terminal
+URxvt.transparent: true
+URxvt.tintColor: #1c1c1c
+URxvt.shading: 32
+URxvt.geometry: 120x38
+URxvt.internalBorder: 5
+URxvt.saveLines: 5000
+URxvt.scrollBar:true
+URxvt.scrollBar_right:true
+URxvt.scrollstyle:plain
+Urxvt*scrollColor: #777777
+
+!!Xterm rules
+XTerm*Background: grey6
+XTerm*Foreground: white
+XTerm*FaceName: terminus:pixelsize=10
+
+!!Yeahconsole rules
+yeahconsole*term:urxvt
+yeahconsole*consoleHeight:25
+yeahconsole*toggleKey:None+F12
+yeahconsole*restart:1
+yeahconsole*keyFull:None+F11
+yeahconsole*keySmaller:Control+KP_Subtract
+yeahconsole*keyBigger:Control+KP_Add
+yeahconsole*metaSendsEscape: true
