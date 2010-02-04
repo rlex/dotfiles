@@ -70,14 +70,20 @@ if [ "$ext_toast" = "1" ]; then
 fi
 
 # prompt (if running GNU screen, show window number)
-if [ x$WINDOW != x ]; then
+#if [ x$WINDOW != x ]; then
     # [5:xdemon@mainframe:~]% 
-    export PS1="%{$fg[blue]%}[%{$fg[cyan]%}$WINDOW%{$fg[blue]%}:%{$fg[green]%}%n%{$fg[cyan]%}@%{$fg[green]%}%m%{$fg[blue]%}:%{$fg[magenta]%}%~%{$fg[blue]%}]%{$reset_color%}%# "
-else
+#    export PS1="%{$fg[blue]%}[%{$fg[cyan]%}$WINDOW%{$fg[blue]%}:%{$fg[green]%}%n%{$fg[cyan]%}@%{$fg[green]%}%m%{$fg[blue]%}:%{$fg[magenta]%}%~%{$fg[blue]%}]%{$reset_color%}%# "
+#else
     # [xdemon@mainframe:~]% 
-    export PS1="%{$fg[blue]%}[%{$fg[green]%}%n%{$fg[cyan]%}@%{$fg[green]%}%m%{$fg[blue]%}:%{$fg[magenta]%}%~%{$fg[blue]%}]%{$reset_color%}%# "
-fi
-export RPRMOPT="%{$reset_color%}"
+#    export PS1="%{$fg[blue]%}[%{$fg[green]%}%n%{$fg[cyan]%}@%{$fg[green]%}%m%{$fg[blue]%}:%{$fg[magenta]%}%~%{$fg[blue]%}]%{$reset_color%}%# "
+#fi
+#export RPRMOPT="%{$reset_color%}"
+
+# Two-lined prompt
+PS1="%{${fg_bold[red]}%}[%{${fg_bold[default]}%}%D%{${fg_bold[red]}%}]-[%{${fg_bold[default]}%}%n%{${fg_bold[red]}%}]-[${fg_bold[default]}%m%{${fg_bold[red]}%}]-[\
+%{${fg_bold[default]}%}${$(tty)#/dev/##}%}%{${fg_bold[red]}%}]-[\
+%{${fg_bold[default]}%}%~%{${fg_bold[red]}%}]
+[%{${fg_bold[default]}%}%*%{${fg_bold[red]}%}]-%#%{${fg_bold[default]}%} """
 
 # colorize stderr
 # exec 2>>(while read line; do print '\e[91m'${(q)line}'\e[0m' > /dev/tty; print -n $'\0'; done &)
