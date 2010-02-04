@@ -1,6 +1,6 @@
 #!/bin/bash
 # dotfiles, for example .bashrc, .bash_profile... 
-dotfiles=( screenrc vimrc zshrc bashrc bash_profile gemrc htoprc gitconfig hgrc biewrc dircolors ackrc muttrc my.cnf toprc )
+dotfiles=( screenrc vimrc zshrc bashrc bash_profile gemrc htoprc gitconfig hgrc biewrc dircolors ackrc muttrc my.cnf toprc Xdefaults )
 # dotdirs, for example .vim, .mc...
 dotdirs=( mc vim mutt )
 
@@ -15,5 +15,8 @@ for dir in ${dotdirs[@]}
 do
         ln -sfv ~/.rc/.$dir/ -t $HOME
 done
+
+# awesome deployment
+ln -sfv ~/.rc/.config/awesome -t $HOME/.config/
 
 cd - >&/dev/null
