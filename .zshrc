@@ -35,6 +35,9 @@ colors
 compinit
 promptinit
 
+## dircolors ##
+eval `dircolors ~/.dircolors -b`
+
 # load env variables
 if [ -f $HOME/.rc/.sh_env ];
   then
