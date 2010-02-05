@@ -41,7 +41,6 @@ set t_vb=
 set backupdir=~/.rc/.vim/swap/
 set directory=~/.rc/.vim/swap/
 
-
 if has('win32')
   set makeprg=nmake
   compiler msvc
@@ -191,16 +190,16 @@ menu Encoding.windows-1251 :e ++enc=cp1251<CR>
 menu Encoding.cp866 :e ++enc=cp866<CR>
 menu Encoding.utf-8 :e ++enc=utf8 <CR>
 
-" їїїїї їїїїї їїїї [ їїї їїїї =)
+" С—С—С—С—С— С—С—С—С—С— С—С—С—С— [ С—С—С— С—С—С—С— =)
 imap [ []<LEFT>
-" їїїїїїїїїї ї їїї {
+" С—С—С—С—С—С—С—С—С—С— С— С—С—С— {
 imap {<CR> {<CR>}<Esc>O
 
-" ї-q - їїїїї її Vim 
+" С—-q - С—С—С—С—С— С—С— Vim
 map <C-Q> <Esc>:qa<cr>
 
 
-" їїїїїїїїїїїїїї їїїї її tab =)
+" С—С—С—С—С—С—С—С—С—С—С—С—С—С— С—С—С—С— С—С— tab =)
 function InsertTabWrapper()
  let col = col('.') - 1
  if !col || getline('.')[col - 1] !~ '\k'
@@ -213,15 +212,15 @@ endfunction
 imap <S-tab> <c-r>=InsertTabWrapper()<cr>
 
 
-" їїїїї їїїїїї їїїїї їїїїїїїїї
+" С—С—С—С—С— С—С—С—С—С—С— С—С—С—С—С— С—С—С—С—С—С—С—С—С—
 set complete=""
-" її їїїїїїїї їїїїїї
+" С—С— С—С—С—С—С—С—С—С— С—С—С—С—С—С—
 set complete+=.
-" її їїїїїїї
+" С—С— С—С—С—С—С—С—С—
 set complete+=k
-" її їїїїїї їїїїїїїї їїїїїїї
+" С—С— С—С—С—С—С—С— С—С—С—С—С—С—С—С— С—С—С—С—С—С—С—
 set complete+=b
-" її їїїїї 
+" С—С— С—С—С—С—С—
 set complete+=t
 
 " Filetype plugin
@@ -328,38 +327,38 @@ nmap <leader>rci :%!ruby-code-indenter<cr>
 
 autocmd FileType rb,rake,ruby set noexpandtab
 
-" убираем замену таба на две точки в haml-файлах
+" СѓР±РёСЂР°РµРј Р·Р°РјРµРЅСѓ С‚Р°Р±Р° РЅР° РґРІРµ С‚РѕС‡РєРё РІ haml-С„Р°Р№Р»Р°С…
 " autocmd FileType haml set listchars=tab:\ \ 
 
-" включить сохранение резервных копий
+" РІРєР»СЋС‡РёС‚СЊ СЃРѕС…СЂР°РЅРµРЅРёРµ СЂРµР·РµСЂРІРЅС‹С… РєРѕРїРёР№
 set backup
 
-" сохранять умные резервные копии ежедневно
+" СЃРѕС…СЂР°РЅСЏС‚СЊ СѓРјРЅС‹Рµ СЂРµР·РµСЂРІРЅС‹Рµ РєРѕРїРёРё РµР¶РµРґРЅРµРІРЅРѕ
 function! BackupDir()
-	" определим каталог для сохранения резервной копии
+	" РѕРїСЂРµРґРµР»РёРј РєР°С‚Р°Р»РѕРі РґР»СЏ СЃРѕС…СЂР°РЅРµРЅРёСЏ СЂРµР·РµСЂРІРЅРѕР№ РєРѕРїРёРё
 	let l:backupdir=$HOME.'/.vim/backup/'.
 			\substitute(expand('%:p:h'), '^'.$HOME, '~', '')
 
-	" если каталог не существует, создадим его рекурсивно
+	" РµСЃР»Рё РєР°С‚Р°Р»РѕРі РЅРµ СЃСѓС‰РµСЃС‚РІСѓРµС‚, СЃРѕР·РґР°РґРёРј РµРіРѕ СЂРµРєСѓСЂСЃРёРІРЅРѕ
 	if !isdirectory(l:backupdir)
 		call mkdir(l:backupdir, 'p', 0700)
 	endif
 
-	" переопределим каталог для резервных копий
+	" РїРµСЂРµРѕРїСЂРµРґРµР»РёРј РєР°С‚Р°Р»РѕРі РґР»СЏ СЂРµР·РµСЂРІРЅС‹С… РєРѕРїРёР№
 	let &backupdir=l:backupdir
 
-	" переопределим расширение файла резервной копии
+	" РїРµСЂРµРѕРїСЂРµРґРµР»РёРј СЂР°СЃС€РёСЂРµРЅРёРµ С„Р°Р№Р»Р° СЂРµР·РµСЂРІРЅРѕР№ РєРѕРїРёРё
 	let &backupext=strftime('~%Y-%m-%d~')
 endfunction
 
-" выполним перед записью буффера на диск
+" РІС‹РїРѕР»РЅРёРј РїРµСЂРµРґ Р·Р°РїРёСЃСЊСЋ Р±СѓС„С„РµСЂР° РЅР° РґРёСЃРє
 autocmd! bufwritepre * call BackupDir()
 
 
-" включаем syntax/haml.vim
+" РІРєР»СЋС‡Р°РµРј syntax/haml.vim
 "au BufRead,BufNewFile *.haml         setfiletype haml 
 "au BufRead,BufNewFile *.haml         set listchars=tab:\ \ 
-au BufEnter *        if &ft == 'haml' |  set listchars=tab:\ \  | else | set listchars=tab:··| endif
+au BufEnter *        if &ft == 'haml' |  set listchars=tab:\ \  | else | set listchars=tab:В·В·| endif
 
 nmap <PageUp> <C-U><C-U>
 imap <PageUp> <C-O><C-U><C-O><C-U>
