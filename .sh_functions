@@ -1,46 +1,45 @@
 # functions
-mdc() { mkdir -p "$1" && cd "$1" }
-setenv() { export $1=$2 }  # csh compatibility
-sdate() { date +%Y.%m.%d }
-pc() { awk "{print \$$1}" }
-rot13 () { tr "[a-m][n-z][A-M][N-Z]" "[n-z][a-m][N-Z][A-M]" }
-function maxhead() { head -n `echo $LINES - 5|bc` ; }
-function maxtail() { tail -n `echo $LINES - 5|bc` ; }
+mdc() { mkdir -p "$1" && cd "$1" ; }
+sdate() { date +%Y.%m.%d ; }
+pc() { awk "{print \$$1}" ; }
 
 # get current revision of a repo
-function svn_revision { 
-  svn info $@ | awk '/^Revision:/ {print $2}'
+svn_revision() { 
+  svn info $@ | awk '/^Revision:/ {print $2} ;'
 }
-# print the log or 'no changes' after an update
-function svn_up_and_log {
+
+# print the log or no changes after an update
+svn_up_and_log() {
   local old_rev=$(svn_revision $@)
   local first_up=$((${old_rev} + 1))
   svn up -q $@
   if [ $(svn_revision $@) -gt ${old_rev} ]; then
     svn log -v -rHEAD:${first_up} $@
   else
-    echo "No changes."
+    echo "No changes.";
   fi
 }
+
 # tag a directory in a command to come to it later
-function tag {
-  alias $1='cd $PWD'
+tag() {
+  alias $1="cd $PWD";
 }
 
-function dirdiff () {
-        diff -yB -W 80 <(ls -1 --color=never $1) <(ls -1 --color=never $2)
-
+dirdiff() {
+        diff -yB -W 80 <(ls -1 --color=never "$1") <(ls -1 --color=never "$2")
 }
-function zomb_ps () {
+
+zomb_ps() {
         ps hr -Nos | awk '$1=="Z" {print $1}'
 
 }
-function fixtty () {
+
+fixtty() {
     stty sane
     reset
 }
 
-function findfiles () {
+findfiles() {
    if [[ -z $1 ]]; then
       echo "Find files recursively starting at \`pwd\` - usage: findfiles pattern"
       return
@@ -49,7 +48,7 @@ function findfiles () {
    find . -type f \( -name "*$1*" -o -name ".$1*" -o -name ".*.*$1*" -o -name "*$1*.*" \) -print
 
 }
-function finddirs () {
+finddirs() {
    if [[ -z $1 ]]; then
       echo "Find directories recursively starting at \`pwd\` - usage: finddirs pattern"
       return
@@ -58,7 +57,7 @@ function finddirs () {
    find . -type d \( -name "*$1*" -o -name ".$1*" -o -name ".*.*$1*" -o -name "*$1*.*" \) -print
 }
 
-function findinfiles () {
+findinfiles() {
    if [[ -z $1 ]]; then
       echo "Find text in files recursively starting at \`pwd\` - usage: findinfiles pattern. \n \
       Output: /path/to/file | line number | line contents"
@@ -69,7 +68,7 @@ function findinfiles () {
 }
 
 
-bu ()
+bu()
 {
     if [ "`dirname $1`" == "." ]; then
         mkdir -p ~/.backup/`pwd`;
@@ -81,7 +80,7 @@ bu ()
 } 
 
 # extractor
-ee () {
+ee() {
     if [ -f $1 ] ; then
         case $1 in
             *.tar.bz2)   tar xjf $1        ;;
@@ -99,12 +98,12 @@ ee () {
             *)           echo "'$1' cannot be extracted via ee()" ;;
         esac
     else
-        echo "'$1' is not a valid file"
+        echo "'$1' is not a valid file";
     fi
 }
 
 #packer
-pk () {
+pk() {
     if [ $1 ] ; then
         case $1 in
             tbz)    tar cjvf $2.tar.bz2 $2      ;;
@@ -117,20 +116,20 @@ pk () {
             *)      echo "'$1' cannot be packed via pk()" ;;
         esac
     else
-        echo "'$1' is not a valid file"
+        echo "'$1' is not a valid file";
     fi
 }
 
 #toast install function
-function install_toast() {
+install_toast() {
 perl -e 'socket(S,2,1,0)&&connect(S,pack("Sna4x8",2,80,gethostbyname(
     $h="toastball.net")||die("dns")))&&syswrite(S,"GET /toast/toast "
     ."HTTP/1.0\nHost: $h\n\n")&&open(STDIN,"<&S")&&exec($^X,qw(-x -
-    arm toast))||die($!)'
+    arm toast))||die($!)';
 }
 
-function history-all { 
-history -E 1 
+history-all() { 
+history -E 1;
 }
 
 psgrep() {
@@ -138,17 +137,17 @@ psgrep() {
                 echo "Grepping for processes matching $1..."
                 ps aux | grep $1 | grep -v grep
         else
-                echo "!! Need name to grep for"
+                echo "!! Need name to grep for";
         fi
 }
 grab() {
-        sudo chown -R ${USER} ${1:-.}
+        sudo chown -R ${USER} ${1:-.};
 }
 have() {
-        type "$1" &> /dev/null
+        type "$1" &> /dev/null;
 }
-function calc () {
-    gawk -v CONVFMT="%12.2f" -v OFMT="%.9g"  "BEGIN { print $* ; }"
+calc() {
+    gawk -v CONVFMT="%12.2f" -v OFMT="%.9g"  "BEGIN { print $* ; }";
 }
 cpx() {
         if [ -z "$1" -o -z "$2" ]
