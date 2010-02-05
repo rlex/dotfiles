@@ -1,51 +1,67 @@
 [merge]
-	summary = true
-	tool = vimdiff
+    summary = true
+    tool = vimdiff
 [diff]
-	renames = copy
+    renames = true
 [i18n]
-	logoutputencoding = UTF-8
+    logoutputencoding = UTF-8
+[rerere]
+    enabled = true
 [format]
-	numbered = true
+    numbered = true
 [status]
-	submodulesummary = -1 
+    submodulesummary = -1 
 [color]
-	branch = true
-	diff = true
-	interactive = true
-	status = true
+    branch = true
+    diff = true
+    interactive = true
+    status = true
+    showbranch = true
+    ui = true
+    grep = true
 [core]
-	editor = vim
+    editor = vim
+    pager = less -JFRSX
+[color "branch"]
+    current = green
+    local = yellow
+    remote = red
+[color "diff"]
+    meta = yellow
+[color "grep"]
+    match = green
+[color "status"]
+    changed = yellow
 [alias]
-	s = status
-	b = branch
-	ba = branch -a -v -v
-	bs = !git-branch-status
-	bsi = !git-branch-status -i
-	ci = commit
-	co = checkout
+    s = status
+    b = branch
+    ba = branch -a -v -v
+    bs = !git-branch-status
+    bsi = !git-branch-status -i
+    ci = commit
+    co = checkout
 
-	d = diff -C
-	ds = diff -C --stat
-	dsp = diff -C --stat -p
-	dw = diff -C --color-words
+    d = diff -C
+    ds = diff -C --stat
+    dsp = diff -C --stat -p
+    dw = diff -C --color-words
 
-	l = log -C --decorate
-	ls = log -C --stat --decorate
-	lsp = log -C --stat -p --decorate
-	lg = log --graph '--pretty=tformat:%Cblue%h%Creset %Cgreen%ar%Creset %Cblue%d%Creset %s'
-	lga = log --graph '--pretty=tformat:%Cblue%h%Creset %Cgreen%ar%Creset %Cblue%d%Creset %s' --all
-	l19 = log --graph '--pretty=tformat:%Cblue%h%Creset %Cgreen%ar%Creset %Cblue%d%Creset %s' --all -19 # для сложных ветвлений
-	lsd = log --graph '--pretty=tformat:%Cblue%h%Creset %Cgreen%ar%Creset %Cblue%d%Creset %s' --all --simplify-by-decoration
-	ru = remote update
-	sb = show-branch --sha1-name
-	ls-del = ls-files -d
-	ls-mod = ls-files -m # включая удалённые файлы
-	ls-new = ls-files --exclude-standard -o
-	ls-ign = ls-files --exclude-standard -o -i
+    l = log -C --decorate
+    ls = log -C --stat --decorate
+    lsp = log -C --stat -p --decorate
+    lg = log --graph '--pretty=tformat:%Cblue%h%Creset %Cgreen%ar%Creset %Cblue%d%Creset %s'
+    lga = log --graph '--pretty=tformat:%Cblue%h%Creset %Cgreen%ar%Creset %Cblue%d%Creset %s' --all
+    l19 = log --graph '--pretty=tformat:%Cblue%h%Creset %Cgreen%ar%Creset %Cblue%d%Creset %s' --all -19 # для сложных ветвлений
+    lsd = log --graph '--pretty=tformat:%Cblue%h%Creset %Cgreen%ar%Creset %Cblue%d%Creset %s' --all --simplify-by-decoration
+    ru = remote update
+    sb = show-branch --sha1-name
+    ls-del = ls-files -d
+    ls-mod = ls-files -m # включая удалённые файлы
+    ls-new = ls-files --exclude-standard -o
+    ls-ign = ls-files --exclude-standard -o -i
     clog = log --date=short --pretty=format:\"%Cred%ad %Cblue%h %Cgreen%an %Creset%s%C(yellow)%d\"
     slog = log --date=short --pretty=format:\"%C(124)%ad %C(24)%h %C(34)%an %C(252)%s%C(178)%d\"
 [user]
-	name = Lex Rivera
-	email = x-demon@x-demon.org
-	signingkey = 5B952599
+    name = Lex Rivera
+    email = x-demon@x-demon.org
+    signingkey = 5B952599
