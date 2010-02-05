@@ -35,3 +35,31 @@ export LESS_TERMCAP_us=$'\E[01;32m'
 if [ "$TERM" = "xterm" ]; then
 export TERM=xterm-256color
 fi
+
+### source external files
+# check for toast, if yes, env it
+if [ "$ext_toast" = "1" ];
+    then
+        if [ -f $HOME/.toast/armed/bin/toast ];
+        then
+            eval `$HOME/.toast/armed/bin/toast env`
+        fi
+fi
+
+# check for sh functions file
+if [ "$ext_functions" = "1" ];
+    then
+        if [ -f $HOME/.rc/.sh_functions ];
+        then
+            source $HOME/.rc/.sh_functions
+        fi
+fi
+
+# check for sh aliases file
+if [ "$ext_toast" = "1" ];
+    then
+        if [ -f $HOME/.rc/.sh_aliases ];
+        then
+            source $HOME/.rc/.sh_aliases
+        fi
+fi

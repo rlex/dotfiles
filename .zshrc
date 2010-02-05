@@ -38,31 +38,6 @@ if [ -f $HOME/.rc/.sh_env ];
 	source $HOME/.rc/.sh_env
 fi
 
-
-# check for toast, if yes, env it
-if [ "$ext_toast" = "1" ]; then
-	if [ -f $HOME/.toast/armed/bin/toast ];
-		then
-	eval `$HOME/.toast/armed/bin/toast env`
-	fi
-fi
-
-# check for sh functions file
-if [ "$ext_functions" = "1" ]; then
-	if [ -f $HOME/.rc/.sh_functions ];
-		then
-	source $HOME/.rc/.sh_functions
-	fi
-fi
-
-# check for sh aliases file
-if [ "$ext_toast" = "1" ]; then
-	if [ -f $HOME/.rc/.sh_aliases ];
-		then
-	source $HOME/.rc/.sh_aliases
-	fi
-fi
-
 # prompt (if running GNU screen, show window number)
 #if [ x$WINDOW != x ]; then
     # [5:xdemon@mainframe:~]% 
