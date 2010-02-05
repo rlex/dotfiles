@@ -67,7 +67,7 @@ STICKY_OTHER_WRITABLE 30;42 # dir that is sticky and other-writable (+t,o+w)
 OTHER_WRITABLE 34;42 # dir that is other-writable (o+w) and not sticky
 STICKY 37;44 # dir with the sticky bit set (+t) and not other-writable
 # This is for files with execute permission:
-EXEC 00;31
+EXEC 01;36
 # List any file extensions like '.gz' or '.tar' that you would like ls
 # to colorize below. Put the extension, a space, and the color init string.
 # (and any comments you want to add after a '#')
@@ -79,28 +79,28 @@ EXEC 00;31
 #.bat 01;32
 #.sh 01;32
 #.csh 01;32
-.tar 00;31 # archives or compressed (bright red)
-.tgz 00;31
-.arj 00;31
-.taz 00;31
-.lzh 00;31
-.zip 00;31
-.z 00;31
-.Z 00;31
-.gz 00;31
-.bz2 00;31
-.bz 00;31
-.tbz2 00;31
-.tz 00;31
-.deb 00;31
-.rpm 00;31
-.jar 00;31
-.rar 00;31 # rar
-.ace 00;31 # unace
-.zoo 00;31 # zoo
-.cpio 00;31 # cpio
-.7z 00;31 # p7zip
-.rz 00;31 # rzip
+.tar 00;33 # archives or compressed (bright red)
+.tgz 00;33
+.arj 00;33
+.taz 00;33
+.lzh 00;33
+.zip 00;33
+.z 00;33
+.Z 00;33
+.gz 00;33
+.bz2 00;33
+.bz 00;33
+.tbz2 00;33
+.tz 00;33
+.deb 00;33
+.rpm 00;33
+.jar 00;33
+.rar 00;33 # rar
+.ace 00;33 # unace
+.zoo 00;33 # zoo
+.cpio 00;33 # cpio
+.7z 00;33 # p7zip
+.rz 00;33 # rzip
 # image formats
 .jpg 00;35
 .jpeg 00;35
