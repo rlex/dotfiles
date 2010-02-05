@@ -1,10 +1,10 @@
 ## ZSH Options ##
-unsetopt BG_NICE		      # do not nice bg commands
-setopt EXTENDED_HISTORY		# puts timestamps in the history
-setopt NO_HUP             # don't send kill to background jobs when exiting
+unsetopt BG_NICE            # do not nice bg commands
+setopt EXTENDED_HISTORY     # puts timestamps in the history
+setopt NO_HUP               # don't send kill to background jobs when exiting
 
 ## History options ##
-export HISTFILE=$HOME/.zsh-history		# path to history file
+export HISTFILE=$HOME/.zsh-history                      # path to history file
 export HISTIGNORE=ls:l:pwd:mc:su:df:clear:fg:bg:history # ignore some common commands
 export HISTSIZE=5000
 export SAVEHIST=1000
@@ -34,30 +34,12 @@ eval `dircolors ~/.dircolors -b`
 
 # load env variables
 if [ -f $HOME/.rc/.sh_env ];
-  then
-	source $HOME/.rc/.sh_env
-fi
+    then
+        source $HOME/.rc/.sh_env
+    fi
 
-# prompt (if running GNU screen, show window number)
-#if [ x$WINDOW != x ]; then
-    # [5:xdemon@mainframe:~]% 
-#    export PS1="%{$fg[blue]%}[%{$fg[cyan]%}$WINDOW%{$fg[blue]%}:%{$fg[green]%}%n%{$fg[cyan]%}@%{$fg[green]%}%m%{$fg[blue]%}:%{$fg[magenta]%}%~%{$fg[blue]%}]%{$reset_color%}%# "
-#else
-    # [xdemon@mainframe:~]% 
-#    export PS1="%{$fg[blue]%}[%{$fg[green]%}%n%{$fg[cyan]%}@%{$fg[green]%}%m%{$fg[blue]%}:%{$fg[magenta]%}%~%{$fg[blue]%}]%{$reset_color%}%# "
-#fi
-#export RPRMOPT="%{$reset_color%}"
-
-# Two-lined prompt
-#PS1="%{${fg_bold[red]}%}[%{${fg_bold[default]}%}%D%{${fg_bold[red]}%}]-[%{${fg_bold[default]}%}%n%{${fg_bold[red]}%}]-[${fg_bold[default]}%m%{${fg_bold[red]}%}]-[\
-#%{${fg_bold[default]}%}${$(tty)#/dev/##}%}%{${fg_bold[red]}%}]-[\
-#%{${fg_bold[default]}%}%~%{${fg_bold[red]}%}]
-#[%{${fg_bold[default]}%}%*%{${fg_bold[red]}%}]-%#%{${fg_bold[default]}%} """
+# Prompt!
 export PS1="%{$fg[green]%}%n%{$fg[cyan]%}@%m%{$reset_color%}%{$fg[green]%} $newPWD%{$reset_color%}$ "
-
-# colorize stderr
-# exec 2>>(while read line; do print '\e[91m'${(q)line}'\e[0m' > /dev/tty; print -n $'\0'; done &)
-
 
 # format titles for screen and rxvt
 function title() {
