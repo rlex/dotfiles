@@ -190,16 +190,11 @@ menu Encoding.windows-1251 :e ++enc=cp1251<CR>
 menu Encoding.cp866 :e ++enc=cp866<CR>
 menu Encoding.utf-8 :e ++enc=utf8 <CR>
 
-" їїїїї їїїїї їїїї [ їїї їїїї =)
-imap [ []<LEFT>
-" їїїїїїїїїї ї їїї {
-imap {<CR> {<CR>}<Esc>O
-
-" ї-q - їїїїї її Vim
+" C-Q - Exit Vim
 map <C-Q> <Esc>:qa<cr>
 
 
-" їїїїїїїїїїїїїї їїїї її tab =)
+" Smart mapper for tab completion
 function InsertTabWrapper()
  let col = col('.') - 1
  if !col || getline('.')[col - 1] !~ '\k'
@@ -211,17 +206,15 @@ endfunction
 " imap <tab> <c-r>=InsertTabWrapper()<cr>
 imap <S-tab> <c-r>=InsertTabWrapper()<cr>
 
-
-" їїїїї їїїїїї їїїїї їїїїїїїїї
-set complete=""
-" її їїїїїїїї їїїїїї
-set complete+=.
-" її їїїїїїї
-set complete+=k
-" її їїїїїї їїїїїїїї їїїїїїї
-set complete+=b
-" її їїїїї
-set complete+=t
+" order and what to complete. see ":help complete" for info
+set     complete=.,w,b,u,t,i
+" enable dictionary (add k to complete to scan dict when completing)
+" set dict=<FILENAME>
+" adjust case of a keyword completion match
+set infercase
+" showfulltag   when completing tags in Insert mode show only the name
+" not any arguments (when a c-funtion is inserted)
+set nosft
 
 " Filetype plugin
 filetype plugin on
@@ -291,10 +284,10 @@ set csto=1
 
 " add any cscope database in current directory
 if filereadable("cscope.out")
-		cs add cscope.out  
+        cs add cscope.out 
 " else add the database pointed to by environment variable 
 elseif $CSCOPE_DB != ""
-		cs add $CSCOPE_DB
+        cs add $CSCOPE_DB
 endif
 
 " show msg when any other cscope db added
@@ -327,35 +320,33 @@ nmap <leader>rci :%!ruby-code-indenter<cr>
 
 autocmd FileType rb,rake,ruby set noexpandtab
 
-" убираем замену таба на две точки в haml-файлах
+" Not change tab to two dots in HAML
 " autocmd FileType haml set listchars=tab:\ \ 
 
-" включить сохранение резервных копий
+" Power on backup :)
 set backup
 
-" сохранять умные резервные копии ежедневно
+" Smart backup
 function! BackupDir()
-	" определим каталог для сохранения резервной копии
-	let l:backupdir=$HOME.'/.vim/backup/'.
-			\substitute(expand('%:p:h'), '^'.$HOME, '~', '')
+    let l:backupdir=$HOME.'/.vim/backup/'.
+            \substitute(expand('%:p:h'), '^'.$HOME, '~', '')
+    " if directory no exist, create it
+    if !isdirectory(l:backupdir)
+        call mkdir(l:backupdir, 'p', 0700)
+    endif
 
-	" если каталог не существует, создадим его рекурсивно
-	if !isdirectory(l:backupdir)
-		call mkdir(l:backupdir, 'p', 0700)
-	endif
+    " set directory for backups...
+    let &backupdir=l:backupdir
 
-	" переопределим каталог для резервных копий
-	let &backupdir=l:backupdir
-
-	" переопределим расширение файла резервной копии
-	let &backupext=strftime('~%Y-%m-%d~')
+    " ...and extension
+    let &backupext=strftime('~%Y-%m-%d~')
 endfunction
 
-" выполним перед записью буффера на диск
+" And write.
 autocmd! bufwritepre * call BackupDir()
 
 
-" включаем syntax/haml.vim
+" Enable syntax/haml.vim
 "au BufRead,BufNewFile *.haml         setfiletype haml 
 "au BufRead,BufNewFile *.haml         set listchars=tab:\ \ 
 au BufEnter *        if &ft == 'haml' |  set listchars=tab:\ \  | else | set listchars=tab:··| endif
@@ -375,11 +366,11 @@ inoremap <expr> <C-d> pumvisible() ? "\<PageDown>\<C-p>\<C-n>" : "\<C-d>"
 inoremap <expr> <C-u> pumvisible() ? "\<PageUp>\<C-p>\<C-n>" : "\<C-u>"
 
 if has("multi_lang")
-	if has("unix")
-		language messages C
-	else
-		language messages en
-	endif
+    if has("unix")
+        language messages C
+    else
+        language messages en
+    endif
 endif
 
 
