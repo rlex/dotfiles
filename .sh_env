@@ -1,3 +1,9 @@
+## Options ##
+# 1 for true, any other for false
+export ext_functions="1"        # source ~/.rc/.sh_functions
+export ext_alias="1"            # source ~/.rc/.sh_aliases
+export ext_toast="1"            # add toast environment variables
+
 #### paths
 # main path
 export PATH=~/bin:$PATH:/usr/local/sbin:/sbin:/usr/local/bin:/usr/local/sbin:/usr/libexec:/opt/local/bin:/opt/local/sbin:/usr/local/mysql/bin:~/.rc/.bin
