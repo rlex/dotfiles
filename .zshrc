@@ -80,10 +80,11 @@ fi
 #export RPRMOPT="%{$reset_color%}"
 
 # Two-lined prompt
-PS1="%{${fg_bold[red]}%}[%{${fg_bold[default]}%}%D%{${fg_bold[red]}%}]-[%{${fg_bold[default]}%}%n%{${fg_bold[red]}%}]-[${fg_bold[default]}%m%{${fg_bold[red]}%}]-[\
-%{${fg_bold[default]}%}${$(tty)#/dev/##}%}%{${fg_bold[red]}%}]-[\
-%{${fg_bold[default]}%}%~%{${fg_bold[red]}%}]
-[%{${fg_bold[default]}%}%*%{${fg_bold[red]}%}]-%#%{${fg_bold[default]}%} """
+#PS1="%{${fg_bold[red]}%}[%{${fg_bold[default]}%}%D%{${fg_bold[red]}%}]-[%{${fg_bold[default]}%}%n%{${fg_bold[red]}%}]-[${fg_bold[default]}%m%{${fg_bold[red]}%}]-[\
+#%{${fg_bold[default]}%}${$(tty)#/dev/##}%}%{${fg_bold[red]}%}]-[\
+#%{${fg_bold[default]}%}%~%{${fg_bold[red]}%}]
+#[%{${fg_bold[default]}%}%*%{${fg_bold[red]}%}]-%#%{${fg_bold[default]}%} """
+export PS1="%{$fg[green]%}%n%{$fg[cyan]%}@%m%{$reset_color%}%{$fg[green]%} $newPWD%{$reset_color%}$ "
 
 # colorize stderr
 # exec 2>>(while read line; do print '\e[91m'${(q)line}'\e[0m' > /dev/tty; print -n $'\0'; done &)
