@@ -63,3 +63,10 @@ if [ "$ext_toast" = "1" ];
             source $HOME/.rc/.sh_aliases
         fi
 fi
+
+# all done? Show MOTD!
+if [ -f $HOME/.rc/.sh_motd ];
+then
+    source $HOME/.rc/.sh_motd
+fi
+

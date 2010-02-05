@@ -32,12 +32,6 @@ promptinit
 ## dircolors ##
 eval `dircolors ~/.dircolors -b`
 
-# load env variables
-if [ -f $HOME/.rc/.sh_env ];
-    then
-        source $HOME/.rc/.sh_env
-    fi
-
 # Prompt!
 export PS1="%{$fg[green]%}%n%{$fg[cyan]%}@%m%{$reset_color%}%{$fg[green]%} $newPWD%{$reset_color%}$ "
 
@@ -85,19 +79,8 @@ zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([0-9]#)*=0=01;31'
 ## Keybindings ##
 #bindkey -e
 
-## Startup screen ##
-OS=`uname`
-if [ "$OS" = "Linux" ]; then
-echo -e "I am: "`whoami` on `hostname` - `hostname -i`;
-echo -e "ID: "`id`;
-echo -e "Sysinfo:" `uname -o` - "Kernel" `uname -r`
-echo -e "Status:" `uptime`
-elif [ "$OS" = "Darwin" -o "$OS" = "FreeBSD" ]; then
-echo -e "I am: "`whoami` on `hostname`
-echo -e "ID: "`id`;
-echo -e "Sysinfo:" `uname` - "Kernel" `uname -r`
-echo -e "Status:" `uptime`
-else
-echo "You are `whoami` on `hostname` which works on `uname`"
+# load env variables
+if [ -f $HOME/.rc/.sh_env ];
+then
+    source $HOME/.rc/.sh_env
 fi
-

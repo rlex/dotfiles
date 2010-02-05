@@ -8,12 +8,6 @@ if [ -f /etc/bash_completion ]; then
     . /etc/bash_completion
 fi
 
-# load env variables
-if [ -f $HOME/.rc/.sh_env ];
-  then
-        source $HOME/.rc/.sh_env
-fi
-
 # if xterm
 case "$TERM" in
 xterm*|rxvt*)
@@ -91,19 +85,9 @@ PROMPT_COMMAND='if [ $? -ne 0 ]; then ERROR_FLAG=1; else ERROR_FLAG=; fi; '
 ## functions
 # SmiliePrompt
 smiley() { if [ $? == 0 ]; then echo '^_^'; else echo '0_o'; fi; }
-function calc () {
-    gawk -v CONVFMT="%12.2f" -v OFMT="%.9g"  "BEGIN { print $* ; }"
-    }
-# startup screen
-clear
-if [ "$OS" = "Linux" ]; then
-echo -e "I am: "`whoami` on `hostname` - `hostname -i`;
-echo -e "ID: "`id`;
-echo -e "Sysinfo:" `uname -o` - "Kernel" `uname -r` 
-echo -e "Status:" `uptime`
-elif [ "$OS" = "Darwin" -o "$OS" = "FreeBSD" ]; then
-echo -e "I am: "`whoami` on `hostname`
-echo -e "ID: "`id`;
-echo -e "Sysinfo:" `uname` - "Kernel" `uname -r`
-echo -e "Status:" `uptime`
+
+# load env variables
+if [ -f $HOME/.rc/.sh_env ];
+  then
+        source $HOME/.rc/.sh_env
 fi
