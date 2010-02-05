@@ -88,7 +88,7 @@ set list
 set expandtab
 
 " Status line settings
-set statusline=%F%m%r%h%w\ [FORMAT=%{&ff}]\ [TYPE=%Y]\ [ASCII=\%03.3b]\ [HEX=\%02.2B]\ [POS=%04l,%04v][%p%%]\ [LEN=%L]
+set statusline=%F%m%r%h%w\ [FORMAT=%{strlen(&fenc)?&fenc:'none'},%{&ff}]\ [TYPE=%Y]\ [ASCII=\%03.3b]\ [HEX=\%02.2B]\ [POS=%04l,%04v][%p%%]\ [LEN=%L]
 set laststatus=2
 
 " Smart indentation
@@ -399,4 +399,3 @@ if !has('unix')
 endif
 
 set ignorecase smartcase
-
