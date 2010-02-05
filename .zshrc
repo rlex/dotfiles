@@ -1,9 +1,3 @@
-## Options ##
-# 1 for true, any other for false
-export ext_functions="1"	# source ~/.rc/.sh_functions
-export ext_alias="1"			# source ~/.rc/.sh_aliases
-export ext_toast="1"			# add toast environment variables
-
 ## ZSH Options ##
 unsetopt BG_NICE		      # do not nice bg commands
 setopt EXTENDED_HISTORY		# puts timestamps in the history
