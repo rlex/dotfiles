@@ -3,19 +3,40 @@ if [[ $- != *i* ]] ; then
          return
 fi
 
-OS=`uname`
-
-PS1=''${prompt_color}'\u@\h'${sh_norm}':'${sh_light_blue}'\w'${sh_norm}' $(smiley) ${ERROR_FLAG:+'${sh_light_red}'}\$${ERROR_FLAG:+'${sh_norm}'} '
-
-
 # bash completion
 if [ -f /etc/bash_completion ]; then
     . /etc/bash_completion
 fi
 
-# toast
-if [ -f $HOME/.toast/armed/bin/toast ]; then
-    eval `$HOME/.toast/armed/bin/toast env`
+# load env variables
+if [ -f $HOME/.rc/.sh_env ];
+  then
+        source $HOME/.rc/.sh_env
+fi
+
+
+# check for toast, if yes, env it
+if [ "$ext_toast" = "1" ]; then
+        if [ -f $HOME/.toast/armed/bin/toast ];
+                then
+        eval `$HOME/.toast/armed/bin/toast env`
+        fi
+fi
+
+# check for sh functions file
+if [ "$ext_functions" = "1" ]; then
+        if [ -f $HOME/.rc/.sh_functions ];
+                then
+        source $HOME/.rc/.sh_functions
+        fi
+fi
+
+# check for sh aliases file
+if [ "$ext_toast" = "1" ]; then
+        if [ -f $HOME/.rc/.sh_aliases ];
+                then
+        source $HOME/.rc/.sh_aliases
+        fi
 fi
 
 # if xterm
@@ -40,8 +61,8 @@ export HISTSIZE=20000
 export HISTFILESIZE=20000
 export HISTTIMEFORMAT="[%Y-%m-%d - %H:%M:%S] "
 export HISTIGNORE="&:ls:ll:la:l:pwd:exit:clear:b:r:exit:env:date:.:..:...:....:.....:pwd:cfg:rb:eb:!!:fg:bg:cd:h:mc"
+export HISTFILE=~/.bash_history
 export CLICOLOR=1
-export INPUTRC=~/.inputrc
 shopt -s checkwinsize
 shopt -s extglob
 shopt -s nocaseglob
@@ -111,7 +132,3 @@ echo -e "ID: "`id`;
 echo -e "Sysinfo:" `uname` - "Kernel" `uname -r`
 echo -e "Status:" `uptime`
 fi
-
-
-
-
