@@ -172,8 +172,7 @@ fsicon = widget({ type = "imagebox" })
 fsicon.image = image(beautiful.widget_fs)
 -- Initialize widgets
 fs = {
-  r = awful.widget.progressbar(),  h = awful.widget.progressbar(),
-  s = awful.widget.progressbar(),  b = awful.widget.progressbar()
+  r = awful.widget.progressbar(),  h = awful.widget.progressbar()
 }
 -- Progressbar properties
 for _, w in pairs(fs) do
@@ -248,6 +247,15 @@ datewidget = widget({ type = "textbox" })
 vicious.register(datewidget, vicious.widgets.date, "%R", 61)
 -- }}}
 
+-- {{{ Wireless network
+wifiicon = widget({ type = "imagebox" })
+wifiicon.image = image(beautiful.widget_wifi)
+-- Initialize widget
+wifiwidget = widget({ type = "textbox" })
+-- Register widget
+vicious.register(wifiwidget, vicious.widgets.wifi, "WiFi: ${sign}", 10, "wlan0")
+-- }}}
+
 -- {{{ System tray
 systray = widget({ type = "systray" })
 -- }}}
@@ -297,7 +305,8 @@ for s = 1, screen.count() do
         separator, datewidget, dateicon,
         separator, volwidget, spacer, volbar.widget, volicon,
         separator, upicon, netwidget, dnicon,
-        separator, fs.b.widget, fs.s.widget, fsicon,
+        separator, wifiwidget,
+        separator, fs.r.widget, fs.h.widget, fsicon,
         separator, membar.widget, memicon,
         separator, batwidget, baticon,
         separator, tzswidget, tzicon, spacer, cpugraph.widget, cpuicon,
