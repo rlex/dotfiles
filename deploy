@@ -1,6 +1,6 @@
 #!/bin/bash
 # dotfiles, for example .bashrc, .bash_profile... 
-dotfiles=( screenrc vimrc zshrc bashrc bash_profile gemrc htoprc gitconfig hgrc biewrc dircolors ackrc muttrc my.cnf toprc Xdefaults )
+dotfiles=( screenrc vimrc zshrc bashrc bash_profile gemrc htoprc gitconfig hgrc biewrc dircolors ackrc muttrc my.cnf toprc Xdefaults gvimrc nanorc )
 # dotdirs, for example .vim, .mc...
 dotdirs=( mc vim mutt )
 
