@@ -36,7 +36,7 @@ set softtabstop=4
 set tabstop=4
 set sw=4
 set sts=4
-set list
+set nolist
 set expandtab
 " Turn on syntax highlighting
 syntax on
@@ -109,6 +109,11 @@ imap <F8> <esc>:MarksBrowser<cr>
 
 " F9 - toggle pasting mode
 set pastetoggle=<F9>
+
+" F10 - NerdTree
+map <F10> :NERDTreeToggle<cr>
+imap <F10> <esc>:NERDTreeToggle<cr>
+nmap <F10> <esc>:NERDTreeToggle<cr>
 
 " F11 - TagList
 map <F11> :TlistToggle<cr>
