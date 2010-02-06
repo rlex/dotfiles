@@ -24,6 +24,12 @@ set hls                             " Highlight searchi
 set complete=.,w,b,u,t,i            " Params for complete
 set infercase                       " Fix completion case
 set nosft                           " No full tags, please
+set foldenable                      " Turn on folding
+set foldmethod=marker               " With {{{,}}} markers
+set viminfo=\'100,\"500,:100"       " read/write a .viminfo file --"Limit regs to 500 lines
+set showmatch                       " show matching brackets and etc
+set wildmenu                        " Filesystem via :e
+
 " Tabulation params
 set shiftwidth=4
 set softtabstop=4
