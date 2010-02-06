@@ -23,7 +23,7 @@ require("myrc/fdmenu")
 
 -- {{{ Variable definitions
 -- Themes define colours, icons, and wallpapers
-beautiful.init("/usr/share/awesome/themes/zenburn/theme.lua")
+beautiful.init("zenburn.lua")
 
 -- This is used later as the default terminal and editor to run.
 terminal = "urxvt"
@@ -111,40 +111,141 @@ mylauncher = awful.widget.launcher({ image = image(beautiful.awesome_icon),
 -- }}}
 
 -- {{{ Wibox
+--
 -- {{{ Widgets configuration
+--
 -- {{{ Reusable separators
-local spacer         = widget({ type = "textbox", name = "spacer" })
-local separator      = widget({ type = "textbox", name = "separator" })
-spacer.text    = " "
-separator.text = " <span foreground='brown'>|</span> "
+spacer    = widget({ type = "textbox"  })
+separator = widget({ type = "imagebox" })
+spacer.text     = " "
+separator.image = image(beautiful.widget_sep)
 -- }}}
 
--- {{{ CPU load 
-local cpuwidget = widget({ type = "textbox" })
-vicious.register(cpuwidget, vicious.widgets.cpu, "<span foreground='orange'>load: </span><span foreground='green'>$2%</span><span foreground='orange'> - </span><span foreground='green'>$3%</span>")
--- }}}
- 
--- {{{ CPU temperature
-local thermalwidget  = widget({ type = "textbox" })
-vicious.register(thermalwidget, vicious.widgets.thermal, "<span foreground='orange'>temp: </span><span foreground='green'>$1°C</span>", 20, "thermal_zone1")
+-- {{{ CPU usage and temperature
+cpuicon = widget({ type = "imagebox" })
+cpuicon.image = image(beautiful.widget_cpu)
+-- Initialize widgets
+cpugraph  = awful.widget.graph()
+tzswidget = widget({ type = "textbox" })
+-- Graph properties
+cpugraph:set_width(40)
+cpugraph:set_height(14)
+cpugraph:set_background_color(beautiful.fg_off_widget)
+cpugraph:set_color(beautiful.fg_end_widget)
+cpugraph:set_gradient_angle(0)
+cpugraph:set_gradient_colors({ beautiful.fg_end_widget,
+   beautiful.fg_center_widget, beautiful.fg_widget
+}) -- Register widgets
+vicious.register(cpugraph,  vicious.widgets.cpu,     "$1")
+vicious.register(tzswidget, vicious.widgets.thermal, "$1C", 19, "thermal_zone0")
 -- }}}
 
 -- {{{ Battery state
--- Widget icon
--- baticon       = widget({ type = "imagebox", name = "baticon" })
--- baticon.image = image(beautiful.widget_bat)
-local batwidget     = widget({ type = "textbox" })
-vicious.register(batwidget, vicious.widgets.bat, "<span foreground='orange'>bat: </span><span foreground='green'>$1$2%</span>", 60, "C1C0")
+baticon = widget({ type = "imagebox" })
+baticon.image = image(beautiful.widget_bat)
+-- Initialize widget
+batwidget = widget({ type = "textbox" })
+-- Register widget
+vicious.register(batwidget, vicious.widgets.bat, "$1$2%", 61, "C1C0")
+-- }}}
+
+-- {{{ Memory usage
+memicon = widget({ type = "imagebox" })
+memicon.image = image(beautiful.widget_mem)
+-- Initialize widget
+membar = awful.widget.progressbar()
+-- Pogressbar properties
+membar:set_width(10)
+membar:set_height(12)
+membar:set_vertical(true)
+membar:set_background_color(beautiful.fg_off_widget)
+membar:set_border_color(beautiful.border_widget)
+membar:set_color(beautiful.fg_widget)
+membar:set_gradient_colors({ beautiful.fg_widget,
+   beautiful.fg_center_widget, beautiful.fg_end_widget
+}) -- Register widget
+vicious.register(membar, vicious.widgets.mem, "$1", 13)
+-- }}}
+
+-- {{{ File system usage
+fsicon = widget({ type = "imagebox" })
+fsicon.image = image(beautiful.widget_fs)
+-- Initialize widgets
+fs = {
+  r = awful.widget.progressbar(),  h = awful.widget.progressbar(),
+  s = awful.widget.progressbar(),  b = awful.widget.progressbar()
+}
+-- Progressbar properties
+for _, w in pairs(fs) do
+  w:set_width(5)
+  w:set_height(12)
+  w:set_vertical(true)
+  w:set_background_color(beautiful.fg_off_widget)
+  w:set_border_color(beautiful.border_widget)
+  w:set_color(beautiful.fg_widget)
+  w:set_gradient_colors({ beautiful.fg_widget,
+     beautiful.fg_center_widget, beautiful.fg_end_widget
+  }) -- Register buttons
+  w.widget:buttons(awful.util.table.join(
+    awful.button({ }, 1, function () exec("dolphin", false) end)
+  ))
+end -- Enable caching
+vicious.enable_caching(vicious.widgets.fs)
+-- Register widgets
+vicious.register(fs.r, vicious.widgets.fs, "${/ used_p}",            599)
+vicious.register(fs.h, vicious.widgets.fs, "${/media/media used_p}",        599)
+-- }}}
+
+-- {{{ Network usage
+dnicon = widget({ type = "imagebox" })
+upicon = widget({ type = "imagebox" })
+dnicon.image = image(beautiful.widget_net)
+upicon.image = image(beautiful.widget_netup)
+-- Initialize widget
+netwidget = widget({ type = "textbox" })
+-- Register widget
+vicious.register(netwidget, vicious.widgets.net, '<span color="'
+  .. beautiful.fg_netdn_widget ..'">${wlan0 down_kb}</span> <span color="'
+  .. beautiful.fg_netup_widget ..'">${wlan0 up_kb}</span>', 3)
+-- }}}
+
+-- {{{ Volume level
+volicon = widget({ type = "imagebox" })
+volicon.image = image(beautiful.widget_vol)
+-- Initialize widgets
+volbar    = awful.widget.progressbar()
+volwidget = widget({ type = "textbox" })
+-- Progressbar properties
+volbar:set_width(10)
+volbar:set_height(12)
+volbar:set_vertical(true)
+volbar:set_background_color(beautiful.fg_off_widget)
+volbar:set_border_color(beautiful.border_widget)
+volbar:set_color(beautiful.fg_widget)
+volbar:set_gradient_colors({ beautiful.fg_widget,
+   beautiful.fg_center_widget, beautiful.fg_end_widget
+}) -- Enable caching
+vicious.enable_caching(vicious.widgets.volume)
+-- Register widgets
+vicious.register(volbar,    vicious.widgets.volume, "$1",  2, "PCM")
+vicious.register(volwidget, vicious.widgets.volume, "$1%", 2, "PCM")
+-- Register buttons
+volbar.widget:buttons(awful.util.table.join(
+   awful.button({ }, 1, function () exec("kmix") end),
+   awful.button({ }, 2, function () exec("amixer -q sset Master toggle")   end),
+   awful.button({ }, 4, function () exec("amixer -q sset PCM 2dB+", false) end),
+   awful.button({ }, 5, function () exec("amixer -q sset PCM 2dB-", false) end)
+)) -- Register assigned buttons
+volwidget:buttons(volbar.widget:buttons())
 -- }}}
 
 -- {{{ Date and time
-local datewidget = widget({ type = "textbox" })
-vicious.register(datewidget, vicious.widgets.date, "<span foreground='green'>%a, %d.%m.%y - %H:%M</span>", 5)
--- }}}
-
--- {{{ Volume widget
-local volwidget = widget({ type = "textbox" })
-vicious.register(volwidget, vicious.widgets.volume, "<span foreground='orange'>vol: </span><span foreground='green'>$1%</span>", 1, 'PCM')
+dateicon = widget({ type = "imagebox" })
+dateicon.image = image(beautiful.widget_date)
+-- Initialize widget
+datewidget = widget({ type = "textbox" })
+-- Register widget
+vicious.register(datewidget, vicious.widgets.date, "%R", 61)
 -- }}}
 
 -- {{{ System tray
@@ -153,17 +254,18 @@ systray = widget({ type = "systray" })
 -- }}}
 
 -- {{{ Wibox initialisation
-local wibox     = {}
-local promptbox = {}
-local layoutbox = {}
-local taglist   = {}
+wibox     = {}
+promptbox = {}
+layoutbox = {}
+taglist   = {}
 taglist.buttons = awful.util.table.join(
-                    awful.button({ }, 1, awful.tag.viewonly),
-                    awful.button({ modkey }, 1, awful.client.movetotag),
-                    awful.button({ }, 3, awful.tag.viewtoggle),
-                    awful.button({ modkey }, 3, awful.client.toggletag),
-                    awful.button({ }, 4, awful.tag.viewnext),
-                    awful.button({ }, 5, awful.tag.viewprev))
+    awful.button({ }, 1, awful.tag.viewonly),
+    awful.button({ modkey }, 1, awful.client.movetotag),
+    awful.button({ }, 3, awful.tag.viewtoggle),
+    awful.button({ modkey }, 3, awful.client.toggletag),
+    awful.button({ }, 4, awful.tag.viewnext),
+    awful.button({ }, 5, awful.tag.viewprev
+))
 
 for s = 1, screen.count() do
     -- Create a promptbox
@@ -171,31 +273,35 @@ for s = 1, screen.count() do
     -- Create a layoutbox
     layoutbox[s] = awful.widget.layoutbox(s)
     layoutbox[s]:buttons(awful.util.table.join(
-                           awful.button({ }, 1, function () awful.layout.inc(layouts, 1) end),
-                           awful.button({ }, 3, function () awful.layout.inc(layouts, -1) end),
-                           awful.button({ }, 4, function () awful.layout.inc(layouts, 1) end),
-                           awful.button({ }, 5, function () awful.layout.inc(layouts, -1) end)
+        awful.button({ }, 1, function () awful.layout.inc(layouts, 1)  end),
+        awful.button({ }, 3, function () awful.layout.inc(layouts, -1) end),
+        awful.button({ }, 4, function () awful.layout.inc(layouts, 1)  end),
+        awful.button({ }, 5, function () awful.layout.inc(layouts, -1) end)
     ))
 
-    -- Create a taglist widget
+    -- Create the taglist
     taglist[s] = awful.widget.taglist(s, awful.widget.taglist.label.all, taglist.buttons)
     -- Create the wibox
-    wibox[s] = awful.wibox({
-        position = "top", screen = s,
-        fg = beautiful.fg_normal, bg = beautiful.bg_normal
+    wibox[s] = awful.wibox({      screen = s,
+        fg = beautiful.fg_normal, height = 12,
+        bg = beautiful.bg_normal, position = "top",
+        border_color = beautiful.border_focus,
+        border_width = beautiful.border_width
     })
     -- Add widgets to the wibox
-    wibox[s].widgets = {{
-        mylauncher, taglist[s], layoutbox[s], promptbox[s],
-        layout = awful.widget.layout.horizontal.leftright
-    },
+    wibox[s].widgets = {
+        {   taglist[s], layoutbox[s], separator, promptbox[s],
+            ["layout"] = awful.widget.layout.horizontal.leftright
+        },
         s == screen.count() and systray or nil,
-        spacer, datewidget,
-        separator, volwidget,
-        separator, batwidget,
-        separator, cpuwidget,
-        separator, thermalwidget,
-        layout = awful.widget.layout.horizontal.rightleft
+        separator, datewidget, dateicon,
+        separator, volwidget, spacer, volbar.widget, volicon,
+        separator, upicon, netwidget, dnicon,
+        separator, fs.b.widget, fs.s.widget, fsicon,
+        separator, membar.widget, memicon,
+        separator, batwidget, baticon,
+        separator, tzswidget, tzicon, spacer, cpugraph.widget, cpuicon,
+        separator, ["layout"] = awful.widget.layout.horizontal.rightleft
     }
 end
 -- }}}
