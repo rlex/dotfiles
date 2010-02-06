@@ -1,46 +1,46 @@
-" Set normal encoding
-set encoding=utf8
-set termencoding=utf-8
+" Generic params
+set encoding=utf8                   " normal encoding
+set termencoding=utf-8              " terminal encoding
+set nocompatible                    " no vi manner
+set ruler                           " cursor position always enabled
+set showcmd                         " show commands
+set nu                              " line numbers
+set title                           " enable title
+set titlestring=VIM:\ %F            " Make the window title reflect the file being edited
+set incsearch                       " Incremental search
+set scrolljump=7                    " Jump with scroll
+set scrolloff=7                     " Scroll when near screen edge
+set novisualbell                    " Disable bell
+set t_vb=                           " Really disable
+set backupdir=~/.rc/.vim/swap/      " Backup dir
+set directory=~/.rc/.vim/swap/      " Another backup dir
+set hidden                          " Enable unsaved buffer
+set ch=1                            " Command line - one line high
+set mousehide                       " Hide mouse cursor
+set autoindent                      " Auto indentation
+set backspace=indent,eol,start      " Use backspace...
+set whichwrap+=<,>,[,]              " Instead of _x
+set hls                             " Highlight searchi
+set complete=.,w,b,u,t,i            " Params for complete
+set infercase                       " Fix completion case
+set nosft                           " No full tags, please
+" Tabulation params
+set shiftwidth=4
+set softtabstop=4
+set tabstop=4
+set sw=4
+set sts=4
+set list
+set expandtab
+" Turn on syntax highlighting
+syntax on
+" Status line settings
+set statusline=%F%m%r%h%w\ [FORMAT=%{strlen(&fenc)?&fenc:'none'},%{&ff}]\ [TYPE=%Y]\ [ASCII=\%03.3b]\ [HEX=\%02.2B]\ [POS=%04l,%04v][%p%%]\ [LEN=%L]
+set laststatus=2
+" Fix <Enter> for comment
+set fo+=cr
 
-" No vi manner
-set nocompatible
-
-" Turn ruler on
-set ruler
-
-" Show commands
-set showcmd
-
-" Copy with lines
-set nu
-
-" Make the window title reflect the file being edited
-set title
-set titlestring=VIM:\ %F
-
-" Folding method
-" set foldmethod=indent
-
-" Incremental search
-set incsearch
-
-" No highlighting when search
-set nohls
-
-" Jump with scroll
-set scrolljump=7
-
-" 7 lines near cursor
-set scrolloff=7
-
-" Disable bell
-set novisualbell
-set t_vb= 
-
-" Backup dir
-set backupdir=~/.rc/.vim/swap/
-set directory=~/.rc/.vim/swap/
-
+" Which compiler we must use?
 if has('win32')
   set makeprg=nmake
   compiler msvc
@@ -52,49 +52,6 @@ endif
 " map <Del> i<Del><Esc>l
 map <Del> "_x
 " Map del
-
-" Enable unsaved buffer
-set hidden
-
-" Remove toolbar
-set guioptions-=T
-
-" Make command line one line high
-set ch=1
-
-" Hide mouse cursor
-set mousehide
-
-" Enable auto indentation
-set autoindent
-
-" Enable syntax highlight
-syntax on
-
-" allow to use backspace instead of "x"
-set backspace=indent,eol,start whichwrap+=<,>,[,]
-
-" Tabulation params
-set shiftwidth=4
-set softtabstop=4
-set tabstop=4
-set sw=4
-set sts=4
-"set et
-"set ai
-"set cin
-set list
-set expandtab
-
-" Status line settings
-set statusline=%F%m%r%h%w\ [FORMAT=%{strlen(&fenc)?&fenc:'none'},%{&ff}]\ [TYPE=%Y]\ [ASCII=\%03.3b]\ [HEX=\%02.2B]\ [POS=%04l,%04v][%p%%]\ [LEN=%L]
-set laststatus=2
-
-" Smart indentation
-" set smartindent
-
-" Fix <Enter> for comment
-set fo+=cr
 
 " Session options
 set sessionoptions=curdir,buffers,tabpages
@@ -252,16 +209,9 @@ imap <C-N>t <esc>:TlistToggle<cr>i
 "vmap <C-N>x <esc>:TlistToggle<cr>i
 "imap <C-N>x <esc>:TlistToggle<cr>i
 
-"let g:ctags_statusline=1
 let g:ctags_title=1
 let generate_tags=1
 let g:ctags_regenerate=1
-
-" set background=dark
-" syntax highlighting
-syntax on " syntax highlighting
-colorscheme xoria256
-set hls
 
 " Colorscheme based on $TERM
 if $TERM == "xterm" || $TERM == "rxvt" || $TERM == "xterm-256color" || $TERM == "rxvt-unicode" || &term =~ "builtin_gui" || $TERM == "dumb"
