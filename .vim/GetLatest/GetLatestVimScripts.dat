@@ -1,22 +1,16 @@
 scriptID SourceID Filename
 --------------------------
 1658 11834 :AutoInstall: NERD_tree.vim
-102 9375 :AutoInstall: DirDiff.vim
 1928 7262 :AutoInstall: Rename.vim
 642 8136 :AutoInstall: GetLatestVimscripts.vim
-489 9573 :AutoInstall: Manpageview.vim
-2009 9223 :AutoInstall: autoclose.vim
 42 12104 :AutoInstall: bufexplorer.vim
 610 2529 :AutoInstall: ctags.vim
-1588 5884 :AutoInstall: scrollcolor.vim
 1879 11894 :AutoInstall: acp.vim
 39 8196 :AutoInstall: matchit.vim
 1567 11920 :AutoInstall: rails.vim
-2540 11006 :AutoInstall: snipMate.vim
 1643 11853 :AutoInstall: supertab.vim
 273 7701 :AutoInstall: taglist.vim
 1218 10318 :AutoInstall: NERD_commenter.vim
 1502 11981 :AutoInstall: vimball.vim
 1879 11894 :AutoInstall: AutoComplPop
-642 8136 :AutoInstall: getscript.vim
-90 12274 :AutoInstall: vcscontrol.vim
+90 12274 :AutoInstall: vcscommand.vim

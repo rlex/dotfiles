@@ -29,7 +29,7 @@ set foldmethod=marker               " With {{{,}}} markers
 set viminfo=\'100,\"500,:100"       " read/write a .viminfo file --"Limit regs to 500 lines
 set showmatch                       " show matching brackets and etc
 set wildmenu                        " Filesystem via :e
-
+set fileencodings=utf-8,cp1251      " Well, sometimes i edit files from win.
 " Tabulation params
 set shiftwidth=4
 set softtabstop=4
@@ -76,10 +76,6 @@ imap <C-V> <esc>"+gPi
 " shift-insert fix for Xterm
 map <S-Insert> <MiddleMouse>
 
-" C-y - vim dd
-nmap <C-y> dd
-imap <C-y> <esc>ddi
-
 " C-d - yyPi
 imap <C-d> <esc>yypi
 
@@ -96,13 +92,6 @@ nmap <F2> :w<cr>
 vmap <F2> <esc>:w<cr>i
 imap <F2> <esc>:w<cr>i
 
-" F3 - rake
-nmap <F3> :!rake<cr>
-vmap <F3> <esc>:!rake<cr>
-imap <F3> <esc>:!rake<cr>
-
-"map <F4> [I:let nr = input("Which one: ")<Bar>exe "normal " . nr ."[\t"<CR>]]
-
 " F5 - BufExplorer
 nmap <F5> <Esc>:BufExplorer<cr>
 vmap <F5> <esc>:BufExplorer<cr>
@@ -113,12 +102,6 @@ map <F6> :bp<cr>
 vmap <F6> <esc>:bp<cr>i
 imap <F6> <esc>:bp<cr>i
 
-" F7 - wall make
-map <F7> :wall \| make<Cr>
-imap <F7> <ESC>:wall \| make<Cr>
-map <F4> :cn<Cr>zvzz:cc<Cr>
-map <S-F4> :cp<Cr>zvzz:cc<Cr>
-
 " F8 - Marks Browser
 map <F8> :MarksBrowser<cr>
 vmap <F8> <esc>:MarksBrowser<cr>
@@ -127,17 +110,10 @@ imap <F8> <esc>:MarksBrowser<cr>
 " F9 - toggle pasting mode
 set pastetoggle=<F9>
 
-" F10 free
-
 " F11 - TagList
 map <F11> :TlistToggle<cr>
 vmap <F11> <esc>:TlistToggle<cr>
 imap <F11> <esc>:TlistToggle<cr>
-
-" F12 - ExWhat?
-map <F12> :Ex<cr>
-vmap <F12> <esc>:Ex<cr>i
-imap <F12> <esc>:Ex<cr>i
 
 " tab navigation like firefox
 map <C-Right> :tabnext<CR>
@@ -146,7 +122,6 @@ nmap <C-t> :tabnew<CR>
 imap <C-t> <Esc>:tabnew<CR>
 
 " Encoding settings (koi8-r, cp1251, cp866, utf8)
-set wildmenu
 set wcm=<Tab> 
 menu Encoding.koi8-r :e ++enc=koi8-r<CR>
 menu Encoding.windows-1251 :e ++enc=cp1251<CR>
@@ -170,7 +145,7 @@ endfunction
 imap <S-tab> <c-r>=InsertTabWrapper()<cr>
 
 " order and what to complete. see ":help complete" for info
-set     complete=.,w,b,u,t,i
+set complete=.,w,b,u,t,i
 " enable dictionary (add k to complete to scan dict when completing)
 " set dict=<FILENAME>
 " adjust case of a keyword completion match
@@ -185,18 +160,13 @@ au BufRead,BufNewFile *.phps set filetype=php
 au BufRead,BufNewFile *.thtml set filetype=php
 au BufRead,BufNewFile *.erb set filetype=html
 
-" SessionMgr Settings
-let g:SessionMgr_AutoManage = 0
-let g:SessionMgr_DefaultName = "mysession"
-
 " Show only one file in Tlist
 let g:Tlist_Show_One_File = 1
 
 set completeopt-=preview
 set completeopt+=longest
 set mps-=[:]
-
-:au Filetype html,xml,xsl,erb,rhtml,phtml,htm,rb,php source ~/.vim/scripts/closetag.vim 
+ 
 " NERDTree hotkeys
 nmap <C-N>v :NERDTree<cr>
 vmap <C-N>v <esc>:NERDTree<cr>i
@@ -205,15 +175,6 @@ imap <C-N>v <esc>:NERDTree<cr>i
 nmap <C-N>x :NERDTreeClose<cr>
 vmap <C-N>x <esc>:NERDTreeClose<cr>i
 imap <C-N>x <esc>:NERDTreeClose<cr>i
-
-"TagList Hotkeys :TlistToggle
-nmap <C-N>t :TlistToggle<cr>
-vmap <C-N>t <esc>:TlistToggle<cr>i
-imap <C-N>t <esc>:TlistToggle<cr>i
-
-"nmap <C-N>x :TlistToggle<cr>
-"vmap <C-N>x <esc>:TlistToggle<cr>i
-"imap <C-N>x <esc>:TlistToggle<cr>i
 
 let g:ctags_title=1
 let generate_tags=1
@@ -228,8 +189,6 @@ else
 endif
 
 let g:AutoClosePairs = {'(': ')', '{': '}', '[': ']', '"': '"', "'": "'" }
-
-autocmd BufNewFile,BufRead *.rb source ~/.vim/scripts/rubysnippets.vim
 
 "ie both cscope and ctag for 'ctrl-]', ':ta', and 'vim -t'
 set cscopetag
@@ -255,29 +214,8 @@ autocmd FileType css set omnifunc=csscomplete#CompleteCSS
 autocmd FileType xml set omnifunc=xmlcomplete#CompleteTags
 autocmd FileType php set omnifunc=phpcomplete#CompletePHP
 autocmd FileType c set omnifunc=ccomplete#Complete
-"autocmd FileType rb set omnifunc=rubycomplete#Complete
-
-" set encodings
-set fileencodings=utf-8,cp1251
-
-autocmd FileType html :set omnifunc=htmlcomplete#CompleteTags
-autocmd FileType python set omnifunc=pythoncomplete#Complete
-autocmd FileType javascript set omnifunc=javascriptcomplete#CompleteJS
-autocmd FileType css set omnifunc=csscomplete#CompleteCSS
-autocmd FileType xml set omnifunc=xmlcomplete#CompleteTags
-autocmd FileType php set omnifunc=phpcomplete#CompletePHP
-autocmd FileType c set omnifunc=ccomplete#Complete
-autocmd FileType ruby,eruby set omnifunc=rubycomplete#Complete
-autocmd FileType ruby,eruby let g:rubycomplete_buffer_loading = 1
-autocmd FileType ruby,eruby let g:rubycomplete_rails = 1
-autocmd FileType ruby,eruby let g:rubycomplete_classes_in_global = 1
-
-nmap <leader>rci :%!ruby-code-indenter<cr>
-
+autocmd FileType rb,rake,ruby,eruby set omnifunc=rubycomplete#Complete
 autocmd FileType rb,rake,ruby set noexpandtab
-
-" Not change tab to two dots in HAML
-" autocmd FileType haml set listchars=tab:\ \ 
 
 " Power on backup :)
 set backup
@@ -302,24 +240,17 @@ endfunction
 autocmd! bufwritepre * call BackupDir()
 
 
-" Enable syntax/haml.vim
-"au BufRead,BufNewFile *.haml         setfiletype haml 
-"au BufRead,BufNewFile *.haml         set listchars=tab:\ \ 
-au BufEnter *        if &ft == 'haml' |  set listchars=tab:\ \  | else | set listchars=tab:··| endif
-
 nmap <PageUp> <C-U><C-U>
 imap <PageUp> <C-O><C-U><C-O><C-U>
 nmap <PageDown> <C-D><C-D>
 imap <PageDown> <C-O><C-D><C-O><C-D>
 
 for $f in split(glob("~/.vim/tags/*"), "\n")
-	set tags+=$f
+    set tags+=$f
 endfor
 
+" Regenerate tag
 source ~/.vim/autoload/autotag.vim
-
-inoremap <expr> <C-d> pumvisible() ? "\<PageDown>\<C-p>\<C-n>" : "\<C-d>"
-inoremap <expr> <C-u> pumvisible() ? "\<PageUp>\<C-p>\<C-n>" : "\<C-u>"
 
 if has("multi_lang")
     if has("unix")
@@ -344,4 +275,3 @@ if !has('unix')
   set keywordprg=:help
 endif
 
-set ignorecase smartcase
