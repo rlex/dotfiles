@@ -19,3 +19,4 @@ scriptID SourceID Filename
 1502 11981 :AutoInstall: vimball.vim
 1879 11894 :AutoInstall: AutoComplPop
 642 8136 :AutoInstall: getscript.vim
+90 12274 :AutoInstall: vcscontrol.vim
