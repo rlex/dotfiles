@@ -264,7 +264,7 @@ wifiicon.image = image(beautiful.widget_wifi)
 -- Initialize widget
 wifiwidget = widget({ type = "textbox" })
 -- Register widget
-vicious.register(wifiwidget, vicious.widgets.wifi, "WiFi: ${sign}", 10, "wlan0")
+vicious.register(wifiwidget, vicious.widgets.wifi, "WiFi: ${ssid} / ${link}%", 10, "wlan0")
 -- }}}
 
 -- {{{ System tray
