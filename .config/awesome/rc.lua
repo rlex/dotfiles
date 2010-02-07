@@ -18,7 +18,7 @@ require("beautiful")
 require("naughty")
 require("vicious")
 -- Menu library
-require("myrc/fdmenu")
+--require("freedesktop")
 -- }}}
 
 -- {{{ Variable definitions
@@ -61,8 +61,8 @@ commands.help = "touch ~/seppal"
 commands.lock = "xscreensaver-command --lock"
 commands.screenshot = "scrot -e 'mv $f ~/bilder/screenshots'"
 --audio stuff
-commands.raisevol = "amixer set PCM 2%+"
-commands.lowervol = "amixer set PCM 2%-"
+commands.raisevol = "amixer set Master 2%+"
+commands.lowervol = "amixer set Master 2%-"
 commands.mute = "amixer sset PCM toggle"
 commands.cmusnext = "cmus-remote --next"
 commands.cmusprev = "cmus-remote --prev"
@@ -81,33 +81,43 @@ tags = {}
 for s = 1, screen.count() do
     -- Each screen has its own tag table.
     tags[s] = awful.tag({ 
-     "1 www", "2 im", "3 xchat", 
-     "4 music", "5 iron", "6 term", 
+     "1 www", "2 im", "3 irc", 
+     "4 mus", "5 code", "6 term", 
      7, 8, 9 }, s, awful.layout.suit.tile)
 end
 -- }}}
 
 -- {{{ Menu
--- Create a laucher widget and a main menu
+-- applications menu
+require('freedesktop.utils')
+freedesktop.utils.terminal = terminal  -- default: "xterm"
+freedesktop.utils.icon_theme = 'hicolor' -- look inside /usr/share/icons/, default: nil (don't use icon theme)
+require('freedesktop.menu')
+
+menu_items = freedesktop.menu.new()
 myawesomemenu = {
-   { "manual", terminal .. " -e man awesome" },
-   { "edit config", editor_cmd .. " " .. awful.util.getdir("config") .. "/rc.lua" },
-   { "restart", awesome.restart },
-   { "quit", awesome.quit }
+    { "manual", terminal .. " -e man awesome", freedesktop.utils.lookup_icon({ icon = 'help' }) },
+    { "edit config", editor_cmd .. " " .. awful.util.getdir("config") .. "/rc.lua", freedesktop.utils.lookup_icon({ 
+    icon = 'package_settings' }) },
+    { "restart", awesome.restart, freedesktop.utils.lookup_icon({ icon = '' }) },
+    { "quit", awesome.quit, freedesktop.utils.lookup_icon({ icon = '' }) }
 }
+table.insert(menu_items, { "awesome", myawesomemenu, beautiful.awesome_icon })
+table.insert(menu_items, { "open terminal", terminal, freedesktop.utils.lookup_icon({icon = 'terminal'}) })
 
--- {{{ XDG Menu
-mymainmenu = myrc.mainmenu.build()
-mylauncher = awful.widget.launcher({
-    image = beautiful.awesome_icon, menu = mymainmenu })
--- }}}
---mymainmenu = awful.menu({ items = { { "awesome", myawesomemenu, beautiful.awesome_icon },
---                                    { "open terminal", terminal }
---                                  }
---                        })
+mymainmenu = awful.menu.new({ items = menu_items, width = 150 })
 
-mylauncher = awful.widget.launcher({ image = image(beautiful.awesome_icon),
+mylauncher = awful.widget.launcher({ image = beautiful.awesome_icon,
                                      menu = mymainmenu })
+
+
+-- desktop icons
+require('freedesktop.desktop')
+for s = 1, screen.count() do
+--    freedesktop.desktop.add_applications_icon({screen = s, showlabels = true})
+--    freedesktop.desktop.add_dirs_and_files_icon({screen = s, showlabels = true})
+end
+
 -- }}}
 
 -- {{{ Wibox
@@ -227,14 +237,14 @@ volbar:set_gradient_colors({ beautiful.fg_widget,
 }) -- Enable caching
 vicious.enable_caching(vicious.widgets.volume)
 -- Register widgets
-vicious.register(volbar,    vicious.widgets.volume, "$1",  2, "PCM")
-vicious.register(volwidget, vicious.widgets.volume, "$1%", 2, "PCM")
+vicious.register(volbar,    vicious.widgets.volume, "$1",  2, "Master")
+vicious.register(volwidget, vicious.widgets.volume, "$1%", 2, "Master")
 -- Register buttons
 volbar.widget:buttons(awful.util.table.join(
    awful.button({ }, 1, function () exec("kmix") end),
    awful.button({ }, 2, function () exec("amixer -q sset Master toggle")   end),
-   awful.button({ }, 4, function () exec("amixer -q sset PCM 2dB+", false) end),
-   awful.button({ }, 5, function () exec("amixer -q sset PCM 2dB-", false) end)
+   awful.button({ }, 4, function () exec("amixer -q sset Master 2dB+", false) end),
+   awful.button({ }, 5, function () exec("amixer -q sset Master 2dB-", false) end)
 )) -- Register assigned buttons
 volwidget:buttons(volbar.widget:buttons())
 -- }}}
