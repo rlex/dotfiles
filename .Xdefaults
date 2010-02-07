@@ -3,30 +3,22 @@ URxvt.buffered: true
 URxvt.font: xft:Terminus:pixelsize=11:antialias=false
 URxvt.boldFont: xft:Terminus:bold:pixelsize=11:antialias=false
 URxvt.perl-ext-common: default,tabbed
-urxvt.termName: rxvt
+urxvt.termName: rxvt-256color
 urxvt.title: urxvt
 urxvt.scrollBar: false
-urxvt.imLocale: en_UK.UTF-8
 urxvt.loginShell: true
 urxvt.saveLines: 512
 urxvt.geometry: 75x25
 urxvt.boldMode: false
-urxvt.inheritPixmap: true
 URxvt.transparent:false
 urxvt.shading: 40
 urxvt.xftAntialias: false
 urxvt.jumpScroll: true
-!urxvt.tintColor: black
+urxvt.tintColor: #181818
 urxvt.internalBorder: 0
 urxvt.cursorBlink: false
-!urxvt.cursorColor: #E2BAF1
 urxvt.cursorColor: #0A832D
 urxvt.cursorColor2: #000000
-!urxvt.background: #181818
-!urxvt.foreground: #999999
-urxvt.colorBD: #aaaaaa
-urxvt.colorIT: #bbbbbb
-urxvt.colorUL: #999999
 urxvt.underlineColor: #999999
 urxvt.borderless: true
 
