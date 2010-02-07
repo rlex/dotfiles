@@ -23,7 +23,7 @@ require("myrc/fdmenu")
 
 -- {{{ Variable definitions
 -- Themes define colours, icons, and wallpapers
-beautiful.init("zenburn.lua")
+beautiful.init("/home/xdemon/.config/awesome/zenburn.lua")
 
 -- This is used later as the default terminal and editor to run.
 terminal = "urxvt"
@@ -127,6 +127,7 @@ cpuicon.image = image(beautiful.widget_cpu)
 -- Initialize widgets
 cpugraph  = awful.widget.graph()
 tzswidget = widget({ type = "textbox" })
+tzswidget.image = image(beautiful.widget_temp)
 -- Graph properties
 cpugraph:set_width(40)
 cpugraph:set_height(14)
@@ -196,16 +197,16 @@ vicious.register(fs.h, vicious.widgets.fs, "${/media/media used_p}",        599)
 -- }}}
 
 -- {{{ Network usage
-dnicon = widget({ type = "imagebox" })
-upicon = widget({ type = "imagebox" })
-dnicon.image = image(beautiful.widget_net)
-upicon.image = image(beautiful.widget_netup)
+--dnicon = widget({ type = "imagebox" })
+--upicon = widget({ type = "imagebox" })
+--dnicon.image = image(beautiful.widget_net)
+--upicon.image = image(beautiful.widget_netup)
 -- Initialize widget
-netwidget = widget({ type = "textbox" })
+--netwidget = widget({ type = "textbox" })
 -- Register widget
-vicious.register(netwidget, vicious.widgets.net, '<span color="'
-  .. beautiful.fg_netdn_widget ..'">${wlan0 down_kb}</span> <span color="'
-  .. beautiful.fg_netup_widget ..'">${wlan0 up_kb}</span>', 3)
+--vicious.register(netwidget, vicious.widgets.net, '<span color="'
+--  .. beautiful.fg_netdn_widget ..'">${wlan0 down_kb}</span> <span color="'
+--  .. beautiful.fg_netup_widget ..'">${wlan0 up_kb}</span>', 3)
 -- }}}
 
 -- {{{ Volume level
@@ -304,7 +305,6 @@ for s = 1, screen.count() do
         s == screen.count() and systray or nil,
         separator, datewidget, dateicon,
         separator, volwidget, spacer, volbar.widget, volicon,
-        separator, upicon, netwidget, dnicon,
         separator, wifiwidget,
         separator, fs.r.widget, fs.h.widget, fsicon,
         separator, membar.widget, memicon,
@@ -528,7 +528,7 @@ client.add_signal("unfocus", function(c) c.border_color = beautiful.border_norma
 -- }}}
 
 -- {{{ Autostart
-os.execute("krandrtray &")
+os.execute("yeahconsole &")
 -- }}}
 
 -- vim: fdm=marker fdl=0 sts=4 ai
