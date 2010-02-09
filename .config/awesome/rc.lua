@@ -1,6 +1,6 @@
 -- {{{ License
--- rc.lua, works with awesome 3.4.2 (Arch Linux)
--- author: nblock <nblock [at] archlinux.us>
+-- rc.lua, currently works with awesome 3.4.2
+-- author: x-demon <x-demon [at] x-demon.org>
 -- based on multiple rc.lua files from different awesome users
 --
 -- This work is licensed under the Creative Commons Attribution Share
@@ -41,14 +41,8 @@ modkey = "Mod4"
 layouts =
 {
     awful.layout.suit.tile,
-    awful.layout.suit.tile.left,
     awful.layout.suit.tile.bottom,
-    awful.layout.suit.tile.top,
     awful.layout.suit.fair,
-    awful.layout.suit.fair.horizontal,
-    awful.layout.suit.spiral,
-    awful.layout.suit.spiral.dwindle,
-    awful.layout.suit.max,
     awful.layout.suit.max.fullscreen,
     awful.layout.suit.magnifier,
     awful.layout.suit.floating
@@ -56,7 +50,7 @@ layouts =
 
 -- some commands
 local commands = {}
-commands.suspend = "sudo pm-suspend"
+commands.suspend = "sudo s2ram --force"
 commands.help = "touch ~/seppal"
 commands.lock = "xscreensaver-command --lock"
 commands.screenshot = "scrot -e 'mv $f ~/bilder/screenshots'"
@@ -64,15 +58,15 @@ commands.screenshot = "scrot -e 'mv $f ~/bilder/screenshots'"
 commands.raisevol = "amixer set Master 2%+"
 commands.lowervol = "amixer set Master 2%-"
 commands.mute = "amixer sset PCM toggle"
-commands.cmusnext = "cmus-remote --next"
-commands.cmusprev = "cmus-remote --prev"
-commands.cmuspause = "cmus-remote --pause"
-commands.cmusplay = "cmus-remote --play"
+commands.musnext = "mpc next"
+commands.musprev = "mpc prev"
+commands.muspause = "mpc pause"
+commands.musplay = "mpc play"
 commands.calc = "krunner"
 --todo
-commands.fileman = "pcmanfm"
-commands.calc = "xcalc"
-commands.browser = "firefox"
+commands.fileman = "doplhin"
+commands.calc = "kcalc"
+commands.browser = "chromium"
 -- }}}
 
 -- {{{ Tags
@@ -264,7 +258,7 @@ wifiicon.image = image(beautiful.widget_wifi)
 -- Initialize widget
 wifiwidget = widget({ type = "textbox" })
 -- Register widget
-vicious.register(wifiwidget, vicious.widgets.wifi, "WiFi: ${ssid} / ${link}%", 10, "wlan0")
+vicious.register(wifiwidget, vicious.widgets.wifi, "WiFi: ${ssid} - ${link}%", 10, "wlan0")
 -- }}}
 
 -- {{{ System tray
@@ -344,18 +338,12 @@ globalkeys = awful.util.table.join(
     awful.key({}, "XF86AudioMute", function() awful.util.spawn_with_shell(commands.mute) end ),
     awful.key({}, "XF86AudioRaiseVolume", function() awful.util.spawn_with_shell(commands.raisevol) end ),
     awful.key({}, "XF86AudioLowerVolume", function() awful.util.spawn_with_shell(commands.lowervol) end ),
-    awful.key({}, "XF86AudioNext", function() awful.util.spawn_with_shell(commands.cmusnext) end ),
-    awful.key({}, "XF86AudioPrev", function() awful.util.spawn_with_shell(commands.cmusprev) end ),
-    awful.key({}, "XF86AudioPlay", function() awful.util.spawn_with_shell(commands.cmuspause) end ),
-    awful.key({}, "XF86Tools", function() awful.util.spawn_with_shell(commands.cmusplay) end ),
+    awful.key({}, "XF86AudioNext", function() awful.util.spawn_with_shell(commands.musnext) end ),
+    awful.key({}, "XF86AudioPrev", function() awful.util.spawn_with_shell(commands.musprev) end ),
+    awful.key({}, "XF86AudioPlay", function() awful.util.spawn_with_shell(commands.muspause) end ),
+    awful.key({}, "XF86Tools", function() awful.util.spawn_with_shell(commands.musplay) end ),
     awful.key({}, "XF86Calculator", function() awful.util.spawn_with_shell(commands.calc) end ),
     awful.key({}, "Print", function() awful.util.spawn_with_shell(commands.screenshot) end ),
-
-   -- awful.key({}, "XF86MyComputer", function() awful.util.spawn_with_shell(commands.fileman) end ),
-   -- awful.key({}, "XF86Mail", function() awful.util.spawn_with_shell(commands.mail) end ),
-   -- awful.key({}, "XF86HomePage", function() awful.util.spawn_with_shell(commands.browser) end ),
-   -- awful.key({}, "XF86Sleep", function() awful.util.spawn_with_shell(commands.lock) end ),
-   -- awful.key({"Control", "Mod1"}, "l", function() awful.util.spawn_with_shell(commands.lock) end ),
 
     --default bindings
     awful.key({ modkey,           }, "Left",   awful.tag.viewprev       ),
@@ -480,23 +468,25 @@ awful.rules.rules = {
     --floating apps
     { rule = { class = "pinentry-qt4" },
     properties = { floating = true } },
-    { rule = { class = "Gimp" },
+    { rule = { class = "Dialog" },
     properties = { floating = true } },
     --apptags
-    --downloading stuff
-    { rule = { class = "JDownloader" },
+    --browser
+    { rule = { class = "Chromium" },
     properties = { tag = tags[1][1],switchtotag = true } },
-    -- mail
-    { rule = { class = "Kmail" },
+    { rule = { class = "Chrome" },
+    properties = { tag = tags[1][1],switchtotag = true } },
+    -- IM
+    { rule = { class = "Qutim" },
     properties = { tag = tags[1][2],switchtotag = true } },
-    --chat and stuff like that
-    { rule = { class = "Choqok" },
+    -- IRC
+    { rule = { class = "Xchat" },
     properties = { tag = tags[1][3],switchtotag = false } },
-    { rule = { class = "Kopete" },
+    { rule = { class = "qmpdclient" },
     properties = { tag = tags[1][3],switchtotag = false } },
     --file manager
     { rule = { class = "Dolphin" },
-    properties = { tag = tags[1][6],switchtotag = true } },
+    properties = { tag = tags[1][7],switchtotag = true } },
     --misc stuff
     { rule = { class = "Konqueror" },
     properties = { tag = tags[1][9],switchtotag = true } },
