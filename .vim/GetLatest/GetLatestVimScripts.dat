@@ -5,7 +5,6 @@ scriptID SourceID Filename
 642 8136 :AutoInstall: GetLatestVimscripts.vim
 42 12354 :AutoInstall: bufexplorer.vim
 610 2529 :AutoInstall: ctags.vim
-1879 11894 :AutoInstall: acp.vim
 39 8196 :AutoInstall: matchit.vim
 1643 11853 :AutoInstall: supertab.vim
 273 7701 :AutoInstall: taglist.vim
