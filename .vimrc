@@ -265,6 +265,11 @@ if has("multi_lang")
     endif
 endif
 
+" Disable mouse on non-gui
+if !has('gui_running')
+  set mouse=
+endif
+
 
 " some more Console-mode-only settings
  set keywordprg=man
