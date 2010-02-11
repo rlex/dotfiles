@@ -1,4 +1,4 @@
-" Generic params
+"{{{ Generic params
 set encoding=utf8                   " normal encoding
 set termencoding=utf-8              " terminal encoding
 set nocompatible                    " no vi manner
@@ -43,10 +43,11 @@ syntax on
 " Status line settings
 set statusline=%F%m%r%h%w\ [FORMAT=%{strlen(&fenc)?&fenc:'none'},%{&ff}]\ [TYPE=%Y]\ [ASCII=\%03.3b]\ [HEX=\%02.2B]\ [POS=%04l,%04v][%p%%]\ [LEN=%L]
 set laststatus=2
-" Fix <Enter> for comment
-set fo+=cr
+set fo+=cr " Fix enter for comment
+set sessionoptions=curdir,buffers,tabpages
+"}}}
 
-" Which compiler we must use?
+"{{{ Compiler
 if has('win32')
   set makeprg=nmake
   compiler msvc
@@ -54,17 +55,13 @@ else
   set makeprg=make
   compiler gcc
 endif
+"}}}
+
+"{{{ Binds
 
 " map <Del> i<Del><Esc>l
 map <Del> "_x
 " Map del
-
-" Session options
-set sessionoptions=curdir,buffers,tabpages
-
-"-------------------------
-" Binds and other
-"-------------------------
 
 " CTRL-F omni completion
 imap <C-F> <C-X><C-O>
@@ -136,8 +133,14 @@ menu Encoding.utf-8 :e ++enc=utf8 <CR>
 " C-Q - Exit Vim
 map <C-Q> <Esc>:qa<cr>
 
+nmap <PageUp> <C-U><C-U>
+imap <PageUp> <C-O><C-U><C-O><C-U>
+nmap <PageDown> <C-D><C-D>
+imap <PageDown> <C-O><C-D><C-O><C-D>
 
-" Smart mapper for tab completion
+" }}}
+
+" {{{ Smart mapper for tab completion
 function InsertTabWrapper()
  let col = col('.') - 1
  if !col || getline('.')[col - 1] !~ '\k'
@@ -148,7 +151,9 @@ function InsertTabWrapper()
 endfunction
 " imap <tab> <c-r>=InsertTabWrapper()<cr>
 imap <S-tab> <c-r>=InsertTabWrapper()<cr>
+" }}}
 
+" {{{ completion
 " order and what to complete. see ":help complete" for info
 set complete=.,w,b,u,t,i
 " enable dictionary (add k to complete to scan dict when completing)
@@ -158,29 +163,22 @@ set infercase
 " showfulltag   when completing tags in Insert mode show only the name
 " not any arguments (when a c-funtion is inserted)
 set nosft
+" }}}
 
-" Filetype plugin
+"{{{ Filetype plugin
 filetype plugin on
 au BufRead,BufNewFile *.phps set filetype=php
 au BufRead,BufNewFile *.thtml set filetype=php
 au BufRead,BufNewFile *.erb set filetype=html
+" }}}
 
-" Show only one file in Tlist
+" {{{ Various plugins settings
 let g:Tlist_Show_One_File = 1
 
 set completeopt-=preview
 set completeopt+=longest
 set mps-=[:]
  
-" NERDTree hotkeys
-nmap <C-N>v :NERDTree<cr>
-vmap <C-N>v <esc>:NERDTree<cr>i
-imap <C-N>v <esc>:NERDTree<cr>i
-
-nmap <C-N>x :NERDTreeClose<cr>
-vmap <C-N>x <esc>:NERDTreeClose<cr>i
-imap <C-N>x <esc>:NERDTreeClose<cr>i
-
 let g:ctags_title=1
 let generate_tags=1
 let g:ctags_regenerate=1
@@ -196,16 +194,19 @@ let g:NeoComplCache_ManualCompletionStartLength = 0     " Manual completion leng
 let g:NeoComplCache_MinKeywordLength = 3                " Minimal keyword length 
 
 " }}}
-" Colorscheme based on $TERM
+
+" {{{ Colorscheme based on $TERM
 if $TERM == "xterm" || $TERM == "rxvt" || $TERM == "xterm-256color" || $TERM == "rxvt-unicode" || &term =~ "builtin_gui" || $TERM == "dumb"
     set t_Co=256
     colorscheme xoria256
 else
     colorscheme desert
 endif
+" }}}
 
-let g:AutoClosePairs = {'(': ')', '{': '}', '[': ']', '"': '"', "'": "'" }
+" }}}
 
+" {{{ cscope
 "ie both cscope and ctag for 'ctrl-]', ':ta', and 'vim -t'
 set cscopetag
 
@@ -233,7 +234,9 @@ autocmd FileType c set omnifunc=ccomplete#Complete
 autocmd FileType rb,rake,ruby,eruby set omnifunc=rubycomplete#Complete
 autocmd FileType rb,rake,ruby set noexpandtab
 
-" Power on backup :)
+" }}}
+
+" {{{ Backup :)
 set backup
 
 " Smart backup
@@ -255,19 +258,18 @@ endfunction
 " And write.
 autocmd! bufwritepre * call BackupDir()
 
+" }}}
 
-nmap <PageUp> <C-U><C-U>
-imap <PageUp> <C-O><C-U><C-O><C-U>
-nmap <PageDown> <C-D><C-D>
-imap <PageDown> <C-O><C-D><C-O><C-D>
-
+" {{{ Vim tags
 for $f in split(glob("~/.vim/tags/*"), "\n")
     set tags+=$f
 endfor
 
 " Regenerate tag
 source ~/.vim/autoload/autotag.vim
+"}}}
 
+" {{{ Various fixes
 if has("multi_lang")
     if has("unix")
         language messages C
@@ -295,4 +297,4 @@ endif
 if !has('unix')
   set keywordprg=:help
 endif
-
+" }}}
