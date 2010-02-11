@@ -185,6 +185,17 @@ let g:ctags_title=1
 let generate_tags=1
 let g:ctags_regenerate=1
 
+" {{{ NeoComplCache
+
+let g:NeoComplCache_EnableAtStartup = 1                 " Enable NeoComplCache
+let g:NeoComplCache_SmartCase = 1                       " Use smartcase 
+let g:NeoComplCache_EnableCamelCaseCompletion = 1       " Camel case completion 
+let g:NeoComplCache_EnableUnderbarCompletion = 1        " Underbar completion
+let g:NeoComplCache_MinSyntaxLength = 3                 " Minimum syntax keywork length 
+let g:NeoComplCache_ManualCompletionStartLength = 0     " Manual completion length 
+let g:NeoComplCache_MinKeywordLength = 3                " Minimal keyword length 
+
+" }}}
 " Colorscheme based on $TERM
 if $TERM == "xterm" || $TERM == "rxvt" || $TERM == "xterm-256color" || $TERM == "rxvt-unicode" || &term =~ "builtin_gui" || $TERM == "dumb"
     set t_Co=256
