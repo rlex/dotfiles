@@ -9,3 +9,6 @@
 
 ### MUTT ###
 .mutt/.localprofile
+
+### AWESOME AUTORUN ###
+.config/awesome/autorun/*

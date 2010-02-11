@@ -23,7 +23,7 @@ require("vicious")
 
 -- {{{ Variable definitions
 -- Themes define colours, icons, and wallpapers
-beautiful.init("/home/xdemon/.config/awesome/zenburn.lua")
+beautiful.init(os.getenv("HOME") .. "/.config/awesome/zenburn.lua")
 
 -- This is used later as the default terminal and editor to run.
 terminal = "urxvt"
@@ -528,7 +528,31 @@ client.add_signal("unfocus", function(c) c.border_color = beautiful.border_norma
 -- }}}
 
 -- {{{ Autostart
-os.execute("yeahconsole &")
+function autostart(dir)
+    if not dir then
+        do return nil end
+    end
+    local fd = io.popen("ls -1 -F " .. dir)
+    if not fd then
+        do return nil end
+    end
+    for file in fd:lines() do
+        local c= string.sub(file,-1)   -- last char
+        if c=='*' then  -- executables
+            executable = string.sub( file, 1,-2 )
+            print("Awesome Autostart: Executing: " .. executable)
+            awful.util.spawn_with_shell(dir .. "/" .. executable .. "") -- launch in bg
+        elseif c=='@' then  -- symbolic links
+            print("Awesome Autostart: Not handling symbolic links: " .. file)
+        else
+            print ("Awesome Autostart: Skipping file " .. file .. " not executable.")
+        end
+    end
+    io.close(fd)
+end
+
+autostart_dir = os.getenv("HOME") ..  "/.config/awesome/autorun"
+autostart(autostart_dir)
 -- }}}
 
 -- vim: fdm=marker fdl=0 sts=4 ai
