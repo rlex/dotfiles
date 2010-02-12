@@ -74,12 +74,14 @@ commands.browser = "chromium"
 --{{{ SHIFTY: configured tags
 shifty.config.tags = {
   ["G"] =      { layout = awful.layout.suit.tile,         mwfact=0.60, exclusive = false, solitary = false, position = 1, init = true, screen = 1, slave = true } ,
-  ["www"] =    { layout = awful.layout.suit.tile.bottom,  mwfact=0.65, exclusive = true , solitary = true , position = 2, spawn = browser  } ,
-  ["im"] =     { layout = awful.layout.suit.tile,         mwfact=0.55, exclusive = false, solitary = false, position = 3, spawn = mail, slave = true     } ,
+  ["www"] =    { layout = awful.layout.suit.tile.bottom,  mwfact=0.30, exclusive = true , solitary = true , position = 2 } ,
+  ["im"] =     { layout = awful.layout.suit.tile,         mwfact=0.85, exclusive = false, solitary = false, position = 3 } ,
   ["media"] =  { layout = awful.layout.suit.float,                     exclusive = false, solitary = false, position = 4 } ,
   ["office"] = { layout = awful.layout.suit.tile, position = 9} ,
   ["code"] =   { layout = awful.layout.suit.tile.bottom,  mwfact=0.65, exclusive = true , solitary = true , position = 5 } ,
   ["skype"] =  { layout = awful.layout.suit.tile.bottom,  mwfact=0.65, exclusive = true , solitary = true , position = 6 } ,
+  ["irc"] =    { layout = awful.layout.suit.tile.bottom,  mwfact=0.65, exclusive = true , solitary = true , position = 7 } ,
+  ["doc"] =    { layout = awful.layout.suit.tile.bottom,  mwfact=0.65, exclusive = true , solitary = true , position = 8 } ,
 }
 --}}}
  
@@ -87,14 +89,16 @@ shifty.config.tags = {
 -- order here matters, early rules will be applied first
 shifty.config.apps = {
          { match = { "Chromium","Google Chrome","Gran Paradiso"            } , tag = "www"    } ,
-         { match = { "qutim"                                               } , tag = "im"   } ,
+         { match = { "qutim"                                               } , tag = "im"     } ,
          { match = { "dolphin"                                             } , slave = true   } ,
          { match = { "OpenOffice.*", "Abiword", "Gnumeric", "wxmaxima"     } , tag = "office" } ,
          { match = { "Mplayer.*","gimp", "digikam", "easytag"              } , tag = "media", nopopup = true, } ,
          { match = { "MPlayer", "Gnuplot", "kcalc",                        } , float = true   } ,
-         { match = { "MonoDevelop", "gvim"                                 } , tag = "code"   },
-         { match = { "skype"                                               } , tag = "skype"  },
+         { match = { "MonoDevelop", "gvim", "qtcreator"                    } , tag = "code"   } ,
+         { match = { "skype"                                               } , tag = "skype"  } ,
+         { match = { "xchat"                                               } , tag = "irc"    } ,
          { match = { terminal                                              } , honorsizehints = false, slave = true   } ,
+         { match = { "Okular"                                              } , tag = "doc"    } ,
 }
 --}}}
  
