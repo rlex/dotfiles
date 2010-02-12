@@ -17,6 +17,7 @@ require("beautiful")
 -- Notification library
 require("naughty")
 require("vicious")
+require("shifty")
 -- Menu library
 --require("freedesktop")
 -- }}}
@@ -70,16 +71,47 @@ commands.browser = "chromium"
 -- }}}
 
 -- {{{ Tags
--- Define a tag table which hold all screen tags.
-tags = {}
-for s = 1, screen.count() do
-    -- Each screen has its own tag table.
-    tags[s] = awful.tag({ 
-     "1 www", "2 im", "3 irc", 
-     "4 mus", "5 code", "6 term", 
-     7, 8, 9 }, s, awful.layout.suit.tile)
-end
--- }}}
+--{{{ SHIFTY: configured tags
+shifty.config.tags = {
+  ["1"] =      { layout = awful.layout.suit.max,          mwfact=0.60, exclusive = false, solitary = false, position = 1, init = true, screen = 1, slave = true } ,
+  ["web"] =    { layout = awful.layout.suit.tile.bottom,  mwfact=0.65, exclusive = true , solitary = true , position = 4, spawn = browser  } ,
+  ["im"] =     { layout = awful.layout.suit.tile,         mwfact=0.55, exclusive = false, solitary = false, position = 5, spawn = mail, slave = true     } ,
+  ["media"] =  { layout = awful.layout.suit.float,                     exclusive = false, solitary = false, position = 8 } ,
+  ["office"] = { layout = awful.layout.suit.tile, position = 9} ,
+}
+--}}}
+ 
+--{{{ SHIFTY: application matching rules
+-- order here matters, early rules will be applied first
+shifty.config.apps = {
+         { match = { "Chromium","*Chrome*","Gran Paradiso"                 } , tag = "web"    } ,
+         { match = { "qutim"                                               } , tag = "im"   } ,
+         { match = { "dolphin"                                             } , slave = true   } ,
+         { match = { "OpenOffice.*", "Abiword", "Gnumeric"                 } , tag = "office" } ,
+         { match = { "Mplayer.*","gimp","gtkpod","digikam","easytag"       } , tag = "media", nopopup = true, } ,
+         { match = { "MPlayer", "Gnuplot", "galculator"                    } , float = true   } ,
+         { match = { terminal                                              } , honorsizehints = false, slave = true   } ,
+}
+--}}}
+ 
+--{{{ SHIFTY: default tag creation rules
+-- parameter description
+--  * floatBars : if floating clients should always have a titlebar
+--  * guess_name : wether shifty should try and guess tag names when creating new (unconfigured) tags
+--  * guess_position: as above, but for position parameter
+--  * run : function to exec when shifty creates a new tag
+--  * remember_index: ?
+--  * all other parameters (e.g. layout, mwfact) follow awesome's tag API
+shifty.config.defaults={  
+  layout = awful.layout.suit.tile.bottom, 
+  ncol = 1, 
+  mwfact = 0.60,
+  floatBars=true,
+  guess_name=true,
+  guess_position=true,
+}
+--}}}
+--}}}
 
 -- {{{ Menu
 -- applications menu
