@@ -70,26 +70,30 @@ commands.calc = "kcalc"
 commands.browser = "chromium"
 -- }}}
 
--- {{{ Tags
+--{{{ Tags
 --{{{ SHIFTY: configured tags
 shifty.config.tags = {
-  ["1"] =      { layout = awful.layout.suit.max,          mwfact=0.60, exclusive = false, solitary = false, position = 1, init = true, screen = 1, slave = true } ,
-  ["web"] =    { layout = awful.layout.suit.tile.bottom,  mwfact=0.65, exclusive = true , solitary = true , position = 4, spawn = browser  } ,
-  ["im"] =     { layout = awful.layout.suit.tile,         mwfact=0.55, exclusive = false, solitary = false, position = 5, spawn = mail, slave = true     } ,
-  ["media"] =  { layout = awful.layout.suit.float,                     exclusive = false, solitary = false, position = 8 } ,
+  ["G"] =      { layout = awful.layout.suit.tile,         mwfact=0.60, exclusive = false, solitary = false, position = 1, init = true, screen = 1, slave = true } ,
+  ["www"] =    { layout = awful.layout.suit.tile.bottom,  mwfact=0.65, exclusive = true , solitary = true , position = 2, spawn = browser  } ,
+  ["im"] =     { layout = awful.layout.suit.tile,         mwfact=0.55, exclusive = false, solitary = false, position = 3, spawn = mail, slave = true     } ,
+  ["media"] =  { layout = awful.layout.suit.float,                     exclusive = false, solitary = false, position = 4 } ,
   ["office"] = { layout = awful.layout.suit.tile, position = 9} ,
+  ["code"] =   { layout = awful.layout.suit.tile.bottom,  mwfact=0.65, exclusive = true , solitary = true , position = 5 } ,
+  ["skype"] =  { layout = awful.layout.suit.tile.bottom,  mwfact=0.65, exclusive = true , solitary = true , position = 6 } ,
 }
 --}}}
  
 --{{{ SHIFTY: application matching rules
 -- order here matters, early rules will be applied first
 shifty.config.apps = {
-         { match = { "Chromium","*Chrome*","Gran Paradiso"                 } , tag = "web"    } ,
+         { match = { "Chromium","Google Chrome","Gran Paradiso"            } , tag = "www"    } ,
          { match = { "qutim"                                               } , tag = "im"   } ,
          { match = { "dolphin"                                             } , slave = true   } ,
-         { match = { "OpenOffice.*", "Abiword", "Gnumeric"                 } , tag = "office" } ,
-         { match = { "Mplayer.*","gimp","gtkpod","digikam","easytag"       } , tag = "media", nopopup = true, } ,
-         { match = { "MPlayer", "Gnuplot", "galculator"                    } , float = true   } ,
+         { match = { "OpenOffice.*", "Abiword", "Gnumeric", "wxmaxima"     } , tag = "office" } ,
+         { match = { "Mplayer.*","gimp", "digikam", "easytag"              } , tag = "media", nopopup = true, } ,
+         { match = { "MPlayer", "Gnuplot", "kcalc",                        } , float = true   } ,
+         { match = { "MonoDevelop", "gvim"                                 } , tag = "code"   },
+         { match = { "skype"                                               } , tag = "skype"  },
          { match = { terminal                                              } , honorsizehints = false, slave = true   } ,
 }
 --}}}
@@ -102,8 +106,7 @@ shifty.config.apps = {
 --  * run : function to exec when shifty creates a new tag
 --  * remember_index: ?
 --  * all other parameters (e.g. layout, mwfact) follow awesome's tag API
-shifty.config.defaults={  
-  layout = awful.layout.suit.tile.bottom, 
+shifty.config.defaults={
   ncol = 1, 
   mwfact = 0.60,
   floatBars=true,
