@@ -153,7 +153,7 @@ endfunction
 imap <S-tab> <c-r>=InsertTabWrapper()<cr>
 " }}}
 
-" {{{ completion
+" {{{ Completion
 " order and what to complete. see ":help complete" for info
 set complete=.,w,b,u,t,i
 " enable dictionary (add k to complete to scan dict when completing)
@@ -192,6 +192,9 @@ let g:NeoComplCache_EnableUnderbarCompletion = 1        " Underbar completion
 let g:NeoComplCache_MinSyntaxLength = 3                 " Minimum syntax keywork length 
 let g:NeoComplCache_ManualCompletionStartLength = 0     " Manual completion length 
 let g:NeoComplCache_MinKeywordLength = 3                " Minimal keyword length 
+
+imap <silent><C-l>     <Plug>(neocomplcache_snippets_expand)
+smap <silent><C-l>     <Plug>(neocomplcache_snippets_expand)
 
 " }}}
 
