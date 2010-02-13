@@ -90,7 +90,7 @@ shifty.config.tags = {
 shifty.config.apps = {
          { match = { "Chromium","Google Chrome","Gran Paradiso"            } , tag = "www"    } ,
          { match = { "qutim"                                               } , tag = "im"     } ,
-         { match = { "dolphin"                                             } , slave = true   } ,
+         { match = { "Dolphin"                                             } , slave = true   } ,
          { match = { "OpenOffice.*", "Abiword", "Gnumeric", "wxmaxima"     } , tag = "office" } ,
          { match = { "Mplayer.*","gimp", "digikam", "easytag"              } , tag = "media", nopopup = true, } ,
          { match = { "MPlayer", "Gnuplot", "kcalc",                        } , float = true   } ,
@@ -99,6 +99,14 @@ shifty.config.apps = {
          { match = { "xchat"                                               } , tag = "irc"    } ,
          { match = { terminal                                              } , honorsizehints = false, slave = true   } ,
          { match = { "Okular"                                              } , tag = "doc"    } ,
+             -- all
+         { match = { "" }, honorsizehints = false,
+                           buttons = {
+                              awful.button({ }, 1, function (c) client.focus = c; c:raise() end, nil, "Focus client"),
+                              awful.button({ "Mod1" }, 1, awful.mouse.client.move, nil, "Move client"),
+                              awful.button({ "Mod1" }, 3, awful.mouse.client.resize, nil, "Resize client" ),
+      } ,
+    } ,
 }
 --}}}
  
@@ -110,12 +118,13 @@ shifty.config.apps = {
 --  * run : function to exec when shifty creates a new tag
 --  * remember_index: ?
 --  * all other parameters (e.g. layout, mwfact) follow awesome's tag API
-shifty.config.defaults={
+shifty.config.defaults = {
   ncol = 1, 
   mwfact = 0.60,
   floatBars=true,
   guess_name=true,
   guess_position=true,
+  run = function(tag) naughty.notify({ text = tag.name }) end
 }
 --}}}
 --}}}
@@ -488,6 +497,15 @@ end
 -- }}}
 
 
+
+-- Hook function to execute when the mouse enters a client.
+awful.hooks.mouse_enter.register(function (c)
+    -- Sloppy focus, but disabled for magnifier layout
+    if awful.layout.get(c.screen) ~= awful.layout.suit.magnifier
+        and awful.client.focus.filter(c) then
+        client.focus = c
+    end
+end)
 
 clientbuttons = awful.util.table.join(
     awful.button({ }, 1, function (c) client.focus = c; c:raise() end),
