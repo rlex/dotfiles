@@ -449,9 +449,11 @@ globalkeys = awful.util.table.join(
     awful.key({ modkey, "Shift"   }, "space", function () awful.layout.inc(layouts, -1) end),
 
     -- Prompt
-    awful.key({ modkey },            "e",     function () promptbox[mouse.screen]:run() end)
+    awful.key({ modkey,           }, "e",     function () awful.prompt.run({prompt="Run:"},
+                                               promptbox[mouse.screen].widget,
+                                               check_for_terminal,
+                                               clean_for_completion) end)
 )
-
 clientkeys = awful.util.table.join(
     awful.key({ modkey,           }, "f",      function (c) c.fullscreen = not c.fullscreen  end),
     awful.key({ modkey, "Shift"   }, "c",      function (c) c:kill()                         end),
@@ -516,6 +518,32 @@ clientbuttons = awful.util.table.join(
 root.keys(globalkeys)
 shifty.config.globalkeys = globalkeys
 shifty.config.clientkeys = clientkeys
+-- }}}
+
+-- {{{ Functions
+-- {{{ functions to help launch run commands in a terminal using ":" keyword 
+function check_for_terminal (command)
+   if command:sub(1,1) == ":" then
+      command = terminal .. ' -e ' .. command:sub(2)
+   end
+   awful.util.spawn(command)
+end
+   
+function clean_for_completion (command, cur_pos, ncomp, shell)
+   local term = false
+   if command:sub(1,1) == ":" then
+      term = true
+      command = command:sub(2)
+      cur_pos = cur_pos - 1
+   end
+   command, cur_pos =  awful.completion.shell(command, cur_pos,ncomp,shell)
+   if term == true then
+      command = ':' .. command
+      cur_pos = cur_pos + 1
+   end
+   return command, cur_pos
+end
+-- }}}
 -- }}}
 
 -- {{{ Signals
