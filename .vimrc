@@ -239,30 +239,6 @@ autocmd FileType rb,rake,ruby set noexpandtab
 
 " }}}
 
-" {{{ Backup :)
-set backup
-
-" Smart backup
-function! BackupDir()
-    let l:backupdir=$HOME.'/.vim/backup/'.
-            \substitute(expand('%:p:h'), '^'.$HOME, '~', '')
-    " if directory no exist, create it
-    if !isdirectory(l:backupdir)
-        call mkdir(l:backupdir, 'p', 0700)
-    endif
-
-    " set directory for backups...
-    let &backupdir=l:backupdir
-
-    " ...and extension
-    let &backupext=strftime('~%Y-%m-%d~')
-endfunction
-
-" And write.
-autocmd! bufwritepre * call BackupDir()
-
-" }}}
-
 " {{{ Vim tags
 for $f in split(glob("~/.vim/tags/*"), "\n")
     set tags+=$f
