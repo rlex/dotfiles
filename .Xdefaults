@@ -1,3 +1,6 @@
+!Cursors
+Xcursor.theme: Neutral_Plus
+
 !!URxvt rules
 URxvt.buffered: true
 URxvt.font: xft:Terminus:pixelsize=11:antialias=false
