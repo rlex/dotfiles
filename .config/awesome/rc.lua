@@ -101,14 +101,12 @@ shifty.config.apps = {
          { match = { "xchat"                                               } , tag = "irc"    } ,
          { match = { terminal                                              } , honorsizehints = false, slave = true   } ,
          { match = { "Okular"                                              } , tag = "doc"    } ,
-             -- all
-         { match = { "" }, honorsizehints = false,
-                           buttons = {
-                              awful.button({                }, 1, function (c) client.focus = c; c:raise() end, nil, "Focus client"),
-                              awful.button({ modkey         }, 1, awful.mouse.client.move, nil, "Move client"),
-                              awful.button({ modkey         }, 3, awful.mouse.client.resize, nil, "Resize client" ),
-      } ,
-    } ,
+         { match = { "" },
+                           buttons = awful.util.table.join(
+                                        awful.button({ }, 1, function (c) client.focus = c; c:raise() end),
+                                        awful.button({ modkey }, 1, awful.mouse.client.move),
+                                        awful.button({ modkey }, 3, awful.mouse.client.resize))
+  }
 }
 --}}}
  
@@ -370,7 +368,6 @@ end
 -- the assignment of shifty.taglist must always be after its actually initialized 
 -- with awful.widget.taglist.new()
 shifty.taglist = taglist
-shifty.init()
 -- }}}
 
 -- }}}
@@ -511,13 +508,10 @@ awful.hooks.mouse_enter.register(function (c)
     end
 end)
 
-awful.hooks.manage.register(function (c, startup)
-  c:buttons({
-        button({             }, 1, function (c) client.focus = c; c:raise() end),
-        button({ modkey      }, 1, awful.mouse.client.move),
-        button({ modkey      }, 3, awful.mouse.client.resize)
-    })
-end)
+clientbuttons = awful.util.table.join(
+    awful.button({ }, 1, function (c) client.focus = c; c:raise() end),
+    awful.button({ modkey }, 1, awful.mouse.client.move),
+    awful.button({ modkey }, 3, awful.mouse.client.resize))
 
 -- Register keys
 root.keys(globalkeys)
@@ -579,7 +573,7 @@ client.add_signal("manage", function (c, startup)
         end
     end
 end)
-
+shifty.init()
 client.add_signal("focus", function(c) c.border_color = beautiful.border_focus end)
 client.add_signal("unfocus", function(c) c.border_color = beautiful.border_normal end)
 -- }}}
