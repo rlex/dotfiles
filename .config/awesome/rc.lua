@@ -28,7 +28,7 @@ beautiful.init(os.getenv("HOME") .. "/.config/awesome/zenburn.lua")
 
 -- This is used later as the default terminal and editor to run.
 terminal = "urxvt"
-editor = "vim" 
+editor = "gvim"
 editor_cmd = terminal .. " -e " .. editor
 
 -- Default modkey.
@@ -37,6 +37,8 @@ editor_cmd = terminal .. " -e " .. editor
 -- I suggest you to remap Mod4 to another key using xmodmap or other tools.
 -- However, you can use another modifier like Mod1, but it may interact with others.
 modkey = "Mod4"
+-- Shifty modkey...
+shifty.config.modkey = "Mod4"
 
 -- Table of layouts to cover with awful.layout.inc, order matters.
 layouts =
@@ -65,7 +67,7 @@ commands.muspause = "mpc pause"
 commands.musplay = "mpc play"
 commands.calc = "krunner"
 --todo
-commands.fileman = "doplhin"
+commands.fileman = "dolphin"
 commands.calc = "kcalc"
 commands.browser = "chromium"
 -- }}}
@@ -102,9 +104,9 @@ shifty.config.apps = {
              -- all
          { match = { "" }, honorsizehints = false,
                            buttons = {
-                              awful.button({ }, 1, function (c) client.focus = c; c:raise() end, nil, "Focus client"),
-                              awful.button({ "Mod1" }, 1, awful.mouse.client.move, nil, "Move client"),
-                              awful.button({ "Mod1" }, 3, awful.mouse.client.resize, nil, "Resize client" ),
+                              awful.button({                }, 1, function (c) client.focus = c; c:raise() end, nil, "Focus client"),
+                              awful.button({ modkey         }, 1, awful.mouse.client.move, nil, "Move client"),
+                              awful.button({ modkey         }, 3, awful.mouse.client.resize, nil, "Resize client" ),
       } ,
     } ,
 }
@@ -509,12 +511,15 @@ awful.hooks.mouse_enter.register(function (c)
     end
 end)
 
-clientbuttons = awful.util.table.join(
-    awful.button({ }, 1, function (c) client.focus = c; c:raise() end),
-    awful.button({ modkey }, 1, awful.mouse.client.move),
-    awful.button({ modkey }, 3, awful.mouse.client.resize))
+awful.hooks.manage.register(function (c, startup)
+  c:buttons({
+        button({             }, 1, function (c) client.focus = c; c:raise() end),
+        button({ modkey      }, 1, awful.mouse.client.move),
+        button({ modkey      }, 3, awful.mouse.client.resize)
+    })
+end)
 
--- Set keys
+-- Register keys
 root.keys(globalkeys)
 shifty.config.globalkeys = globalkeys
 shifty.config.clientkeys = clientkeys
