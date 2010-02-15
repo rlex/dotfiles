@@ -66,6 +66,7 @@ commands.musprev = "mpc prev"
 commands.muspause = "mpc pause"
 commands.musplay = "mpc play"
 commands.calc = "krunner"
+commands.screensaver = "/usr/lib/kde4/libexec/kscreenlocker --forcelock"
 --todo
 commands.fileman = "dolphin"
 commands.calc = "kcalc"
@@ -123,8 +124,14 @@ shifty.config.defaults = {
   mwfact = 0.60,
   floatBars=true,
   guess_name=true,
-  guess_position=true,
-  run = function(tag) naughty.notify({ text = tag.name }) end
+  run = function(tag)
+		naughty.notify({ text = "Shifty Created #"..
+				 (awful.tag.getproperty(tag,"position") or shifty.tag2index(mouse.screen,tag))..": "..
+				 (tag.name or "foo")
+				})
+		end,
+  guess_position = true,
+  remember_index = true
 }
 --}}}
 --}}}
@@ -396,6 +403,7 @@ globalkeys = awful.util.table.join(
     awful.key({}, "XF86AudioPlay", function() awful.util.spawn_with_shell(commands.muspause) end ),
     awful.key({}, "XF86Tools", function() awful.util.spawn_with_shell(commands.musplay) end ),
     awful.key({}, "XF86Calculator", function() awful.util.spawn_with_shell(commands.calc) end ),
+    awful.key({}, "XF86ScreenSaver", function() awful.util.spawn_with_shell(commands.screensaver) end ),
     awful.key({}, "Print", function() awful.util.spawn_with_shell(commands.screenshot) end ),
 
     --default bindings
