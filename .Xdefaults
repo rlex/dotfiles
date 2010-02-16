@@ -6,7 +6,7 @@ Xcursor.theme: Neutral_Plus
 urxvt.buffered: true
 urxvt.font: xft:Terminus:pixelsize=11:antialias=false
 urxvt.boldFont: xft:Terminus:bold:pixelsize=11:antialias=false
-urxvt.perl-ext-common: default,tabbed,matcher,searchable-scrollback
+urxvt.perl-ext-common: default,tabbed,searchable-scrollback
 urxvt.termName: rxvt-256color
 urxvt.title: urxvt
 urxvt.scrollBar: false
