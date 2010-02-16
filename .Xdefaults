@@ -1,19 +1,21 @@
-!Cursors
+!{{{Generic X settings
 Xcursor.theme: Neutral_Plus
+!}}}
 
+!{{{ URXVT
 !!URxvt rules
-URxvt.buffered: true
-URxvt.font: xft:Terminus:pixelsize=11:antialias=false
-URxvt.boldFont: xft:Terminus:bold:pixelsize=11:antialias=false
-URxvt.perl-ext-common: default,tabbed
+urxvt.buffered: true
+urxvt.font: xft:Terminus:pixelsize=11:antialias=false
+urxvt.boldFont: xft:Terminus:bold:pixelsize=11:antialias=false
+urxvt.perl-ext-common: default,tabbed,matcher,searchable-scrollback
 urxvt.termName: rxvt-256color
 urxvt.title: urxvt
 urxvt.scrollBar: false
 urxvt.loginShell: true
-urxvt.saveLines: 512
+urxvt.saveLines: 65535
 urxvt.geometry: 75x25
 urxvt.boldMode: false
-URxvt.transparent:false
+urxvt.transparent:false
 urxvt.shading: 40
 urxvt.xftAntialias: false
 urxvt.jumpScroll: true
