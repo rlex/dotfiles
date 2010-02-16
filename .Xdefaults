@@ -3,7 +3,6 @@ Xcursor.theme: Neutral_Plus
 !}}}
 
 !{{{ URXVT
-!!URxvt rules
 urxvt.buffered: true
 urxvt.font: xft:Terminus:pixelsize=11:antialias=false
 urxvt.boldFont: xft:Terminus:bold:pixelsize=11:antialias=false
@@ -27,13 +26,14 @@ urxvt.cursorColor: #0A832D
 urxvt.cursorColor2: #000000
 urxvt.underlineColor: #999999
 urxvt.borderless: true
+!}}}
 
-!!Xterm rules
-!XTerm*Background: grey6
-!XTerm*Foreground: white
+!{{{Xterm rules
 XTerm*FaceName: terminus
 XTerm*FaceSize: 8
-!!Yeahconsole rules
+!}}}
+
+!{{{Yeahconsole rules
 yeahconsole*term:urxvt
 yeahconsole*consoleHeight:25
 yeahconsole*toggleKey:None+F12
@@ -42,12 +42,11 @@ yeahconsole*keyFull:None+F11
 yeahconsole*keySmaller:Control+KP_Subtract
 yeahconsole*keyBigger:Control+KP_Add
 yeahconsole*metaSendsEscape: true
+!}}}
 
-! terminal colours
+!{{{Terminals colours
 *foreground:#a0a0a0
 *background:#181818
-
-!molokai inspired colors // thayer
 
 !black
 *color0:    #181818
@@ -73,3 +72,4 @@ color2:    #407B2A
 !white
 *color7:    #ccccc6
 *color15:   #f8f8f2
+!}}}
