@@ -185,8 +185,6 @@ cpuicon = widget({ type = "imagebox" })
 cpuicon.image = image(beautiful.widget_cpu)
 -- Initialize widgets
 cpugraph  = awful.widget.graph()
-tzswidget = widget({ type = "textbox" })
-tzswidget.image = image(beautiful.widget_temp)
 -- Graph properties
 cpugraph:set_width(40)
 cpugraph:set_height(14)
@@ -197,7 +195,6 @@ cpugraph:set_gradient_colors({ beautiful.fg_end_widget,
    beautiful.fg_center_widget, beautiful.fg_widget
 }) -- Register widgets
 vicious.register(cpugraph,  vicious.widgets.cpu,     "$1")
-vicious.register(tzswidget, vicious.widgets.thermal, "$1C", 19, "thermal_zone0")
 -- }}}
 
 -- {{{ Battery state
@@ -273,7 +270,6 @@ volicon = widget({ type = "imagebox" })
 volicon.image = image(beautiful.widget_vol)
 -- Initialize widgets
 volbar    = awful.widget.progressbar()
-volwidget = widget({ type = "textbox" })
 -- Progressbar properties
 volbar:set_width(10)
 volbar:set_height(12)
@@ -287,15 +283,6 @@ volbar:set_gradient_colors({ beautiful.fg_widget,
 vicious.enable_caching(vicious.widgets.volume)
 -- Register widgets
 vicious.register(volbar,    vicious.widgets.volume, "$1",  2, "Master")
-vicious.register(volwidget, vicious.widgets.volume, "$1%", 2, "Master")
--- Register buttons
-volbar.widget:buttons(awful.util.table.join(
-   awful.button({ }, 1, function () exec("kmix") end),
-   awful.button({ }, 2, function () exec("amixer -q sset Master toggle")   end),
-   awful.button({ }, 4, function () exec("amixer -q sset Master 2dB+", false) end),
-   awful.button({ }, 5, function () exec("amixer -q sset Master 2dB-", false) end)
-)) -- Register assigned buttons
-volwidget:buttons(volbar.widget:buttons())
 -- }}}
 
 -- {{{ Date and time
@@ -361,12 +348,12 @@ for s = 1, screen.count() do
         },
         s == screen.count() and systray or nil,
         separator, datewidget, dateicon,
-        separator, volwidget, spacer, volbar.widget, volicon,
+        separator, volbar.widget, volicon,
         separator, wifiwidget,
         separator, fs.r.widget, fs.h.widget, fsicon,
         separator, membar.widget, memicon,
         separator, batwidget, baticon,
-        separator, tzswidget, tzicon, spacer, cpugraph.widget, cpuicon,
+        separator, cpugraph.widget, cpuicon,
         separator, ["layout"] = awful.widget.layout.horizontal.rightleft
     }
 end
