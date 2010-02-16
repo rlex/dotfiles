@@ -1,4 +1,4 @@
-!{{{Generic X settings
+!{{{ Generic X settings
 Xcursor.theme: Neutral_Plus
 !}}}
 
@@ -11,7 +11,7 @@ urxvt.termName: rxvt-256color
 urxvt.title: urxvt
 urxvt.scrollBar: false
 urxvt.loginShell: true
-urxvt.saveLines: 65535
+urxvt.saveLines: 10000
 urxvt.geometry: 75x25
 urxvt.boldMode: false
 urxvt.transparent:false
@@ -28,12 +28,12 @@ urxvt.underlineColor: #999999
 urxvt.borderless: true
 !}}}
 
-!{{{Xterm rules
+!{{{ Xterm rules
 XTerm*FaceName: terminus
 XTerm*FaceSize: 8
 !}}}
 
-!{{{Yeahconsole rules
+!{{{ Yeahconsole rules
 yeahconsole*term:urxvt
 yeahconsole*consoleHeight:25
 yeahconsole*toggleKey:None+F12
@@ -44,7 +44,7 @@ yeahconsole*keyBigger:Control+KP_Add
 yeahconsole*metaSendsEscape: true
 !}}}
 
-!{{{Terminals colours
+!{{{ Terminals colours
 *foreground:#a0a0a0
 *background:#181818
 
