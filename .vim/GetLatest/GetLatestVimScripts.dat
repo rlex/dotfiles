@@ -3,7 +3,7 @@ scriptID SourceID Filename
 1658 11834 :AutoInstall: NERD_tree.vim
 1928 7262 :AutoInstall: Rename.vim
 642 8136 :AutoInstall: GetLatestVimscripts.vim
-42 12354 :AutoInstall: bufexplorer.vim
+42 12363 :AutoInstall: bufexplorer.vim
 610 2529 :AutoInstall: ctags.vim
 39 8196 :AutoInstall: matchit.vim
 1643 11853 :AutoInstall: supertab.vim
