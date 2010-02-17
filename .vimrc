@@ -207,6 +207,21 @@ else
 endif
 " }}}
 
+" {{{ srcexpl
+let g:SrcExpl_winHeight = 8 " Set Source explorer height
+let g:SrcExpl_refreshTime = 100 " 100 ms to refresh 
+let g:SrcExpl_jumpKey = "<ENTER>" " Set Enter key to jump into the exact definition context 
+let g:SrcExpl_gobackKey = "<SPACE>" "Set Space key for back from the definition contex 
+let g:SrcExpl_pluginList = [ 
+        \ "__Tag_List__", 
+        \ "_NERD_tree_", 
+        \ "Source_Explorer" 
+    \ ] 
+let g:SrcExpl_searchLocalDef = 0 " Disable local def searching
+let g:SrcExpl_isUpdateTags = 1  " Update ctags automatically
+let g:SrcExpl_updateTagsCmd = "ctags --sort=foldcase -R ." " Use ctags with args
+let g:SrcExpl_updateTagsKey = "<F12>" "Set F12 key for updating the tags file artificially 
+
 " }}}
 
 " {{{ cscope
