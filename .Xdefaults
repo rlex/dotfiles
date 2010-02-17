@@ -3,29 +3,29 @@ Xcursor.theme: Neutral_Plus
 !}}}
 
 !{{{ URXVT
-urxvt.buffered: true
-urxvt.font: xft:Terminus:pixelsize=11:antialias=false
-urxvt.boldFont: xft:Terminus:bold:pixelsize=11:antialias=false
-urxvt.perl-ext-common: default,tabbed,searchable-scrollback
-urxvt.termName: rxvt-256color
-urxvt.title: urxvt
-urxvt.scrollBar: false
-urxvt.loginShell: true
-urxvt.saveLines: 10000
-urxvt.geometry: 75x25
-urxvt.boldMode: false
-urxvt.transparent:false
-urxvt.shading: 40
-urxvt.xftAntialias: false
-urxvt.jumpScroll: true
-urxvt.skipScroll: true
-urxvt.tintColor: #181818
-urxvt.internalBorder: 0
-urxvt.cursorBlink: false
-urxvt.cursorColor: #0A832D
-urxvt.cursorColor2: #000000
-urxvt.underlineColor: #999999
-urxvt.borderless: true
+URxvt.buffered: true
+URxvt.font: xft:Terminus:pixelsize=11:antialias=false
+URxvt.boldFont: xft:Terminus:bold:pixelsize=11:antialias=false
+URxvt.perl-ext-common: default,tabbed,searchable-scrollback
+URxvt.termName: rxvt-256color
+URxvt.title: urxvt
+URxvt.scrollBar: false
+URxvt.loginShell: true
+URxvt.saveLines: 10000
+URxvt.geometry: 75x25
+URxvt.boldMode: false
+URxvt.transparent:false
+URxvt.shading: 40
+URxvt.xftAntialias: false
+URxvt.jumpScroll: true
+URxvt.skipScroll: true
+URxvt.tintColor: #181818
+URxvt.internalBorder: 0
+URxvt.cursorBlink: false
+URxvt.cursorColor: #0A832D
+URxvt.cursorColor2: #000000
+URxvt.underlineColor: #999999
+URxvt.borderless: true
 !}}}
 
 !{{{ Xterm rules
