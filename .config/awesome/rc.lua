@@ -249,20 +249,6 @@ end -- Enable caching
 vicious.enable_caching(vicious.widgets.fs)
 -- Register widgets
 vicious.register(fs.r, vicious.widgets.fs, "${/ used_p}",            599)
-vicious.register(fs.h, vicious.widgets.fs, "${/media/media used_p}",        599)
--- }}}
-
--- {{{ Network usage
---dnicon = widget({ type = "imagebox" })
---upicon = widget({ type = "imagebox" })
---dnicon.image = image(beautiful.widget_net)
---upicon.image = image(beautiful.widget_netup)
--- Initialize widget
---netwidget = widget({ type = "textbox" })
--- Register widget
---vicious.register(netwidget, vicious.widgets.net, '<span color="'
---  .. beautiful.fg_netdn_widget ..'">${wlan0 down_kb}</span> <span color="'
---  .. beautiful.fg_netup_widget ..'">${wlan0 up_kb}</span>', 3)
 -- }}}
 
 -- {{{ Volume level
@@ -287,20 +273,10 @@ vicious.register(volbar,    vicious.widgets.volume, "$1",  2, "Master")
 
 -- {{{ Date and time
 dateicon = widget({ type = "imagebox" })
-dateicon.image = image(beautiful.widget_date)
 -- Initialize widget
 datewidget = widget({ type = "textbox" })
 -- Register widget
-vicious.register(datewidget, vicious.widgets.date, "%R", 61)
--- }}}
-
--- {{{ Wireless network
-wifiicon = widget({ type = "imagebox" })
-wifiicon.image = image(beautiful.widget_wifi)
--- Initialize widget
-wifiwidget = widget({ type = "textbox" })
--- Register widget
-vicious.register(wifiwidget, vicious.widgets.wifi, "WiFi: ${ssid} - ${link}%", 10, "wlan0")
+vicious.register(datewidget, vicious.widgets.date, " %R", 61)
 -- }}}
 
 -- {{{ System tray
@@ -347,10 +323,8 @@ for s = 1, screen.count() do
             ["layout"] = awful.widget.layout.horizontal.leftright
         },
         s == screen.count() and systray or nil,
-        separator, datewidget, dateicon,
+        separator, datewidget,
         separator, volbar.widget, volicon,
-        separator, wifiwidget,
-        separator, fs.r.widget, fs.h.widget, fsicon,
         separator, membar.widget, memicon,
         separator, batwidget, baticon,
         separator, cpugraph.widget, cpuicon,
