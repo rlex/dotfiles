@@ -17,19 +17,21 @@ require("beautiful")
 -- Notification library
 require("naughty")
 require("vicious")
-require("shifty")
+require("lib/shifty")
 -- Menu library
---require("freedesktop")
+require("lib/freedesktop.utils")
+require("lib/freedesktop.menu")
+require("lib/freedesktop.desktop")
 -- }}}
 
 -- {{{ Variable definitions
 -- Themes define colours, icons, and wallpapers
-beautiful.init(os.getenv("HOME") .. "/.config/awesome/zenburn.lua")
+beautiful.init(os.getenv("HOME") .. "/.config/awesome/themes/zenburn.lua")
 
 -- This is used later as the default terminal and editor to run.
 terminal = "urxvt"
 editor = "gvim"
-editor_cmd = terminal .. " -e " .. editor
+editor_cmd = editor
 
 -- Default modkey.
 -- Usually, Mod4 is the key with a logo between Control and Alt.
@@ -138,10 +140,8 @@ shifty.config.defaults = {
 
 -- {{{ Menu
 -- applications menu
-require('freedesktop.utils')
 freedesktop.utils.terminal = terminal  -- default: "xterm"
 freedesktop.utils.icon_theme = 'hicolor' -- look inside /usr/share/icons/, default: nil (don't use icon theme)
-require('freedesktop.menu')
 
 menu_items = freedesktop.menu.new()
 myawesomemenu = {
@@ -158,14 +158,6 @@ mymainmenu = awful.menu.new({ items = menu_items, width = 150 })
 
 mylauncher = awful.widget.launcher({ image = beautiful.awesome_icon,
                                      menu = mymainmenu })
-
-
--- desktop icons
-require('freedesktop.desktop')
-for s = 1, screen.count() do
---    freedesktop.desktop.add_applications_icon({screen = s, showlabels = true})
---    freedesktop.desktop.add_dirs_and_files_icon({screen = s, showlabels = true})
-end
 
 -- }}}
 
