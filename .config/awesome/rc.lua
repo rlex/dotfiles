@@ -1,5 +1,5 @@
 -- {{{ License
--- rc.lua, currently works with awesome 3.4.2
+-- rc.lua, currently works with awesome 3.4.3
 -- author: x-demon <x-demon [at] x-demon.org>
 -- based on multiple rc.lua files from different awesome users
 --
@@ -58,7 +58,7 @@ local commands = {}
 commands.suspend = "sudo s2ram --force"
 commands.help = "touch ~/seppal"
 commands.lock = "xscreensaver-command --lock"
-commands.screenshot = "scrot -e 'mv $f ~/bilder/screenshots'"
+commands.screenshot = "scrot -e `mv $f ~/tmp/`"
 --audio stuff
 commands.raisevol = "amixer set Master 2%+"
 commands.lowervol = "amixer set Master 2%-"
@@ -69,7 +69,6 @@ commands.muspause = "mpc pause"
 commands.musplay = "mpc play"
 commands.calc = "krunner"
 commands.screensaver = "/usr/lib/kde4/libexec/kscreenlocker --forcelock"
---todo
 commands.fileman = "dolphin"
 commands.calc = "kcalc"
 commands.browser = "chromium"
@@ -140,7 +139,7 @@ shifty.config.defaults = {
 
 -- {{{ Menu
 -- applications menu
-freedesktop.utils.terminal = terminal  -- default: "xterm"
+freedesktop.utils.terminal = terminal
 
 menu_items = freedesktop.menu.new()
 myawesomemenu = {
@@ -171,7 +170,7 @@ spacer.text     = " "
 separator.image = image(beautiful.widget_sep)
 -- }}}
 
--- {{{ CPU usage and temperature
+-- {{{ CPU usage
 cpuicon = widget({ type = "imagebox" })
 cpuicon.image = image(beautiful.widget_cpu)
 -- Initialize widgets
@@ -215,33 +214,6 @@ membar:set_gradient_colors({ beautiful.fg_widget,
 vicious.register(membar, vicious.widgets.mem, "$1", 13)
 -- }}}
 
--- {{{ File system usage
-fsicon = widget({ type = "imagebox" })
-fsicon.image = image(beautiful.widget_fs)
--- Initialize widgets
-fs = {
-  r = awful.widget.progressbar(),  h = awful.widget.progressbar()
-}
--- Progressbar properties
-for _, w in pairs(fs) do
-  w:set_width(5)
-  w:set_height(12)
-  w:set_vertical(true)
-  w:set_background_color(beautiful.fg_off_widget)
-  w:set_border_color(beautiful.border_widget)
-  w:set_color(beautiful.fg_widget)
-  w:set_gradient_colors({ beautiful.fg_widget,
-     beautiful.fg_center_widget, beautiful.fg_end_widget
-  }) -- Register buttons
-  w.widget:buttons(awful.util.table.join(
-    awful.button({ }, 1, function () exec("dolphin", false) end)
-  ))
-end -- Enable caching
-vicious.enable_caching(vicious.widgets.fs)
--- Register widgets
-vicious.register(fs.r, vicious.widgets.fs, "${/ used_p}",            599)
--- }}}
-
 -- {{{ Volume level
 volicon = widget({ type = "imagebox" })
 volicon.image = image(beautiful.widget_vol)
@@ -267,7 +239,7 @@ dateicon = widget({ type = "imagebox" })
 -- Initialize widget
 datewidget = widget({ type = "textbox" })
 -- Register widget
-vicious.register(datewidget, vicious.widgets.date, " %R", 61)
+vicious.register(datewidget, vicious.widgets.date, "%R", 61)
 -- }}}
 
 -- {{{ System tray
@@ -378,12 +350,6 @@ globalkeys = awful.util.table.join(
             awful.client.focus.byidx(-1)
             if client.focus then client.focus:raise() end
         end),
-
-    -- Layout manipulation
-    awful.key({ modkey, "Shift"   }, "n", function () awful.client.swap.byidx(  1)    end),
-    awful.key({ modkey, "Shift"   }, "k", function () awful.client.swap.byidx( -1)    end),
-    awful.key({ modkey, "Control" }, "n", function () awful.screen.focus_relative( 1) end),
-    awful.key({ modkey, "Control" }, "k", function () awful.screen.focus_relative(-1) end),
     awful.key({ modkey,           }, "u", awful.client.urgent.jumpto),
     awful.key({ modkey,           }, "Tab",
         function ()
@@ -397,6 +363,7 @@ globalkeys = awful.util.table.join(
     awful.key({ modkey,           }, "Return", function () awful.util.spawn(terminal) end),
     awful.key({ modkey, "Control" }, "r", awesome.restart),
     awful.key({ modkey, "Shift"   }, "q", awesome.quit),
+    -- Layout manipulation
     awful.key({ modkey,           }, "l",     function () awful.tag.incmwfact( 0.05)    end),
     awful.key({ modkey,           }, "h",     function () awful.tag.incmwfact(-0.05)    end),
     awful.key({ modkey, "Shift"   }, "h",     function () awful.tag.incnmaster( 1)      end),
@@ -455,8 +422,6 @@ for i=1, ( shifty.config.maxtags or 9 ) do
     end))
 end
 -- }}}
-
-
 
 -- Hook function to execute when the mouse enters a client.
 awful.hooks.mouse_enter.register(function (c)
