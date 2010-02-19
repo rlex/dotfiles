@@ -8,13 +8,13 @@
 -- {{{ Main
 theme = {}
 theme.confdir       = awful.util.getdir("config")
-theme.wallpaper_cmd = { "/usr/bin/nitrogen --restore" }
+theme.wallpaper_cmd = { "/usr/bin/awsetbg -l" }
 --theme.wallpaper_cmd = { "awsetbg /usr/share/awesome/themes/zenburn/zenburn-background.png" }
 -- }}}
 
 
 -- {{{ Styles
-theme.font      = "Profont 8"
+theme.font      = "Droid Sans Mono 8"
 
 -- {{{ Colors
 theme.fg_normal = "#DCDCCC"

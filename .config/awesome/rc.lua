@@ -141,7 +141,6 @@ shifty.config.defaults = {
 -- {{{ Menu
 -- applications menu
 freedesktop.utils.terminal = terminal  -- default: "xterm"
-freedesktop.utils.icon_theme = 'hicolor' -- look inside /usr/share/icons/, default: nil (don't use icon theme)
 
 menu_items = freedesktop.menu.new()
 myawesomemenu = {
@@ -379,7 +378,6 @@ globalkeys = awful.util.table.join(
             awful.client.focus.byidx(-1)
             if client.focus then client.focus:raise() end
         end),
-    awful.key({ modkey,           }, "m", function () mymainmenu:show(true)        end),
 
     -- Layout manipulation
     awful.key({ modkey, "Shift"   }, "n", function () awful.client.swap.byidx(  1)    end),
