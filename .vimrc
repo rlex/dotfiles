@@ -47,6 +47,28 @@ set fo+=cr " Fix enter for comment
 set sessionoptions=curdir,buffers,tabpages
 "}}}
 
+" {{{ Functions
+" Map key in all modes
+function SMap(key, action, ...)
+    let modes = " vi"
+    if (a:0 > 0)
+        let modes = a:{1}
+    endif
+    if (match(modes, '\Ii') != -1)
+        execute 'imap ' . a:key . ' <Esc>' . a:action
+    endif
+    if (match(modes, '\Nn') != -1)
+        execute 'nmap ' . a:key . ' <Esc>' . a:action
+    endif
+    if (match(modes, ' ') != -1)
+        execute 'map ' . a:key . ' <Esc>' . a:action
+    endif
+    if (match(modes, '\Vv') != -1)
+        execute 'vmap ' . a:key . ' <Esc>' . a:action
+    endif
+endfunction
+" }}}
+
 "{{{ Compiler
 if has('win32')
   set makeprg=nmake
@@ -73,55 +95,28 @@ imap <C-V> <esc>"+gPi
 " shift-insert fix for Xterm
 map <S-Insert> <MiddleMouse>
 
-" C-d - yyPi
-imap <C-d> <esc>yypi
-
 " C-N - Toggle lines
-nmap <C-N><C-N> :set invnumber<CR>
-vmap <C-N><C-N> <esc>:set invnumber<CR>
-imap <C-N><C-N> <esc>:set invnumber<CR>
-
-" Expand cword
-nmap > :%s/\<<c-r>=expand("<cword>")<cr>\>/
+call SMap("<C-N><C-N>", ":set invnumber")
  
-" F2 - :w :)
-nmap <F2> :w<cr>
-vmap <F2> <esc>:w<cr>i
-imap <F2> <esc>:w<cr>i
+" F2 - quick save
+call SMap("<F2>", ":w<cr>i")
 
 " F5 - BufExplorer
-nmap <F5> <Esc>:BufExplorer<cr>
-vmap <F5> <esc>:BufExplorer<cr>
-imap <F5> <esc><esc>:BufExplorer<cr>
+call SMap("<F5>", ":BufExplorer<cr>i")
 
-" F6 - bp...
-map <F6> :bp<cr>
-vmap <F6> <esc>:bp<cr>i
-imap <F6> <esc>:bp<cr>i
+" F8 - toggle pasting mode
+set pastetoggle=<F8>
 
-" F8 - Marks Browser
-map <F8> :MarksBrowser<cr>
-vmap <F8> <esc>:MarksBrowser<cr>
-imap <F8> <esc>:MarksBrowser<cr>
-
-" F9 - toggle pasting mode
-set pastetoggle=<F9>
+" F9 - TagList
+call SMap("<F9>", ":TlistToggle<cr>")
 
 " F10 - NerdTree
-map <F10> :NERDTreeToggle<cr>
-imap <F10> <esc>:NERDTreeToggle<cr>
-nmap <F10> <esc>:NERDTreeToggle<cr>
-
-" F11 - TagList
-map <F11> :TlistToggle<cr>
-vmap <F11> <esc>:TlistToggle<cr>
-imap <F11> <esc>:TlistToggle<cr>
+call SMap("<F10>", ":NERDTreeToggle<cr>i")
 
 " tab navigation like firefox
-map <C-Right> :tabnext<CR>
-map <C-Left> <ESC>:tabprev<CR>
-nmap <C-t> :tabnew<CR>
-imap <C-t> <Esc>:tabnew<CR>
+call SMap("<C-Right>", ":tabnext<cr>")
+call SMap("<C-Left>", ":tabprev<cr>")
+call SMap("<C-t>", ":tabnew<cr>")
 
 " Encoding settings (koi8-r, cp1251, cp866, utf8)
 set wcm=<Tab> 
@@ -133,11 +128,9 @@ menu Encoding.utf-8 :e ++enc=utf8 <CR>
 " C-Q - Exit Vim
 map <C-Q> <Esc>:qa<cr>
 
-nmap <PageUp> <C-U><C-U>
-imap <PageUp> <C-O><C-U><C-O><C-U>
-nmap <PageDown> <C-D><C-D>
-imap <PageDown> <C-O><C-D><C-O><C-D>
-
+" Pageup/pagedown
+call SMap("<PageUp>", "<C-U><C-U>")
+call SMap("<PageDown>", "<C-D><C-D>")
 " }}}
 
 " {{{ Smart mapper for tab completion
