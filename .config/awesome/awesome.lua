@@ -60,9 +60,9 @@ commands.help = "touch ~/seppal"
 commands.lock = "xscreensaver-command --lock"
 commands.screenshot = "scrot -e `mv $f ~/tmp/`"
 --audio stuff
-commands.raisevol = "amixer set Master 2%+"
-commands.lowervol = "amixer set Master 2%-"
-commands.mute = "amixer sset PCM toggle"
+commands.raisevol = "amixer set PCM 2%+"
+commands.lowervol = "amixer set PCM 2%-"
+commands.mute = "amixer set PCM toggle"
 commands.musnext = "mpc next"
 commands.musprev = "mpc prev"
 commands.muspause = "mpc pause"
@@ -77,11 +77,11 @@ commands.browser = "chromium"
 --{{{ Tags
 --{{{ SHIFTY: configured tags
 shifty.config.tags = {
-  ["G"] =      { layout = awful.layout.suit.tile,         mwfact=0.60, exclusive = false, solitary = false, position = 1, init = true, screen = 1, slave = true } ,
-  ["www"] =    { layout = awful.layout.suit.tile.bottom,  mwfact=0.30, exclusive = true , solitary = true , position = 2 } ,
-  ["im"] =     { layout = awful.layout.suit.tile,         mwfact=0.85, exclusive = false, solitary = false, position = 3 } ,
+  ["G"] =      { layout = awful.layout.suit.tile,         mwfact=0.60, exclusive = false, solitary = false, position = 1, init = true, screen = 1, slave = true, persist = true } ,
+  ["www"] =    { layout = awful.layout.suit.max,          mwfact=0.30, exclusive = true , solitary = true , position = 2 } ,
+  ["im"] =     { layout = awful.layout.suit.tile,         mwfact=0.85, exclusive = true , solitary = true , position = 3 } ,
   ["media"] =  { layout = awful.layout.suit.float,                     exclusive = false, solitary = false, position = 4 } ,
-  ["office"] = { layout = awful.layout.suit.tile, position = 9} ,
+  ["office"] = { layout = awful.layout.suit.tile,                                                           position = 9 } ,
   ["code"] =   { layout = awful.layout.suit.tile.bottom,  mwfact=0.65, exclusive = true , solitary = true , position = 5 } ,
   ["skype"] =  { layout = awful.layout.suit.tile.bottom,  mwfact=0.65, exclusive = true , solitary = true , position = 6 } ,
   ["irc"] =    { layout = awful.layout.suit.tile.bottom,  mwfact=0.65, exclusive = true , solitary = true , position = 7 } ,
@@ -160,7 +160,6 @@ mylauncher = awful.widget.launcher({ image = beautiful.awesome_icon,
 -- }}}
 
 -- {{{ Wibox
---
 -- {{{ Widgets configuration
 --
 -- {{{ Reusable separators
@@ -231,7 +230,7 @@ volbar:set_gradient_colors({ beautiful.fg_widget,
 }) -- Enable caching
 vicious.enable_caching(vicious.widgets.volume)
 -- Register widgets
-vicious.register(volbar,    vicious.widgets.volume, "$1",  2, "Master")
+vicious.register(volbar,    vicious.widgets.volume, "$1",  2, "PCM")
 -- }}}
 
 -- {{{ Date and time
@@ -299,6 +298,8 @@ end
 -- the assignment of shifty.taglist must always be after its actually initialized 
 -- with awful.widget.taglist.new()
 shifty.taglist = taglist
+shifty.config.sloppy = false
+shifty.modkey = modkey
 -- }}}
 
 -- }}}
