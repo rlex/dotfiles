@@ -59,6 +59,12 @@ if [ "$ext_toast" = "1" ];
         fi
 fi
 
+# terminal fix for ssh
+if [ "$TERM" != "linux" ];
+    then
+        export TERM=xterm
+fi
+
 # all done? Show MOTD!
 if [ -f $HOME/.rc/.sh_motd ];
 then
