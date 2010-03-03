@@ -11,24 +11,18 @@ fi
 # if xterm
 case "$TERM" in
 xterm*|rxvt*)
-        PROMPT_COMMAND='echo -ne "\033]0;${USER}@${HOSTNAME}: ${PWD}\007"'
+        PROMPT_COMMAND="echo -ne "\033]0;${USER}@${HOSTNAME}: ${PWD}\007""
         ;;
 *)
         ;;
 esac
 
 # user preferences
-# exports
-export PAGER=less
-export EDITOR=nano
-export LESS='-R'
-export PATH=$PATH:$HOME/bin:/usr/local/bin
-export LESSCHARSET=utf-8
 # bash-settings
 export HISTCONTROL=ignoredups
 export HISTSIZE=20000
 export HISTFILESIZE=20000
-export HISTTIMEFORMAT="[%Y-%m-%d - %H:%M:%S] "
+export HISTTIMEFORMAT="[%Y-%m-%d - %H:%M:%S]"
 export HISTIGNORE="&:ls:ll:la:l:pwd:exit:clear:b:r:exit:env:date:.:..:...:....:.....:pwd:cfg:rb:eb:!!:fg:bg:cd:h:mc"
 export HISTFILE=~/.bash_history
 export CLICOLOR=1
@@ -78,13 +72,13 @@ if [ "$UID_VALUE" = "uid=0(root)" ]; then
 else
         prompt_color=$sh_light_green
 fi
-PS1='${debian_chroot:+($debian_chroot)}'${prompt_color}'\u@\h'${sh_norm}':'${sh_light_blue}'\w'${sh_norm}' $(smiley) ${ERROR_FLAG:+'${sh_light_red}'}\$${ERROR_FLAG:+'${sh_norm}'} '
+PS1="${debian_chroot:+($debian_chroot)}"${prompt_color}"\u@\h"${sh_norm}":"${sh_light_blue}"\w"${sh_norm}" $(smiley) ${ERROR_FLAG:+"${sh_light_red}"}\$${ERROR_FLAG:+"${sh_norm}"} "
 
 # Set an error flag to be used in our prompt.
-PROMPT_COMMAND='if [ $? -ne 0 ]; then ERROR_FLAG=1; else ERROR_FLAG=; fi; '
+PROMPT_COMMAND="if [ $? -ne 0 ]; then ERROR_FLAG=1; else ERROR_FLAG=; fi; "
 ## functions
 # SmiliePrompt
-smiley() { if [ $? == 0 ]; then echo '^_^'; else echo '0_o'; fi; }
+smiley() { if [ $? == 0 ]; then echo "^_^"; else echo "0_o"; fi; }
 
 # load env variables
 if [ -f $HOME/.rc/.sh_env ];

@@ -4,10 +4,10 @@ setopt EXTENDED_HISTORY     # puts timestamps in the history
 setopt NO_HUP               # don't send kill to background jobs when exiting
 
 ## History options ##
-export HISTFILE=$HOME/.zsh-history                      # path to history file
-export HISTIGNORE=ls:l:pwd:mc:su:df:clear:fg:bg:history # ignore some common commands
-export HISTSIZE=5000
-export SAVEHIST=1000
+export HISTFILE="$HOME/.zsh-history"                      # path to history file
+export HISTIGNORE="ls:l:pwd:mc:su:df:clear:fg:bg:history" # ignore some common commands
+export HISTSIZE="5000"
+export SAVEHIST="1000"
 setopt append_history
 setopt inc_append_history
 setopt extended_history
@@ -65,16 +65,16 @@ function preexec() {
 
 ## Zsh completion ##
 zmodload -i zsh/complist
-zstyle ':completion:*' menu select
-zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
+zstyle ":completion:*" menu select
+zstyle ":completion:*" list-colors ${(s.:.)LS_COLORS}
 # hosts autocomplete - broken!
 #export hosts=(`cat ~/.rc/.hosts`)
 #zstyle '*' hosts $hosts
 # ps autocomplete
-zstyle ':completion:*:processes' command 'ps xua'
-zstyle ':completion:*:processes' sort false
-zstyle ':completion:*:processes-names' command 'ps xho command'
-zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([0-9]#)*=0=01;31'
+zstyle ":completion:*:processes" command "ps xua"
+zstyle ":completion:*:processes" sort false
+zstyle ":completion:*:processes-names" command "ps xho command"
+zstyle ":completion:*:*:kill:*:processes" list-colors "=(#b) #([0-9]#)*=0=01;31"
 
 ## Keybindings ##
 #bindkey -e
