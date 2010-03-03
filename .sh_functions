@@ -135,9 +135,9 @@ history -E 1;
 psgrep() {
         if [ ! -z $1 ] ; then
                 echo "Grepping for processes matching $1..."
-                ps aux | grep $1 | grep -v grep
+                ps -A -o pid,uname,%cpu,%mem,stat,time,args | grep "$1" | grep -v grep
         else
-                echo "!! Need name to grep for";
+                echo "Usage: psgrep <pattern>";
         fi
 }
 grab() {
