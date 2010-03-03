@@ -66,7 +66,7 @@ commands.mute = "amixer set PCM toggle"
 commands.musnext = "mpc next"
 commands.musprev = "mpc prev"
 commands.muspause = "mpc pause"
-commands.musplay = "mpc play"
+commands.mustoggle = "mpc toggle"
 commands.calc = "krunner"
 commands.screensaver = "/usr/lib/kde4/libexec/kscreenlocker --forcelock"
 commands.fileman = "dolphin"
@@ -325,7 +325,7 @@ globalkeys = awful.util.table.join(
     awful.key({}, "XF86AudioLowerVolume", function() awful.util.spawn_with_shell(commands.lowervol) end ),
     awful.key({}, "XF86AudioNext", function() awful.util.spawn_with_shell(commands.musnext) end ),
     awful.key({}, "XF86AudioPrev", function() awful.util.spawn_with_shell(commands.musprev) end ),
-    awful.key({}, "XF86AudioPlay", function() awful.util.spawn_with_shell(commands.muspause) end ),
+    awful.key({}, "XF86AudioPlay", function() awful.util.spawn_with_shell(commands.mustoggle) end ),
     awful.key({}, "XF86Tools", function() awful.util.spawn_with_shell(commands.musplay) end ),
     awful.key({}, "XF86Calculator", function() awful.util.spawn_with_shell(commands.calc) end ),
     awful.key({}, "XF86ScreenSaver", function() awful.util.spawn_with_shell(commands.screensaver) end ),
