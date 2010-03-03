@@ -64,17 +64,24 @@ function preexec() {
 }
 
 ## Zsh completion ##
-zmodload -i zsh/complist
-zstyle ":completion:*" menu select
-zstyle ":completion:*" list-colors ${(s.:.)LS_COLORS}
-# hosts autocomplete - broken!
-#export hosts=(`cat ~/.rc/.hosts`)
-#zstyle '*' hosts $hosts
-# ps autocomplete
-zstyle ":completion:*:processes" command "ps xua"
-zstyle ":completion:*:processes" sort false
-zstyle ":completion:*:processes-names" command "ps xho command"
-zstyle ":completion:*:*:kill:*:processes" list-colors "=(#b) #([0-9]#)*=0=01;31"
+# New style completion system
+autoload -U compinit; compinit
+#  * List of completers to use
+zstyle ":completion:*" completer _complete _match _approximate
+#  * Allow approximate
+zstyle ":completion:*:match:*" original only
+zstyle ":completion:*:approximate:*" max-errors 1 numeric
+#  * Selection prompt as menu
+zstyle ":completion:*" menu select=1
+#  * Menu selection for PID completion
+zstyle ":completion:*:*:kill:*" menu yes select
+zstyle ":completion:*:kill:*" force-list always
+zstyle ":completion:*:processes" command "ps -au$USER"
+zstyle ":completion:*:*:kill:*:processes" list-colors "=(#b) #([0-9]#)*=0=01;32"
+#  * Don't select parent dir on cd
+zstyle ":completion:*:cd:*" ignore-parents parent pwd
+#  * Complete with colors
+zstyle ":completion:*" list-colors ""
 
 ## Keybindings ##
 #bindkey -e
