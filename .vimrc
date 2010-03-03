@@ -163,6 +163,7 @@ filetype plugin on
 au BufRead,BufNewFile *.phps set filetype=php
 au BufRead,BufNewFile *.thtml set filetype=php
 au BufRead,BufNewFile *.erb set filetype=html
+au BufRead,BufNewFile /etc/nginx/* set ft=nginx
 " }}}
 
 " {{{ Various plugins settings
