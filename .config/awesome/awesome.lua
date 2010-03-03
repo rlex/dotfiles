@@ -56,7 +56,6 @@ layouts =
 -- some commands
 local commands = {}
 commands.suspend = "sudo s2ram --force"
-commands.help = "touch ~/seppal"
 commands.lock = "xscreensaver-command --lock"
 commands.screenshot = "scrot -e `mv $f ~/tmp/`"
 --audio stuff
@@ -67,6 +66,7 @@ commands.musnext = "mpc next"
 commands.musprev = "mpc prev"
 commands.muspause = "mpc pause"
 commands.mustoggle = "mpc toggle"
+-- other apps
 commands.calc = "krunner"
 commands.screensaver = "/usr/lib/kde4/libexec/kscreenlocker --forcelock"
 commands.fileman = "dolphin"
@@ -75,21 +75,21 @@ commands.browser = "chromium"
 -- }}}
 
 --{{{ Tags
---{{{ SHIFTY: configured tags
+--{{{ Shifty: configured tags
 shifty.config.tags = {
   ["G"] =      { layout = awful.layout.suit.tile,         mwfact=0.60, exclusive = false, solitary = false, position = 1, init = true, screen = 1, slave = true, persist = true } ,
   ["www"] =    { layout = awful.layout.suit.max,          mwfact=0.30, exclusive = true , solitary = true , position = 2 } ,
   ["im"] =     { layout = awful.layout.suit.tile,         mwfact=0.85, exclusive = true , solitary = true , position = 3 } ,
   ["media"] =  { layout = awful.layout.suit.float,                     exclusive = false, solitary = false, position = 4 } ,
-  ["office"] = { layout = awful.layout.suit.tile,                                                           position = 9 } ,
-  ["code"] =   { layout = awful.layout.suit.tile.bottom,  mwfact=0.65, exclusive = true , solitary = true , position = 5 } ,
-  ["skype"] =  { layout = awful.layout.suit.tile.bottom,  mwfact=0.65, exclusive = true , solitary = true , position = 6 } ,
-  ["irc"] =    { layout = awful.layout.suit.tile.bottom,  mwfact=0.65, exclusive = true , solitary = true , position = 7 } ,
-  ["doc"] =    { layout = awful.layout.suit.tile.bottom,  mwfact=0.65, exclusive = true , solitary = true , position = 8 } ,
+  ["office"] = { layout = awful.layout.suit.tile,                                                           position = 5 } ,
+  ["code"] =   { layout = awful.layout.suit.tile.bottom,  mwfact=0.65, exclusive = true , solitary = true , position = 6 } ,
+  ["skype"] =  { layout = awful.layout.suit.tile.bottom,  mwfact=0.65, exclusive = true , solitary = true , position = 7 } ,
+  ["irc"] =    { layout = awful.layout.suit.tile.bottom,  mwfact=0.65, exclusive = true , solitary = true , position = 8 } ,
+  ["doc"] =    { layout = awful.layout.suit.tile.bottom,  mwfact=0.65, exclusive = true , solitary = true , position = 9 } ,
 }
 --}}}
  
---{{{ SHIFTY: application matching rules
+--{{{ Shifty: application matching rules
 -- order here matters, early rules will be applied first
 shifty.config.apps = {
          { match = { "Chromium","Google Chrome","Gran Paradiso"            } , tag = "www"    } ,
@@ -103,8 +103,8 @@ shifty.config.apps = {
          { match = { "xchat"                                               } , tag = "irc"    } ,
          { match = { terminal                                              } , honorsizehints = false, slave = true   } ,
          { match = { "Okular"                                              } , tag = "doc"    } ,
-         { match = { "" },
-                           buttons = awful.util.table.join(
+         -- match all
+         { match = { "" } ,  buttons = awful.util.table.join(
                                         awful.button({ }, 1, function (c) client.focus = c; c:raise() end),
                                         awful.button({ modkey }, 1, awful.mouse.client.move),
                                         awful.button({ modkey }, 3, awful.mouse.client.resize))
@@ -112,7 +112,7 @@ shifty.config.apps = {
 }
 --}}}
  
---{{{ SHIFTY: default tag creation rules
+--{{{ Shifty: default tag creation rules
 -- parameter description
 --  * floatBars : if floating clients should always have a titlebar
 --  * guess_name : wether shifty should try and guess tag names when creating new (unconfigured) tags
@@ -144,8 +144,7 @@ freedesktop.utils.terminal = terminal
 menu_items = freedesktop.menu.new()
 myawesomemenu = {
     { "manual", terminal .. " -e man awesome", freedesktop.utils.lookup_icon({ icon = 'help' }) },
-    { "edit config", editor_cmd .. " " .. awful.util.getdir("config") .. "/rc.lua", freedesktop.utils.lookup_icon({ 
-    icon = 'package_settings' }) },
+    { "edit config", editor_cmd .. " " .. awful.util.getdir("config") .. "/rc.lua", freedesktop.utils.lookup_icon({ icon = 'package_settings' }) },
     { "restart", awesome.restart, freedesktop.utils.lookup_icon({ icon = '' }) },
     { "quit", awesome.quit, freedesktop.utils.lookup_icon({ icon = '' }) }
 }
@@ -178,12 +177,11 @@ cpugraph  = awful.widget.graph()
 cpugraph:set_width(40)
 cpugraph:set_height(14)
 cpugraph:set_background_color(beautiful.fg_off_widget)
-cpugraph:set_color(beautiful.fg_end_widget)
 cpugraph:set_gradient_angle(0)
 cpugraph:set_gradient_colors({ beautiful.fg_end_widget,
    beautiful.fg_center_widget, beautiful.fg_widget
 }) -- Register widgets
-vicious.register(cpugraph,  vicious.widgets.cpu,     "$1")
+vicious.register(cpugraph, vicious.widgets.cpu, "$1")
 -- }}}
 
 -- {{{ Battery state
@@ -206,7 +204,6 @@ membar:set_height(12)
 membar:set_vertical(true)
 membar:set_background_color(beautiful.fg_off_widget)
 membar:set_border_color(beautiful.border_widget)
-membar:set_color(beautiful.fg_widget)
 membar:set_gradient_colors({ beautiful.fg_widget,
    beautiful.fg_center_widget, beautiful.fg_end_widget
 }) -- Register widget
@@ -217,20 +214,19 @@ vicious.register(membar, vicious.widgets.mem, "$1", 13)
 volicon = widget({ type = "imagebox" })
 volicon.image = image(beautiful.widget_vol)
 -- Initialize widgets
-volbar    = awful.widget.progressbar()
+volbar = awful.widget.progressbar()
 -- Progressbar properties
 volbar:set_width(10)
 volbar:set_height(12)
 volbar:set_vertical(true)
 volbar:set_background_color(beautiful.fg_off_widget)
 volbar:set_border_color(beautiful.border_widget)
-volbar:set_color(beautiful.fg_widget)
 volbar:set_gradient_colors({ beautiful.fg_widget,
    beautiful.fg_center_widget, beautiful.fg_end_widget
 }) -- Enable caching
 vicious.enable_caching(vicious.widgets.volume)
 -- Register widgets
-vicious.register(volbar,    vicious.widgets.volume, "$1",  2, "PCM")
+vicious.register(volbar, vicious.widgets.volume, "$1",  2, "PCM")
 -- }}}
 
 -- {{{ Date and time
@@ -294,12 +290,10 @@ for s = 1, screen.count() do
     }
 end
 
--- {{{ SHIFTY: initialize shifty
+-- {{{ Shifty: initialize shifty
 -- the assignment of shifty.taglist must always be after its actually initialized 
 -- with awful.widget.taglist.new()
 shifty.taglist = taglist
-shifty.config.sloppy = false
-shifty.modkey = modkey
 -- }}}
 
 -- }}}
@@ -316,31 +310,29 @@ root.buttons(awful.util.table.join(
 -- {{{ Key bindings
 globalkeys = awful.util.table.join(
     --user defined
-    awful.key({}, "XF86PowerOff", function() awful.util.spawn_with_shell(commands.suspend) end ),
-    awful.key({}, "Help", function() awful.util.spawn_with_shell(commands.help) end ),
-    awful.key({ modkey,           }, "F12",   function () awful.util.spawn_with_shell(commands.lock) end),
+    awful.key({                   }, "XF86PowerOff",         function() awful.util.spawn_with_shell(commands.suspend) end ),
+    awful.key({ modkey,           }, "F12",                  function () awful.util.spawn_with_shell(commands.lock) end),
     --audio stuff
-    awful.key({}, "XF86AudioMute", function() awful.util.spawn_with_shell(commands.mute) end ),
-    awful.key({}, "XF86AudioRaiseVolume", function() awful.util.spawn_with_shell(commands.raisevol) end ),
-    awful.key({}, "XF86AudioLowerVolume", function() awful.util.spawn_with_shell(commands.lowervol) end ),
-    awful.key({}, "XF86AudioNext", function() awful.util.spawn_with_shell(commands.musnext) end ),
-    awful.key({}, "XF86AudioPrev", function() awful.util.spawn_with_shell(commands.musprev) end ),
-    awful.key({}, "XF86AudioPlay", function() awful.util.spawn_with_shell(commands.mustoggle) end ),
-    awful.key({}, "XF86Tools", function() awful.util.spawn_with_shell(commands.musplay) end ),
-    awful.key({}, "XF86Calculator", function() awful.util.spawn_with_shell(commands.calc) end ),
-    awful.key({}, "XF86ScreenSaver", function() awful.util.spawn_with_shell(commands.screensaver) end ),
-    awful.key({}, "Print", function() awful.util.spawn_with_shell(commands.screenshot) end ),
-
+    awful.key({                   }, "XF86AudioMute",        function() awful.util.spawn_with_shell(commands.mute) end ),
+    awful.key({                   }, "XF86AudioRaiseVolume", function() awful.util.spawn_with_shell(commands.raisevol) end ),
+    awful.key({                   }, "XF86AudioLowerVolume", function() awful.util.spawn_with_shell(commands.lowervol) end ),
+    awful.key({                   }, "XF86AudioNext",        function() awful.util.spawn_with_shell(commands.musnext) end ),
+    awful.key({                   }, "XF86AudioPrev",        function() awful.util.spawn_with_shell(commands.musprev) end ),
+    awful.key({                   }, "XF86AudioPlay",        function() awful.util.spawn_with_shell(commands.mustoggle) end ),
+    awful.key({                   }, "XF86Tools",            function() awful.util.spawn_with_shell(commands.musplay) end ),
+    awful.key({                   }, "XF86Calculator",       function() awful.util.spawn_with_shell(commands.calc) end ),
+    awful.key({                   }, "XF86ScreenSaver",      function() awful.util.spawn_with_shell(commands.screensaver) end ),
+    awful.key({                   }, "Print",                function() awful.util.spawn_with_shell(commands.screenshot) end ),
     --default bindings
     awful.key({ modkey,           }, "Left",   awful.tag.viewprev       ),
     awful.key({ modkey,           }, "Right",  awful.tag.viewnext       ),
     awful.key({ modkey, "Control" }, "Left",   shifty.shift_prev        ),
     awful.key({ modkey, "Control" }, "Right",  shifty.shift_next       ),
-    awful.key({ modkey,           }, "Escape", awful.tag.history.restore),
     awful.key({ modkey            }, "t",      function() shifty.add({ rel_index = 1 }) end),
     awful.key({ modkey, "Control" }, "t",      function() shifty.add({ rel_index = 1, nopopup = true }) end),
     awful.key({ modkey            }, "r",      shifty.rename), -- //TODO: fix renaming
     awful.key({ modkey            }, "w",      shifty.del),
+    awful.key({ modkey,           }, "u",      awful.client.urgent.jumpto),
     awful.key({ modkey,           }, "n",
         function ()
             awful.client.focus.byidx( 1)
@@ -351,7 +343,6 @@ globalkeys = awful.util.table.join(
             awful.client.focus.byidx(-1)
             if client.focus then client.focus:raise() end
         end),
-    awful.key({ modkey,           }, "u", awful.client.urgent.jumpto),
     awful.key({ modkey,           }, "Tab",
         function ()
             awful.client.focus.history.previous()
@@ -373,12 +364,12 @@ globalkeys = awful.util.table.join(
     awful.key({ modkey, "Control" }, "l",     function () awful.tag.incncol(-1)         end),
     awful.key({ modkey,           }, "space", function () awful.layout.inc(layouts,  1) end),
     awful.key({ modkey, "Shift"   }, "space", function () awful.layout.inc(layouts, -1) end),
-
     -- Prompt
     awful.key({ modkey,           }, "e",     function () awful.prompt.run({prompt="Run:"},
                                                promptbox[mouse.screen].widget,
                                                check_for_terminal,
-                                               clean_for_completion) end)
+                                               clean_for_completion)
+                                               end)
 )
 clientkeys = awful.util.table.join(
     awful.key({ modkey,           }, "f",      function (c) c.fullscreen = not c.fullscreen  end),
@@ -512,7 +503,7 @@ function autostart(dir)
         elseif c=='@' then  -- symbolic links
             print("Awesome Autostart: Not handling symbolic links: " .. file)
         else
-            print ("Awesome Autostart: Skipping file " .. file .. " not executable.")
+            print("Awesome Autostart: Skipping file " .. file .. " not executable.")
         end
     end
     io.close(fd)
