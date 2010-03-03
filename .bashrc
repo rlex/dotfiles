@@ -72,7 +72,7 @@ if [ "$UID_VALUE" = "uid=0(root)" ]; then
 else
         prompt_color=$sh_light_green
 fi
-PS1="${debian_chroot:+($debian_chroot)}"${prompt_color}"\u@\h"${sh_norm}":"${sh_light_blue}"\w"${sh_norm}" $(smiley) ${ERROR_FLAG:+"${sh_light_red}"}\$${ERROR_FLAG:+"${sh_norm}"} "
+PS1="${debian_chroot:+($debian_chroot)}'${prompt_color}'\u@\h'${sh_norm}':'${sh_light_blue}'\w'${sh_norm}' $(smiley) ${ERROR_FLAG:+'${sh_light_red}'}\$${ERROR_FLAG:+'${sh_norm}'} "
 
 # Set an error flag to be used in our prompt.
 PROMPT_COMMAND="if [ $? -ne 0 ]; then ERROR_FLAG=1; else ERROR_FLAG=; fi; "
