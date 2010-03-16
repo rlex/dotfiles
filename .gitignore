@@ -12,3 +12,7 @@
 
 ### AWESOME AUTORUN ###
 .config/awesome/autorun/*
+
+### FISH ###
+.config/fish/fish_history
+.config/fish/fishd.*
