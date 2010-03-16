@@ -1,63 +1,53 @@
 ---------------------------------------------------
 -- Licensed under the GNU General Public License v2
 --  * (c) 2010, Adrian C. <anrxc@sysphere.org>
---  * (c) 2010, Henning Glawe <glaweh@debian.org>
 --  * (c) 2009, Lucas de Vries <lucas@glacicle.com>
 ---------------------------------------------------
 
 -- {{{ Grab environment
 local tonumber = tonumber
 local os = { time = os.time }
-local io = { open = io.open }
+local io = { lines = io.lines }
 local setmetatable = setmetatable
-local string = {
-    match = string.match,
-    format = string.format
-}
+local string = { match = string.match }
+local helpers = require("vicious.helpers")
 -- }}}
 
 
 -- Net: provides usage statistics for all network interfaces
-module("vicious.net")
+module("vicious.widgets.net")
 
 
 -- Initialise function tables
 local nets = {}
-
--- {{{ Helper functions
-local function uformat(array, key, value)
-    array["{"..key.."_b}"]  = string.format("%.1f", value)
-    array["{"..key.."_kb}"] = string.format("%.1f", value/1024)
-    array["{"..key.."_mb}"] = string.format("%.1f", value/1024/1024)
-    array["{"..key.."_gb}"] = string.format("%.1f", value/1024/1024/1024)
-    return array
-end
--- }}}
+-- Variable definitions
+local unit = { ["b"] = 1, ["kb"] = 1024,
+    ["mb"] = 1024^2, ["gb"] = 1024^3
+}
 
 -- {{{ Net widget type
 local function worker(format)
-    -- Get /proc/net/dev
-    local f = io.open("/proc/net/dev")
     local args = {}
 
-    for line in f:lines() do
+    -- Get NET stats
+    for line in io.lines("/proc/net/dev") do
         -- Match wmaster0 as well as rt0 (multiple leading spaces)
-        if string.match(line, "^[%s]?[%s]?[%s]?[%s]?[%w]+:") then
-            local name = string.match(line, "^[%s]?[%s]?[%s]?[%s]?([%w]+):")
+        local name = string.match(line, "^[%s]?[%s]?[%s]?[%s]?([%w]+):")
+        if name ~= nil then
             -- Received bytes, first value after the name
             local recv = tonumber(string.match(line, ":[%s]*([%d]+)"))
             -- Transmited bytes, 7 fields from end of the line
             local send = tonumber(string.match(line,
              "([%d]+)%s+%d+%s+%d+%s+%d+%s+%d+%s+%d+%s+%d+%s+%d$"))
 
-            uformat(args, name .. " rx", recv)
-            uformat(args, name .. " tx", send)
+            helpers.uformat(args, name .. " rx", recv, unit)
+            helpers.uformat(args, name .. " tx", send, unit)
 
             if nets[name] == nil then
                 -- Default values on the first run
                 nets[name] = {}
-                uformat(args, name .. " down", 0)
-                uformat(args, name .. " up",   0)
+                helpers.uformat(args, name .. " down", 0, unit)
+                helpers.uformat(args, name .. " up",   0, unit)
 
                 nets[name].time = os.time()
             else -- Net stats are absolute, substract our last reading
@@ -68,8 +58,8 @@ local function worker(format)
                 local down = (recv - nets[name][1]) / interval
                 local up   = (send - nets[name][2]) / interval
 
-                uformat(args, name .. " down", down)
-                uformat(args, name .. " up",   up)
+                helpers.uformat(args, name .. " down", down, unit)
+                helpers.uformat(args, name .. " up",   up,   unit)
             end
 
             -- Store totals
@@ -77,7 +67,6 @@ local function worker(format)
             nets[name][2] = send
         end
     end
-    f:close()
 
     return args
 end

@@ -10,12 +10,14 @@ local setmetatable = setmetatable
 -- }}}
 
 
--- Mdir: provides a number of new and unread messages in a Maildir structure
-module("vicious.mdir")
+-- Mdir: provides the number of new and unread messages in Maildir structures/dirs
+module("vicious.widgets.mdir")
 
 
 -- {{{ Maildir widget type
 local function worker(format, warg)
+    if not warg then return end
+
     -- Initialise counters
     local count = { new = 0, cur = 0 }
 

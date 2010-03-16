@@ -13,21 +13,23 @@ local helpers = require("vicious.helpers")
 
 
 -- Mbox: provides the subject of last e-mail in a mbox file
-module("vicious.mbox")
+module("vicious.widgets.mbox")
 
 
 -- {{{ Mailbox widget type
 local function worker(format, warg)
-    if type(warg) ~= "table" then mbox = warg end
+    if not warg then return end
+
+    -- Default value
+    local subject = "N/A"
+
     -- mbox could be huge, get a 30kb chunk from EOF
-    --  * attachments could be much bigger than this
+    if type(warg) ~= "table" then mbox = warg end
+    -- * attachment could be much bigger than 30kb
     local f = io.open(mbox or warg[1])
     f:seek("end", -30720)
     local txt = f:read("*all")
     f:close()
-
-    -- Default value
-    local subject = "N/A"
 
     -- Find all Subject lines
     for i in string.gfind(txt, "Subject: ([^\n]*)") do

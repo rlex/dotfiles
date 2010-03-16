@@ -1,8 +1,9 @@
 ---------------------------------------------------
 -- Licensed under the GNU General Public License v2
 --  * (c) 2010, Adrian C. <anrxc@sysphere.org>
---  * (c) 2010, Rémy C. <shikamaru@mandriva.org>
---  * (c) 2010, Benedikt Sauer <filmor@gmail.com>
+--  * (c) 2009, Rémy C. <shikamaru@mandriva.org>
+--  * (c) 2009, Benedikt Sauer <filmor@gmail.com>
+--  * (c) 2009, Henning Glawe <glaweh@debian.org>
 --  * (c) 2009, Lucas de Vries <lucas@glacicle.com>
 ---------------------------------------------------
 
@@ -10,9 +11,10 @@
 local pairs = pairs
 local io = { open = io.open }
 local setmetatable = setmetatable
+local getmetatable = getmetatable
 local string = {
-    sub = string.sub,
-    gsub = string.gsub
+    upper = string.upper,
+    format = string.format
 }
 -- }}}
 
@@ -27,14 +29,21 @@ local scroller = {}
 
 -- {{{ Helper functions
 -- {{{ Expose path as a Lua table
-function pathtotable(path)
-    return setmetatable({},
-        { __index = function(_, name)
-            local f = io.open(path .. '/' .. name)
+function pathtotable(dir)
+    return setmetatable({ _path = dir },
+        { __index = function(table, index)
+            local path = table._path .. '/' .. index
+            local f = io.open(path)
             if f then
                 local s = f:read("*all")
                 f:close()
-                return s
+                if s then
+                    return s
+                else
+                    local o = { _path = path }
+                    setmetatable(o, getmetatable(table))
+                    return o
+                end
             end
         end
     })
@@ -44,10 +53,20 @@ end
 -- {{{ Format a string with args
 function format(format, args)
     for var, val in pairs(args) do
-        format = string.gsub(format, "$" .. var, val)
+        format = format:gsub("$" .. var, val)
     end
 
     return format
+end
+-- }}}
+
+-- {{{ Format units to one decimal point
+function uformat(array, key, value, unit)
+    for u, v in pairs(unit) do
+        array["{"..key.."_"..u.."}"] = string.format("%.1f", value/v)
+    end
+
+    return array
 end
 -- }}}
 
@@ -65,12 +84,20 @@ function escape(text)
 end
 -- }}}
 
+-- {{{ Capitalize a string
+function capitalize(text)
+    return text and text:gsub("([%w])([%w]*)", function(c, s)
+        return string.upper(c) .. s
+    end)
+end
+-- }}}
+
 -- {{{ Truncate a string
 function truncate(text, maxlen)
     local txtlen = text:len()
 
     if txtlen > maxlen then
-        text = string.sub(text, 1, maxlen - 3) .. "..."
+        text = text:sub(1, maxlen - 3) .. "..."
     end
 
     return text
@@ -88,14 +115,14 @@ function scroll(text, maxlen, widget)
 
     if txtlen > maxlen then
         if state.d then
-            text = string.sub(text, state.i, state.i + maxlen) .. "..."
+            text = text:sub(state.i, state.i + maxlen) .. "..."
             state.i = state.i + 3
 
             if maxlen + state.i >= txtlen then
                 state.d = false
             end
         else
-            text = "..." .. string.sub(text, state.i, state.i + maxlen)
+            text = "..." .. text:sub(state.i, state.i + maxlen)
             state.i = state.i - 3
 
             if state.i <= 1 then

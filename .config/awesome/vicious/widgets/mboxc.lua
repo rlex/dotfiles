@@ -11,11 +11,13 @@ local string = { find = string.find }
 
 
 -- Mboxc: provides the count of total, old and new messages in mbox files
-module("vicious.mboxc")
+module("vicious.widgets.mboxc")
 
 
 -- {{{ Mbox count widget type
 local function worker(format, warg)
+    if not warg then return end
+
     -- Initialise counters
     local count = { old = 0, total = 0, new = 0 }
 

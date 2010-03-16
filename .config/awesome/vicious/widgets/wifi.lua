@@ -5,8 +5,11 @@
 
 -- {{{ Grab environment
 local tonumber = tonumber
-local io = { popen = io.popen }
 local setmetatable = setmetatable
+local io = {
+    open = io.open,
+    popen = io.popen
+}
 local string = {
     find = string.find,
     match = string.match
@@ -15,28 +18,36 @@ local string = {
 
 
 -- Wifi: provides wireless information for a requested interface
-module("vicious.wifi")
+module("vicious.widgets.wifi")
 
 
 -- {{{ Wireless widget type
-local function worker(format, iface)
-    -- Get data from iwconfig (where available)
-    local f = io.popen("iwconfig " .. iface)
-    local iw = f:read("*all")
-    f:close()
+local function worker(format, warg)
+    if not warg then return end
 
     -- Default values
     local winfo = {
         ["{ssid}"] = "N/A",
         ["{mode}"] = "N/A",
-        ["{chan}"] = "N/A",
+        ["{chan}"] = 0,
         ["{rate}"] = 0,
         ["{link}"] = 0,
         ["{sign}"] = 0
     }
 
-    -- Check if iwconfig wasn't found, can't be executed or the
-    -- interface is not a wireless one
+    -- Get data from iwconfig where available
+    local iwconfig = "/sbin/iwconfig"
+    local f = io.open(iwconfig, "rb")
+    if not f then
+        iwconfig = "/usr/sbin/iwconfig"
+    else
+        f:close()
+    end
+    local f = io.popen(iwconfig .." ".. warg .. " 2>&1")
+    local iw = f:read("*all")
+    f:close()
+
+    -- iwconfig wasn't found, isn't executable, or non-wireless interface
     if iw == nil or string.find(iw, "No such device") then
         return winfo
     end

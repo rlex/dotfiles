@@ -2,6 +2,61 @@
 Full changelog is available online:
     http://git.sysphere.org/vicious/log/?showmsg=1
 ---------------------------------------------------
+0299c15 widgets: minor cleanup before a tag in cpuinf, fs, mbox...
+4fc6dff wifi: return 0 not N/A when channel is unavailable
+f50ad21 thermal: function argument is already local
+4f86e28 os: merge with entropy widget type
+49b1b09 helpers: index subdirectories in pathtotable()
+7cbf987 bat: fix battery detection
+a4bd307 README: updated link to contrib
+4dad2e3 API: missing warg should not break awesome
+237470c API: transform widgets namespace table to a directory
+9a82d41 init: never pass string to awful.widget widgets
+3ac4fcf init: missing widget type should not break awesome
+febc91d hddtemp: minor style changes
+9338cb9 cpuinf: rewritten and optimized
+96a8e55 Make use of io.lines() where appropriate
+6441db0 README: added a list of needed utilities
+06a455a README: add contributors to Authors section
+178a7eb README: added contrib and vicious-fbsd information
+0dd5b72 README: standardize quotes
+8482b54 mpd: rewritten and now uses curl not mpc
+dda51b1 net: remove redudant string.match call
+1abb451 Next release, tag 1.0.26
+6898d4a dio: add I/O scheduler support
+71f21f3 fs: use -l not --local for portability
+edb4619 os: import operating system information widget
+de15934 fs: further improve the regexp
+3178068 mem: rewrite and simplify
+77d1a0b gmail: switch to ~/.netrc for login storage
+1c0ceff gmail: don't break on non-escaped chars, quote login
+abacd77 fs: include available space in percent, requested by Jon
+94e7ed1 fs: rewritten, less prone to error
+fa40e40 init: never pass nil into awful.widget widgets
+6f79227 Next release, tag 1.0.25
+f34bfaf fs: fix the bug reported by Alex Tergeland
+5f41c7a init: do not use keyword type for user data
+ee64644 API: added force() function to force update widgets
+95e9a77 API: regregister() and update() are not exposed
+ff050a0 README: link to the "Widgets in awesome" document
+5226d10 API: function enable_caching() is now cache()
+9371839 volume: added real mute support
+dbd6c7b weather: capitalize weather and sky stats
+2c6b969 weather: calculate degree Celsius from Fahrenheit
+ad14818 helpers: import capitalize
+0ab8311 wifi: properly handle iwconfig PATH differences
+4fa87fa wifi: properly handle non-existant interface
+9eef646 git: ignore file removed
+4664bee mdir: fix module description
+57004c0 Next release, tag 1.0.24
+b96cb98 bat: added a note about Apple PMU and ACPI/procfs
+23d09f0 README: added the Security section
+e29ea62 helpers: uformat helper replaces formatting done by widgets
+f4cd746 pkg: solve interactive pacman prompt patch from tdy
+5e1d1e0 volume: suggest appending card ID or other options
+24f23fa gmail: reworked feed handling and changed username format
+6c34e85 thermal: added support for procfs and coretemp
+355c838 Next release, tag 1.0.23
 0f3123e README: added textbox fixed width example
 3095ffb pkg: added apt and yum to pkg managers table
 91925e6 pkg: pacman moved to generic packages module

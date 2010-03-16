@@ -12,17 +12,19 @@ local helpers = require("vicious.helpers")
 
 
 -- Cpufreq: provides freq, voltage and governor info for a requested CPU
-module("vicious.cpufreq")
+module("vicious.widgets.cpufreq")
 
 
 -- {{{ CPU frequency widget type
-local function worker(format, cpuid)
-    local cpufreq = helpers.pathtotable("/sys/devices/system/cpu/"..cpuid.."/cpufreq")
+local function worker(format, warg)
+    if not warg then return end
+
+    local cpufreq = helpers.pathtotable("/sys/devices/system/cpu/"..warg.."/cpufreq")
     local governor_state = {
-       ["ondemand\n"] = "↯",
-       ["powersave\n"] = "⌁",
-       ["userspace\n"] = "@",
-       ["performance\n"] = "⚡",
+       ["ondemand\n"]     = "↯",
+       ["powersave\n"]    = "⌁",
+       ["userspace\n"]    = "¤",
+       ["performance\n"]  = "⚡",
        ["conservative\n"] = "↯"
     }
     -- Default voltage values

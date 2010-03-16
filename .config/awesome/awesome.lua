@@ -224,7 +224,6 @@ volbar:set_border_color(beautiful.border_widget)
 volbar:set_gradient_colors({ beautiful.fg_widget,
    beautiful.fg_center_widget, beautiful.fg_end_widget
 }) -- Enable caching
-vicious.enable_caching(vicious.widgets.volume)
 -- Register widgets
 vicious.register(volbar, vicious.widgets.volume, "$1",  2, "PCM")
 -- }}}

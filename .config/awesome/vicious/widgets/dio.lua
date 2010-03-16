@@ -7,33 +7,25 @@
 local ipairs = ipairs
 local setmetatable = setmetatable
 local table = { insert = table.insert }
+local string = { gmatch = string.gmatch }
 local helpers = require("vicious.helpers")
-local string = {
-    gmatch = string.gmatch,
-    format = string.format
-}
 -- }}}
 
 
 -- Disk I/O: provides I/O statistics for requested storage devices
-module("vicious.dio")
+module("vicious.widgets.dio")
 
 
 -- Initialise function tables
 local disk_usage = {}
 local disk_total = {}
-
--- {{{ Helper functions
-local function uformat(array, key, value)
-    array["{"..key.."_s}"]  = string.format("%.1f", value)
-    array["{"..key.."_kb}"] = string.format("%.1f", value/2)
-    array["{"..key.."_mb}"] = string.format("%.1f", value/2/1024)
-    return array
-end
--- }}}
+-- Variable definitions
+local unit = { ["s"] = 1, ["kb"] = 2, ["mb"] = 2048 }
 
 -- {{{ Disk I/O widget type
 local function worker(format, disk)
+    if not disk then return end
+
     local disk_lines = { [disk] = {} }
     local disk_stats = helpers.pathtotable("/sys/block/" .. disk)
 
@@ -64,9 +56,14 @@ local function worker(format, disk)
     end
 
     -- Calculate and store I/O
-    uformat(disk_usage[disk], "read",  diff_total[disk][3])
-    uformat(disk_usage[disk], "write", diff_total[disk][7])
-    uformat(disk_usage[disk], "total", diff_total[disk][7] + diff_total[disk][3])
+    helpers.uformat(disk_usage[disk], "read",  diff_total[disk][3], unit)
+    helpers.uformat(disk_usage[disk], "write", diff_total[disk][7], unit)
+    helpers.uformat(disk_usage[disk], "total", diff_total[disk][7] + diff_total[disk][3], unit)
+
+    -- Store I/O scheduler
+    if disk_stats.queue.scheduler then
+        disk_usage[disk]["{sched}"] = string.gmatch(disk_stats.queue.scheduler, "%[([%a]+)%]")
+    end
 
     return disk_usage[disk]
 end

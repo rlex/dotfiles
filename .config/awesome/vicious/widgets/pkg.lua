@@ -11,22 +11,24 @@ local setmetatable = setmetatable
 
 
 -- Pkg: provides number of pending updates on GNU/Linux
-module("vicious.pkg")
+module("vicious.widgets.pkg")
 
 
 -- {{{ Packages widget type
-local function worker(format, dist)
+local function worker(format, warg)
+    if not warg then return end
+
     -- Initialise counters
     local updates = 0
     local manager = {
         ["Arch"]   = { cmd = "pacman -Qu" },
-        ["Arch S"] = { cmd = "pacman -Sup", sub = 2 },
+        ["Arch S"] = { cmd = "yes | pacman -Sup", sub = 2 },
         ["Debian"] = { cmd = "apt-show-versions -u -b" },
         ["Fedora"] = { cmd = "yum list updates", sub = 3 }
     }
 
     -- Check if updates are available
-    local pkg = manager[dist]
+    local pkg = manager[warg]
     local f = io.popen(pkg.cmd)
 
     for line in f:lines() do
