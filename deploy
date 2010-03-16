@@ -17,6 +17,12 @@ do
 done
 
 # awesome deployment
-ln -sfv ~/.rc/.config/awesome -t $HOME/.config/
+if [ -f $HOME/.config ];
+then
+    mkdir $HOME/.config;
+else
+    ln -sfv ~/.rc/.config/fish -t $HOME/.config; 
+    ln -sfv ~/.rc/.config/awesome -t $HOME/.config;
+fi
 
 cd - >&/dev/null
