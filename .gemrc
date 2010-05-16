@@ -8,4 +8,4 @@
 - http://gems.rubyforge.org/
 - http://gems.github.com
 :bulk_threshold: 1000
-rdoc: --inline-source --line-numbers --format=html --template=hanna
+rdoc: --inline-source --line-numbers --template=hanna
