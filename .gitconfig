@@ -56,12 +56,12 @@
     ru = remote update
     sb = show-branch --sha1-name
     ls-del = ls-files -d
-    ls-mod = ls-files -m # включая удалённые файлы
+    ls-mod = ls-files -m
     ls-new = ls-files --exclude-standard -o
     ls-ign = ls-files --exclude-standard -o -i
     clog = log --date=short --pretty=format:\"%Cred%ad %Cblue%h %Cgreen%an %Creset%s%C(yellow)%d\"
     slog = log --date=short --pretty=format:\"%C(124)%ad %C(24)%h %C(34)%an %C(252)%s%C(178)%d\"
 [user]
     name = Lex Rivera
-    email = x-demon@x-demon.org
+    email = me@lex.gs
     signingkey = 5B952599
