@@ -25,22 +25,22 @@ require("lib/freedesktop.desktop")
 -- }}}
 
 -- {{{ Variable definitions
+-- Home variable
+local home   = os.getenv("HOME")
 -- Themes define colours, icons, and wallpapers
-beautiful.init(os.getenv("HOME") .. "/.config/awesome/themes/zenburn.lua")
+beautiful.init(home .. "/.config/awesome/themes/zenburn.lua")
 
 -- This is used later as the default terminal and editor to run.
-terminal = "urxvt"
-editor = "gvim"
-editor_cmd = editor
+local terminal = "urxvt"
+local editor = "gvim"
+local editor_cmd = editor
 
 -- Default modkey.
 -- Usually, Mod4 is the key with a logo between Control and Alt.
 -- If you do not like this or do not have such a key,
 -- I suggest you to remap Mod4 to another key using xmodmap or other tools.
 -- However, you can use another modifier like Mod1, but it may interact with others.
-modkey = "Mod4"
--- Shifty modkey...
-shifty.config.modkey = "Mod4"
+local modkey = "Mod4"
 
 -- Table of layouts to cover with awful.layout.inc, order matters.
 layouts =
