@@ -4,7 +4,7 @@ set termencoding=utf-8              " terminal encoding
 set nocompatible                    " no vi manner
 set ruler                           " cursor position always enabled
 set showcmd                         " show commands
-set nu                              " line numbers
+"set nu                              " line numbers
 set title                           " enable title
 set titlestring=VIM:\ %F            " Make the window title reflect the file being edited
 set incsearch                       " Incremental search
@@ -85,6 +85,12 @@ endif
 map <Del> "_x
 " Map del
 
+" Toggle comment
+map c ,c<SPACE>
+
+" Toggle neocomplcache
+map n :NeoComplCacheToggle<cr>
+
 " CTRL-F omni completion
 imap <C-F> <C-X><C-O>
 
@@ -96,10 +102,13 @@ imap <C-V> <esc>"+gPi
 map <S-Insert> <MiddleMouse>
 
 " C-N - Toggle lines
-call SMap("<C-N><C-N>", ":set invnumber")
+call SMap("<C-N><C-N>", ":set invnumber<cr>")
  
 " F2 - quick save
 call SMap("<F2>", ":w<cr>i")
+ 
+" Shift-F2 - Sudo Save
+call SMap("<S-s>", ":w !sudo tee > /dev/null %<cr>")
 
 " F5 - BufExplorer
 call SMap("<F5>", ":BufExplorer<cr>i")
@@ -179,7 +188,7 @@ let g:ctags_regenerate=1
 
 " {{{ NeoComplCache
 
-let g:NeoComplCache_EnableAtStartup = 1                 " Enable NeoComplCache
+let g:NeoComplCache_EnableAtStartup = 0                 " Enable NeoComplCache
 let g:NeoComplCache_SmartCase = 1                       " Use smartcase 
 let g:NeoComplCache_EnableCamelCaseCompletion = 1       " Camel case completion 
 let g:NeoComplCache_EnableUnderbarCompletion = 1        " Underbar completion
