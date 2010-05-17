@@ -89,14 +89,14 @@ map <Del> "_x
 map c ,c<SPACE>
 
 " Toggle neocomplcache
-map n :NeoComplCacheToggle<cr>
+map o :NeoComplCacheToggle<cr>
 
 " CTRL-F omni completion
 imap <C-F> <C-X><C-O>
 
 " C-c and C-v - Copy/Paste
-vmap <C-C> "+yi
-imap <C-V> <esc>"+gPi
+vmap <C-v> <esc>"+p
+imap <C-v> <esc>"+p
 
 " shift-insert fix for Xterm
 map <S-Insert> <MiddleMouse>
@@ -107,8 +107,8 @@ call SMap("<C-N><C-N>", ":set invnumber<cr>")
 " F2 - quick save
 call SMap("<F2>", ":w<cr>i")
  
-" Shift-F2 - Sudo Save
-call SMap("<S-s>", ":w !sudo tee > /dev/null %<cr>")
+" Crtl-s - Sudo Save
+call SMap("<C-s>", ":w !sudo tee > /dev/null %<cr>")
 
 " F5 - BufExplorer
 call SMap("<F5>", ":BufExplorer<cr>i")
