@@ -159,3 +159,12 @@ cpx() {
         tar cpf - $1 | (cd $2 && tar xvpBf -)
         return $?
 }
+ssh-send-id() {
+    if [ -z "$1" -o -z "$2" ]
+    then
+        echo "Usage: ssh-send-id pubkey_name machine"
+        return 1
+    fi
+        cat ~/.ssh/${1}.pub | ssh $2 'mkdir .ssh; cat >> .ssh/authorized_keys'
+        return $?
+}
