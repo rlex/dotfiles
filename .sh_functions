@@ -1,36 +1,42 @@
 # functions
-mdc() { mkdir -p "$1" && cd "$1" ; }
-sdate() { date +%Y.%m.%d ; }
-pc() { awk "{print \$$1}" ; }
+mkd() {
+    if [ -z "$1" ];
+    then
+        echo "Usage: mkd dir"
+        return 1
+    fi
+        mkdir -p "$1" && cd "$1"
+}
 
 # get current revision of a repo
 svn_revision() { 
-  svn info $@ | awk '/^Revision:/ {print $2} ;'
+    svn info $@ | awk '/^Revision:/ {print $2} ;'
 }
 
 # print the log or no changes after an update
 svn_up_and_log() {
-  local old_rev=$(svn_revision $@)
-  local first_up=$((${old_rev} + 1))
-  svn up -q $@
-  if [ $(svn_revision $@) -gt ${old_rev} ]; then
-    svn log -v -rHEAD:${first_up} $@
-  else
-    echo "No changes.";
-  fi
+    local old_rev=$(svn_revision $@)
+    local first_up=$((${old_rev} + 1))
+    svn up -q $@
+    if [ $(svn_revision $@) -gt ${old_rev} ];
+    then
+        svn log -v -rHEAD:${first_up} $@
+    else
+        echo "No changes.";
+    fi
 }
 
 # tag a directory in a command to come to it later
 tag() {
-  alias $1="cd $PWD";
+    alias $1="cd $PWD";
 }
 
 dirdiff() {
-        diff -yB -W 80 <(ls -1 --color=never "$1") <(ls -1 --color=never "$2")
+    diff -yB -W 80 <(ls -1 --color=never "$1") <(ls -1 --color=never "$2")
 }
 
 zomb_ps() {
-        ps hr -Nos | awk '$1=="Z" {print $1}'
+    ps hr -Nos | awk '$1=="Z" {print $1}'
 
 }
 
@@ -40,33 +46,29 @@ fixtty() {
 }
 
 findfiles() {
-   if [[ -z $1 ]]; then
-      echo "Find files recursively starting at \`pwd\` - usage: findfiles pattern"
-      return
-   fi
-
-   find . -type f \( -name "*$1*" -o -name ".$1*" -o -name ".*.*$1*" -o -name "*$1*.*" \) -print
+    if [[ -z $1 ]]; then
+        echo "Find files recursively starting at \`pwd\` - usage: findfiles pattern"
+        return
+    fi
+        find . -type f \( -name "*$1*" -o -name ".$1*" -o -name ".*.*$1*" -o -name "*$1*.*" \) -print
 
 }
 finddirs() {
-   if [[ -z $1 ]]; then
-      echo "Find directories recursively starting at \`pwd\` - usage: finddirs pattern"
-      return
-   fi
-
-   find . -type d \( -name "*$1*" -o -name ".$1*" -o -name ".*.*$1*" -o -name "*$1*.*" \) -print
+    if [[ -z $1 ]]; then
+        echo "Find directories recursively starting at \`pwd\` - usage: finddirs pattern"
+        return
+    fi
+        find . -type d \( -name "*$1*" -o -name ".$1*" -o -name ".*.*$1*" -o -name "*$1*.*" \) -print
 }
 
 findinfiles() {
-   if [[ -z $1 ]]; then
-      echo "Find text in files recursively starting at \`pwd\` - usage: findinfiles pattern. \n \
-      Output: /path/to/file | line number | line contents"
-      return
-   fi
-   # Use sed to replace field divider ":" with "  |  " so the output is easier to read
-   find . -type f \( -name "*" -o -name ".*" \) -a -exec fgrep -n "$1" {} /dev/null \; | sed -e 's/:/  |  /g'
+    if [[ -z $1 ]]; then
+        echo "Find text in files recursively starting at \`pwd\` - usage: findinfiles pattern. \n \
+        Output: /path/to/file | line number | line contents"
+        return 1
+    fi
+        find . -type f \( -name "*" -o -name ".*" \) -a -exec fgrep -n "$1" {} /dev/null \; | sed -e 's/:/  |  /g'
 }
-
 
 bu()
 {
