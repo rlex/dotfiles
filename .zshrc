@@ -33,7 +33,15 @@ promptinit
 eval `dircolors ~/.dircolors -b`
 
 # Prompt!
-export PS1="%{$fg[green]%}%n%{$fg[cyan]%}@%m%{$reset_color%}%{$fg[green]%} $newPWD%{$reset_color%}$ "
+function precmd {
+    # different colors for different return status
+    if  [[ $? -eq 0 ]]; then
+    PROMPT="%{$fg[green]%}%n%{$fg[cyan]%}@%m%{$fg[green]%}%{$fg[green]%} > %{$reset_color%}"
+    else
+    PROMPT="%{$fg[green]%}%n%{$fg[cyan]%}@%m%{$fg[green]%}%{$fg[red]%} > %{$reset_color%}"
+    fi
+}
+
 
 # format titles for screen and rxvt
 function title() {
@@ -54,9 +62,9 @@ function title() {
 }
 
 # precmd is called just before the prompt is printed
-function precmd() {
-  title "zsh" "$USER@%m" "%55<...<%~"
-}
+#function precmd() {
+ #title "zsh" "$USER@%m" "%55<...<%~"
+#}
 
 # preexec is called just before any command line is executed
 function preexec() {
