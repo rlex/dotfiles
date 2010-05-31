@@ -27,9 +27,9 @@ done
 
 if [ -f $HOME/.config ];
 then
-    mkdir ~/.config
     confdir
 else
+    mkdir ~/.config
     confdir
 fi
 
