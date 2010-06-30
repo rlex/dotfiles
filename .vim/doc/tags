@@ -223,16 +223,18 @@ g:NeoComplCache_CachingDisablePattern	neocomplcache.txt	/*g:NeoComplCache_Cachin
 g:NeoComplCache_CachingLimitFileSize	neocomplcache.txt	/*g:NeoComplCache_CachingLimitFileSize*
 g:NeoComplCache_CtagsArgumentsList	neocomplcache.txt	/*g:NeoComplCache_CtagsArgumentsList*
 g:NeoComplCache_CtagsProgram	neocomplcache.txt	/*g:NeoComplCache_CtagsProgram*
+g:NeoComplCache_CursorHoldITime	neocomplcache.txt	/*g:NeoComplCache_CursorHoldITime*
 g:NeoComplCache_DictionaryFileTypeLists	neocomplcache.txt	/*g:NeoComplCache_DictionaryFileTypeLists*
 g:NeoComplCache_DisableAutoComplete	neocomplcache.txt	/*g:NeoComplCache_DisableAutoComplete*
 g:NeoComplCache_DisablePluginList	neocomplcache.txt	/*g:NeoComplCache_DisablePluginList*
 g:NeoComplCache_DisableSelectModeMappings	neocomplcache.txt	/*g:NeoComplCache_DisableSelectModeMappings*
 g:NeoComplCache_EnableAtStartup	neocomplcache.txt	/*g:NeoComplCache_EnableAtStartup*
+g:NeoComplCache_EnableAutoSelect	neocomplcache.txt	/*g:NeoComplCache_EnableAutoSelect*
 g:NeoComplCache_EnableCamelCaseCompletion	neocomplcache.txt	/*g:NeoComplCache_EnableCamelCaseCompletion*
+g:NeoComplCache_EnableCursorHoldI	neocomplcache.txt	/*g:NeoComplCache_EnableCursorHoldI*
 g:NeoComplCache_EnableDispalyParameter	neocomplcache.txt	/*g:NeoComplCache_EnableDispalyParameter*
 g:NeoComplCache_EnableQuickMatch	neocomplcache.txt	/*g:NeoComplCache_EnableQuickMatch*
 g:NeoComplCache_EnableRandomize	neocomplcache.txt	/*g:NeoComplCache_EnableRandomize*
-g:NeoComplCache_EnableSkipCompletion	neocomplcache.txt	/*g:NeoComplCache_EnableSkipCompletion*
 g:NeoComplCache_EnableUnderbarCompletion	neocomplcache.txt	/*g:NeoComplCache_EnableUnderbarCompletion*
 g:NeoComplCache_EnableWildCard	neocomplcache.txt	/*g:NeoComplCache_EnableWildCard*
 g:NeoComplCache_IgnoreCase	neocomplcache.txt	/*g:NeoComplCache_IgnoreCase*
@@ -253,7 +255,6 @@ g:NeoComplCache_OmniPatterns	neocomplcache.txt	/*g:NeoComplCache_OmniPatterns*
 g:NeoComplCache_PluginCompletionLength	neocomplcache.txt	/*g:NeoComplCache_PluginCompletionLength*
 g:NeoComplCache_QuickMatchPatterns	neocomplcache.txt	/*g:NeoComplCache_QuickMatchPatterns*
 g:NeoComplCache_SameFileTypeLists	neocomplcache.txt	/*g:NeoComplCache_SameFileTypeLists*
-g:NeoComplCache_SkipCompletionTime	neocomplcache.txt	/*g:NeoComplCache_SkipCompletionTime*
 g:NeoComplCache_SmartCase	neocomplcache.txt	/*g:NeoComplCache_SmartCase*
 g:NeoComplCache_SnippetsDir	neocomplcache.txt	/*g:NeoComplCache_SnippetsDir*
 g:NeoComplCache_TagsFilterPatterns	neocomplcache.txt	/*g:NeoComplCache_TagsFilterPatterns*

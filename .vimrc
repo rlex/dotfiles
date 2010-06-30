@@ -89,7 +89,7 @@ map <Del> "_x
 map c ,c<SPACE>
 
 " Toggle neocomplcache
-map o :NeoComplCacheToggle<cr>
+"map o :NeoComplCacheToggle<cr>
 
 " CTRL-F omni completion
 imap <C-F> <C-X><C-O>
@@ -188,13 +188,13 @@ let g:ctags_regenerate=1
 
 " {{{ NeoComplCache
 
-let g:NeoComplCache_EnableAtStartup = 0                 " Enable NeoComplCache
-let g:NeoComplCache_SmartCase = 1                       " Use smartcase 
-let g:NeoComplCache_EnableCamelCaseCompletion = 1       " Camel case completion 
-let g:NeoComplCache_EnableUnderbarCompletion = 1        " Underbar completion
-let g:NeoComplCache_MinSyntaxLength = 3                 " Minimum syntax keywork length 
-let g:NeoComplCache_ManualCompletionStartLength = 0     " Manual completion length 
-let g:NeoComplCache_MinKeywordLength = 3                " Minimal keyword length 
+let g:neocomplcache_enable_at_startup = 0                 " Enable NeoComplCache
+let g:neocomplcache_enable_smart_case = 1                       " Use smartcase 
+let g:neocomplcache_enable_camel_case_completion = 1       " Camel case completion 
+let g:neocomplcache_enable_underbar_completion = 1        " Underbar completion
+let g:neocomplcache_min_syntax_length = 3                 " Minimum syntax keywork length 
+let g:neocomplcache_manual_completion_start_length = 0     " Manual completion length 
+let g:neocomplcache_min_keyword_length = 3                " Minimal keyword length 
 
 imap <silent><C-l>     <Plug>(neocomplcache_snippets_expand)
 smap <silent><C-l>     <Plug>(neocomplcache_snippets_expand)
