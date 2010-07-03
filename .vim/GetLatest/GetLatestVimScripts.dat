@@ -14,3 +14,6 @@ scriptID SourceID Filename
 642 8136 :AutoInstall: getscript.vim
 2179 10221 :AutoInstall: srcexpl.vim
 2347 11988 :AutoInstall: trinity.vim
+2607 10388 :AutoInstall: tasklist.vim                                                                                                                               
+1664 12520 :AutoInstall: buftabs.vim                                                                                                                                
+2975 12673 :AutoInstall: figutive.vim 
