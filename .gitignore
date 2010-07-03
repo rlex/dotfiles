@@ -3,6 +3,7 @@
 .vim/GetLatest/Installed/*
 .vim/GetLatest/GetLatestVimScripts.dist
 .vim/backup/*
+.vim/.netrwhist
 
 ### MC ###
 .mc/history
