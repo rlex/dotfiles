@@ -88,6 +88,10 @@ map <Del> "_x
 " Toggle comment
 map c ,c<SPACE>
 
+" Bind buffers switching to <>
+map < :bprev<cr>
+map > :bnext<cr>
+
 " Toggle neocomplcache
 "map o :NeoComplCacheToggle<cr>
 
@@ -108,10 +112,10 @@ call SMap("<C-N><C-N>", ":set invnumber<cr>")
 call SMap("<F2>", ":w<cr>i")
  
 " Crtl-s - Sudo Save
-call SMap("<C-s>", ":w !sudo tee > /dev/null %<cr>")
+call SMap("<C-S>", ":w !sudo tee > /dev/null %<cr>")
 
-" F5 - BufExplorer
-call SMap("<F5>", ":BufExplorer<cr>i")
+" F5 - TaskList
+call SMap("<F5>", ":TaskList<cr>")
 
 " F8 - toggle pasting mode
 set pastetoggle=<F8>
@@ -170,9 +174,8 @@ set nosft
 "{{{ Filetype plugin
 filetype plugin on
 au BufRead,BufNewFile *.phps set filetype=php
-au BufRead,BufNewFile *.thtml set filetype=php
-au BufRead,BufNewFile *.erb set filetype=html
-au BufRead,BufNewFile /etc/nginx/* set ft=nginx
+au BufRead,BufNewFile *.vcl set filetype=varnish
+au BufRead,BufNewFile /etc/nginx/* set filetype=nginx
 " }}}
 
 " {{{ Various plugins settings
@@ -185,6 +188,8 @@ set mps-=[:]
 let g:ctags_title=1
 let generate_tags=1
 let g:ctags_regenerate=1
+
+" }}}
 
 " {{{ NeoComplCache
 
@@ -204,7 +209,7 @@ smap <silent><C-l>     <Plug>(neocomplcache_snippets_expand)
 " {{{ Colorscheme based on $TERM
 if $TERM == "xterm" || $TERM == "rxvt" || $TERM == "xterm-256color" || $TERM == "rxvt-unicode" || &term =~ "builtin_gui" || $TERM == "dumb" || $TERM == "screen-256color"
     set t_Co=256
-    colorscheme xoria256
+    colorscheme fu
 else
     colorscheme desert
 endif
