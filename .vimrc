@@ -4,7 +4,6 @@ set termencoding=utf-8              " terminal encoding
 set nocompatible                    " no vi manner
 set ruler                           " cursor position always enabled
 set showcmd                         " show commands
-"set nu                              " line numbers
 set title                           " enable title
 set titlestring=VIM:\ %F            " Make the window title reflect the file being edited
 set incsearch                       " Incremental search
@@ -41,7 +40,7 @@ set expandtab
 " Turn on syntax highlighting
 syntax on
 " Status line settings
-set statusline=%F%m%r%h%w\ [FORMAT=%{strlen(&fenc)?&fenc:'none'},%{&ff}]\ [TYPE=%Y]\ [ASCII=\%03.3b]\ [HEX=\%02.2B]\ [POS=%04l,%04v][%p%%]\ [LEN=%L]
+set statusline=File:%F%m%r%h%w\ Enc:%{strlen(&fenc)?&fenc:'none'}\ Line:%{&ff}\ Syntax:%Y\ ASCII:\%03.3b\ HEX:\%02.2B\ Position:%04l,%04v\ Percent:%p%%
 set laststatus=2
 set fo+=cr " Fix enter for comment
 set sessionoptions=curdir,buffers,tabpages
@@ -174,7 +173,8 @@ set nosft
 
 "{{{ Filetype plugin
 filetype plugin on
-au BufRead,BufNewFile *.phps set filetype=php
+au BufRead,BufNewFile *.php set filetype=php makeprg=php\ %
+au BufRead,BufNewFile *.phps set filetype=php makeprg=php\ %
 au BufRead,BufNewFile *.vcl set filetype=varnish
 au BufRead,BufNewFile /etc/nginx/* set filetype=nginx
 " }}}
@@ -210,7 +210,7 @@ smap <silent><C-l>     <Plug>(neocomplcache_snippets_expand)
 " {{{ Colorscheme based on $TERM
 if $TERM == "xterm" || $TERM == "rxvt" || $TERM == "xterm-256color" || $TERM == "rxvt-unicode" || &term =~ "builtin_gui" || $TERM == "dumb" || $TERM == "screen-256color"
     set t_Co=256
-    colorscheme fu
+    colorscheme wombat256
 else
     colorscheme desert
 endif
