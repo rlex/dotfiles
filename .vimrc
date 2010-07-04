@@ -175,6 +175,7 @@ set nosft
 filetype plugin on
 au BufRead,BufNewFile *.php set filetype=php makeprg=php\ %
 au BufRead,BufNewFile *.phps set filetype=php makeprg=php\ %
+au BufRead,BufNewFile *.sh set makeprg=bash\ -n\ %
 au BufRead,BufNewFile *.vcl set filetype=varnish
 au BufRead,BufNewFile /etc/nginx/* set filetype=nginx
 " }}}
