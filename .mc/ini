@@ -74,9 +74,29 @@ editor_visible_spaces=1
 mcview_remember_file_position=0
 editor_backup_extension=~
 
+kilobyte_si=0
+confirm_history_cleanup=1
+mouse_close_dialog=0
+ftpfs_use_passive_connections_over_proxy=0
+editor_persistent_selections=1
+editor_cursor_beyond_eol=0
+editor_line_state=0
+editor_simple_statusbar=0
+editor_check_new_line=0
+editor_show_right_margin=0
+auto_fill_mkdir_name=1
+reverse_files_only=1
+copymove_persistent_attr=1
+select_flags=6
+quick_search_case_sensitive=2
+mcview_eof=
+skin=default
+keymap=mc.keymap
+auto_save_setup_panels=1
+
 [Layout]
 equal_split=1
-first_panel_size=83
+first_panel_size=85
 message_visible=1
 keybar_visible=1
 xterm_title=1
@@ -86,6 +106,8 @@ menubar_visible=1
 show_mini_info=1
 permission_mode=0
 filetype_mode=1
+
+free_space=1
 
 [Dirs]
 other_dir=/root
@@ -122,13 +144,21 @@ panel_display_codepage=Other_8_bit
 [Misc]
 ftpfs_password=anonymous@
 ftp_proxy_host=gate
-display_codepage=Other_8_bit
+display_codepage=UTF-8
 ftp_codepage=Other_8_bit
+
+timeformat_recent=%b %e %H:%M
+timeformat_old=%b %e  %Y
+source_codepage=Other_8_bit
+autodetect_codeset=
 
 [Colors]
 base_color=cyan,gray:normal=gray,black:selected=cyan,gray:marked=brightcyan,gray:markselect=brightcyan,gray:directory=default,default:executable=lightgray,default:link=cyan,default:device=brightmagenta,default:special=lightgray,default:errors=red,default:reverse=red,default:gauge=lightgray,default:input=white,gray:dnormal=gray,black:dfocus=brightcyan,gray:dhotnormal=brightcyan,black:dhotfocus=brightcyan,gray:menu=lightgrey,default:menuhot=brightcyan,gray:menusel=brightcyan,gray:menuhotsel=brightcyan,gray:helpnormal=lightgray,default:editnormal=green,default:editbold=blue,default:editmarked=gray,blue:stalelink=red,default
 
+rxvt-256color=
+color_terminals=
+
 [Panelize]
-Find *.orig after patching=find . -name \*.orig -print
-Find SUID and SGID programs=find . \( \( -perm -04000 -a -perm +011 \) -o \( -perm -02000 -a -perm +01 \) \) -print
-Find rejects after patching=find . -name \*.rej -print
+Find *.orig after patching=find . -name \\*.orig -print
+Find SUID and SGID programs=find . \\( \\( -perm -04000 -a -perm +011 \\) -o \\( -perm -02000 -a -perm +01 \\) \\) -print
+Find rejects after patching=find . -name \\*.rej -print
