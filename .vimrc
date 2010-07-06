@@ -103,9 +103,9 @@ map <S-Insert> <MiddleMouse>
 
 " F2 - quick save
 call SMap("<F2>", ":w<cr>")
- 
-" Crtl-s - Sudo Save FIXME
-"call SMap("<C-S>", ":w !sudo tee > /dev/null %<cr>")
+
+" F3 - :make
+call SMap("<F3>", ":make<cr>")
 
 " F5 - TaskList
 call SMap("<F5>", ":TaskList<cr>")
@@ -176,8 +176,8 @@ filetype plugin on
 au BufRead,BufNewFile *.php set filetype=php makeprg=php\ %
 au BufRead,BufNewFile *.phps set filetype=php makeprg=php\ %
 au BufRead,BufNewFile *.sh set makeprg=bash\ -n\ %
-au BufRead,BufNewFile *.vcl set filetype=varnish
-au BufRead,BufNewFile /etc/nginx/* set filetype=nginx
+au BufRead,BufNewFile *.vcl set filetype=varnish makeprg=varnishd\ -f\ % \-C
+au BufRead,BufNewFile /etc/nginx/* set filetype=nginx makeprg=nginx\ -t
 " }}}
 
 " {{{ Various plugins settings
@@ -209,7 +209,9 @@ smap <silent><C-l>     <Plug>(neocomplcache_snippets_expand)
 " }}}
 
 " {{{ Colorscheme based on $TERM
-if $TERM == "xterm" || $TERM == "rxvt" || $TERM == "xterm-256color" || $TERM == "rxvt-unicode" || &term =~ "builtin_gui" || $TERM == "dumb" || $TERM == "screen-256color" || $TERM == "rxvt-256color"
+if $TERM == "xterm" || $TERM == "rxvt" || $TERM == "xterm-256color" ||
+\ $TERM == "rxvt-unicode" || &term =~ "builtin_gui" || $TERM == "dumb" || $TERM == "screen-256color" ||
+\ $TERM == "rxvt-256color"
     set t_Co=256
     colorscheme wombat256
 else
