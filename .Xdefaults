@@ -2,12 +2,11 @@
 Xcursor.theme: Neutral_Plus
 !}}}
 
-!{{{ URXVT
+!{{{ Urxvt
 URxvt.buffered: true
 URxvt.font: xft:Terminus:pixelsize=11:antialias=false
 URxvt.boldFont: xft:Terminus:bold:pixelsize=11:antialias=false
 URxvt.perl-ext-common: default,tabbed,searchable-scrollback
-URxvt.termName: rxvt-256color
 URxvt.title: urxvt
 URxvt.scrollBar: false
 URxvt.loginShell: true
