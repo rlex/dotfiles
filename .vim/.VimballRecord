@@ -1,4 +1,4 @@
-
 manpageview.vba: call delete('/home/xdemon/.vim/plugin/manpageviewPlugin.vim')|call delete('/home/xdemon/.vim/autoload/manpageview.vim')|call delete('/home/xdemon/.vim/syntax/man.vim')|call delete('/home/xdemon/.vim/syntax/mankey.vim')|call delete('/home/xdemon/.vim/syntax/info.vim')|call delete('/home/xdemon/.vim/syntax/manphp.vim')|call delete('/home/xdemon/.vim/doc/manpageview.txt')
 supertab.vba: call delete('/home/xdemon/.vim/doc/supertab.txt')|call delete('/home/xdemon/.vim/plugin/supertab.vim')
 getscript.vba: call delete('/home/xdemon/.vim/plugin/getscriptPlugin.vim')|call delete('/home/xdemon/.vim/autoload/getscript.vim')|call delete('/home/xdemon/.vim/GetLatest/GetLatestVimScripts.dist')|call delete('/home/xdemon/.vim/doc/pi_getscript.txt')
+checksyntax.vba: call delete('/home/xdemon/.vim/doc/checksyntax.txt')|call delete('/home/xdemon/.vim/plugin/checksyntax.vim')

@@ -68,16 +68,6 @@ function SMap(key, action, ...)
 endfunction
 " }}}
 
-"{{{ Compiler
-if has('win32')
-  set makeprg=nmake
-  compiler msvc
-else
-  set makeprg=make
-  compiler gcc
-endif
-"}}}
-
 "{{{ Binds
 
 " map <Del> i<Del><Esc>l
@@ -173,11 +163,9 @@ set nosft
 
 "{{{ Filetype plugin
 filetype plugin on
-au BufRead,BufNewFile *.php set filetype=php makeprg=php\ %
-au BufRead,BufNewFile *.phps set filetype=php makeprg=php\ %
-au BufRead,BufNewFile *.sh set makeprg=bash\ -n\ %
-au BufRead,BufNewFile *.vcl set filetype=varnish makeprg=varnishd\ -f\ % \-C
-au BufRead,BufNewFile /etc/nginx/* set filetype=nginx makeprg=nginx\ -t
+au BufRead,BufNewFile *.phps       set filetype=php
+au BufRead,BufNewFile *.vcl        set filetype=varnish
+au BufRead,BufNewFile *etc/nginx/* set filetype=nginx
 " }}}
 
 " {{{ Various plugins settings

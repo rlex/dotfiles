@@ -7,7 +7,10 @@ endif
 " sh detection
 if getline(1) =~ "^#!/bin/bash" || getline(1) =~ "^#!/bin/sh"
     setfiletype sh
-    set commentstring=#%s
-    set makeprg=bash\ -n\ %
+    finish
+endif
+" perl
+if getline(1) =~ "^#!/usr/bin/perl" || getline(1) =~ "^#!/usr/local/bin/perl" || getline(1) =~ "^#/usr/bin/env perl"
+    setfiletype perl
     finish
 endif
