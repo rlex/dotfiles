@@ -84,6 +84,9 @@ map > :bnext<cr>
 " CTRL-F omni completion
 imap <C-F> <C-X><C-O>
 
+" Ctrl-d for quit all
+call SMap("<C-d>", ":qa<cr>")
+
 " C-c and C-v - Copy/Paste
 vmap <C-v> <esc>"+p
 imap <C-v> <esc>"+p
