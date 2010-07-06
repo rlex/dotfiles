@@ -130,6 +130,9 @@ endif
 if !exists('g:checksyntax_compiler_sh')
     let g:checksyntax_compiler_sh = 'bash'
 endif
+if !exists('g:checksyntax_auto_sh')
+    let g:checksyntax_auto_sh = 1
+endif
 " }}}
 
 " {{{ Nginx
