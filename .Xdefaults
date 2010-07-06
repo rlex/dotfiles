@@ -38,7 +38,7 @@ yeahconsole*term:urxvt
 yeahconsole*consoleHeight:25
 yeahconsole*toggleKey:None+F12
 yeahconsole*restart:1
-yeahconsole*keyFull:None+F11
+yeahconsole*keyFull:Control+F11
 yeahconsole*keySmaller:Control+KP_Subtract
 yeahconsole*keyBigger:Control+KP_Add
 yeahconsole*metaSendsEscape: true
