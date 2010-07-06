@@ -9,27 +9,28 @@ dotconf=( fish awesome )
 
 
 # dotfiles deployment
+
 cd ~/.rc
 echo "Deploying dotfiles from `pwd` to ${HOME}"
 
 # Standart dotfiles
 echo "Deploying standart dotfiles..."
 for file in ${dotfiles[@]}
-do
+    do
         ln -sfv ~/.rc/.$(basename ${file}) ~/.${file}
-done
+    done
 echo "Finished!"
 
 # dotdirs deployment
 echo "Deploying dotdirs in ${HOME}..."
 for dir in ${dotdirs[@]}
-do
-    if [ -e ${HOME}/.rc/.${dir} ]
-    then
-        echo "~/.${dir} already exists!"
-    else
-        ln -sfv ~/.rc/.${dir}/ ~/.${dir}
-    fi
+    do
+        if [[ -L ${HOME}/.${dir} ]];
+            then
+                echo "~/.${dir} already exists!"
+            else
+                ln -sfv ~/.rc/.${dir}/ ~/.${dir}
+        fi
 done
 echo "Finished!"
 
@@ -37,23 +38,23 @@ echo "Finished!"
 echo "Deploying dotdirs to ${HOME}/.config"
 confdir() {
 for confdir in ${dotconf[@]}
-do
-    if [ -e $HOME/.rc/.config/$confdir ]
-    then
-        echo "~/.rc/.config/${confdir} already exists!"
-    else    
-        ln -sfv ~/.rc/.config/${confdir} ~/.config/${confdir}
-    fi
+    do
+        if [[ -L $HOME/.config/$confdir ]];
+            then
+                echo "~/.rc/.config/${confdir} already exists!"
+            else    
+                ln -sfv ~/.rc/.config/${confdir} ~/.config/${confdir}
+        fi
 done
 }
 
-if [ -e ${HOME}/.config/ ];
-then
-    confdir
-else
-    echo "${HOME}/.config directory not found, let's make it..."
-    mkdir ~/.config
-    confdir
+if [[ -d ${HOME}/.config ]];
+    then
+        confdir
+    else
+        echo "${HOME}/.config directory not found, let's make it..."
+        mkdir ~/.config
+        confdir
 fi
 echo "Finished!"
 
