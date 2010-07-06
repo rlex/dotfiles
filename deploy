@@ -5,32 +5,56 @@ dotfiles=( screenrc vimrc zshrc bashrc bash_profile gemrc htoprc gitconfig hgrc 
 dotdirs=( mc vim mutt )
 # dirs inside ~/.config
 dotconf=( fish awesome )
+
+
+
 # dotfiles deployment
+cd ~/.rc
+echo "Deploying dotfiles from `pwd` to ${HOME}"
+
+# Standart dotfiles
+echo "Deploying standart dotfiles..."
 for file in ${dotfiles[@]}
 do
-        ln -sfv ~/.rc/.$(basename $file) ~/.$file
+        ln -sfv ~/.rc/.$(basename ${file}) ~/.${file}
 done
+echo "Finished!"
 
 # dotdirs deployment
+echo "Deploying dotdirs in ${HOME}..."
 for dir in ${dotdirs[@]}
 do
-        ln -sfv ~/.rc/.$dir/ -t $HOME
+    if [ -e ${HOME}/.rc/.${dir} ]
+    then
+        echo "~/.${dir} already exists!"
+    else
+        ln -sfv ~/.rc/.${dir}/ ~/.${dir}
+    fi
 done
+echo "Finished!"
 
 # awesome deployment
+echo "Deploying dotdirs to ${HOME}/.config"
 confdir() {
-for dir in ${dotconf[@]}
+for confdir in ${dotconf[@]}
 do
-    ln -sfv ~/.rc/.$dir/ -t $HOME/.config
+    if [ -e $HOME/.rc/.config/$confdir ]
+    then
+        echo "~/.rc/.config/${confdir} already exists!"
+    else    
+        ln -sfv ~/.rc/.config/${confdir} ~/.config/${confdir}
+    fi
 done
 }
 
-if [ -f $HOME/.config ];
+if [ -e ${HOME}/.config/ ];
 then
     confdir
 else
+    echo "${HOME}/.config directory not found, let's make it..."
     mkdir ~/.config
     confdir
 fi
+echo "Finished!"
 
 cd - >&/dev/null
