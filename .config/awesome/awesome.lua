@@ -48,6 +48,7 @@ layouts =
     awful.layout.suit.tile,
     awful.layout.suit.tile.bottom,
     awful.layout.suit.fair,
+    awful.layout.suit.max,
     awful.layout.suit.max.fullscreen,
     awful.layout.suit.magnifier,
     awful.layout.suit.floating
@@ -55,8 +56,8 @@ layouts =
 
 -- some commands
 local commands = {}
-commands.suspend = "sudo s2ram --force"
-commands.lock = "xscreensaver-command --lock"
+commands.suspend = "sudo s2ram -f -p -s"
+commands.lock = "/usr/lib/kde4/libexec/kscreenlocker --forcelock"
 commands.screenshot = "scrot -e `mv $f ~/tmp/`"
 --audio stuff
 commands.raisevol = "amixer set Master 2%+"
@@ -77,15 +78,16 @@ commands.browser = "chromium"
 --{{{ Tags
 --{{{ Shifty: configured tags
 shifty.config.tags = {
-  ["G"] =      { layout = awful.layout.suit.tile,         mwfact=0.60, exclusive = false, solitary = false, position = 1, init = true, screen = 1, slave = true, persist = true } ,
-  ["www"] =    { layout = awful.layout.suit.max,          mwfact=0.30, exclusive = true , solitary = true , position = 2 } ,
-  ["im"] =     { layout = awful.layout.suit.tile,         mwfact=0.85, exclusive = true , solitary = true , position = 3 } ,
-  ["media"] =  { layout = awful.layout.suit.float,                     exclusive = false, solitary = false, position = 4 } ,
-  ["office"] = { layout = awful.layout.suit.tile,                                                           position = 5 } ,
-  ["code"] =   { layout = awful.layout.suit.tile.bottom,  mwfact=0.65, exclusive = true , solitary = true , position = 6 } ,
-  ["skype"] =  { layout = awful.layout.suit.tile.bottom,  mwfact=0.65, exclusive = true , solitary = true , position = 7 } ,
-  ["irc"] =    { layout = awful.layout.suit.tile.bottom,  mwfact=0.65, exclusive = true , solitary = true , position = 8 } ,
-  ["doc"] =    { layout = awful.layout.suit.tile.bottom,  mwfact=0.65, exclusive = true , solitary = true , position = 9 } ,
+  ["G"] =          { layout = awful.layout.suit.tile,         mwfact=0.60, exclusive = false, solitary = false, position = 1, init = true, screen = 1, slave = true, persist = true } ,
+  ["www"] =        { layout = awful.layout.suit.max,                       exclusive = true , solitary = true , position = 2  } ,
+  ["im"] =         { layout = awful.layout.suit.tile,         mwfact=0.85, exclusive = true , solitary = true , position = 3  } ,
+  ["media"] =      { layout = awful.layout.suit.float,                     exclusive = false, solitary = false, position = 4  } ,
+  ["office"] =     { layout = awful.layout.suit.tile,                                                           position = 5  } ,
+  ["code"] =       { layout = awful.layout.suit.tile.bottom,  mwfact=0.65, exclusive = true , solitary = true , position = 6  } ,
+  ["skype"] =      { layout = awful.layout.suit.tile.bottom,  mwfact=0.65, exclusive = true , solitary = true , position = 7  } ,
+  ["irc"] =        { layout = awful.layout.suit.tile.bottom,  mwfact=0.65, exclusive = true , solitary = true , position = 8  } ,
+  ["doc"] =        { layout = awful.layout.suit.tile.bottom,  mwfact=0.65, exclusive = true , solitary = true , position = 9  } ,
+  ["rdesktop"] =   { layout = awful.layout.suit.tile.max,                  exclusive = true , solitary = true , position = 10 } ,
 }
 --}}}
  
@@ -103,6 +105,7 @@ shifty.config.apps = {
          { match = { "xchat"                                               } , tag = "irc"    } ,
          { match = { terminal                                              } , honorsizehints = false, slave = true   } ,
          { match = { "Okular"                                              } , tag = "doc"    } ,
+         { match = { "rdesktop", "remmina"                                 } , tag = "rdesktop" } ,
          -- match all
          { match = { "" } ,  buttons = awful.util.table.join(
                                         awful.button({ }, 1, function (c) client.focus = c; c:raise() end),
@@ -322,6 +325,7 @@ globalkeys = awful.util.table.join(
     awful.key({                   }, "XF86Calculator",       function() awful.util.spawn_with_shell(commands.calc) end ),
     awful.key({                   }, "XF86ScreenSaver",      function() awful.util.spawn_with_shell(commands.screensaver) end ),
     awful.key({                   }, "Print",                function() awful.util.spawn_with_shell(commands.screenshot) end ),
+    awful.key({                   }, "XF86Sleep",            function() awful.util.spawn_with_shell(commands.suspend) end ),
     --default bindings
     awful.key({ modkey,           }, "Left",   awful.tag.viewprev       ),
     awful.key({ modkey,           }, "Right",  awful.tag.viewnext       ),
@@ -329,7 +333,7 @@ globalkeys = awful.util.table.join(
     awful.key({ modkey, "Control" }, "Right",  shifty.shift_next       ),
     awful.key({ modkey            }, "t",      function() shifty.add({ rel_index = 1 }) end),
     awful.key({ modkey, "Control" }, "t",      function() shifty.add({ rel_index = 1, nopopup = true }) end),
-    awful.key({ modkey            }, "r",      shifty.rename), -- //TODO: fix renaming
+    awful.key({ modkey            }, "i",      shifty.rename), -- //TODO: fix renaming
     awful.key({ modkey            }, "w",      shifty.del),
     awful.key({ modkey,           }, "u",      awful.client.urgent.jumpto),
     awful.key({ modkey,           }, "n",
