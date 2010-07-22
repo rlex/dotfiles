@@ -88,6 +88,7 @@ shifty.config.tags = {
   ["irc"] =        { layout = awful.layout.suit.tile.bottom,  mwfact=0.65, exclusive = true , solitary = true , position = 8  } ,
   ["doc"] =        { layout = awful.layout.suit.tile.bottom,  mwfact=0.65, exclusive = true , solitary = true , position = 9  } ,
   ["rdesktop"] =   { layout = awful.layout.suit.tile.max,                  exclusive = true , solitary = true , position = 10 } ,
+  ["vmc"] =        { layout = awful.layout.suit.tile.max,                  exclusive = true , solitary = true , position = 11 } ,
 }
 --}}}
  
@@ -106,6 +107,7 @@ shifty.config.apps = {
          { match = { terminal                                              } , honorsizehints = false, slave = true   } ,
          { match = { "Okular"                                              } , tag = "doc"    } ,
          { match = { "rdesktop", "remmina"                                 } , tag = "rdesktop" } ,
+         { match = { "Vodafone Mobile Connect"                             } , tag = "vmc"    } ,
          -- match all
          { match = { "" } ,  buttons = awful.util.table.join(
                                         awful.button({ }, 1, function (c) client.focus = c; c:raise() end),
@@ -187,13 +189,52 @@ cpugraph:set_gradient_colors({ beautiful.fg_end_widget,
 vicious.register(cpugraph, vicious.widgets.cpu, "$1")
 -- }}}
 
+-- {{{ CPU Temperature
+tempicon = widget({ type = "imagebox" })
+tempicon.image = image(beautiful.widget_temp)
+-- Initialize widget
+tempwidget = widget({ type = "textbox" })
+-- Register widget
+    vicious.register(tempwidget, vicious.widgets.thermal,
+    function (widget, args)
+        if  args[1] >= 65 and args[1] < 75 then
+            return "<span color='#d79b1e'>" .. args[1] .. "°C</span>"
+        elseif args[1] >= 75 and args[1] < 80 then
+            return "<span color='#ff4b4b'>" .. args[1] .. "°C</span>"
+        elseif args[1] > 80 then
+            naughty.notify({ title = "Temperature Warning", text = "Running hot! " .. args[1] .. "°C!\nTake it easy.", timeout = 10, position = "top_right", fg = beautiful.fg_urgent, bg = beautiful.bg_urgent })
+            return "<span color='#ff4b4b'>" .. args[1] .. "°C</span>"
+        else
+            return "<span color='#9acd32'>" .. args[1] .. "°C</span>"
+        end
+    end, 19, "thermal_zone0" )
+
+-- }}}
+
 -- {{{ Battery state
 baticon = widget({ type = "imagebox" })
 baticon.image = image(beautiful.widget_bat)
 -- Initialize widget
 batwidget = widget({ type = "textbox" })
 -- Register widget
-vicious.register(batwidget, vicious.widgets.bat, "$1$2%", 61, "BAT1")
+vicious.register(batwidget, vicious.widgets.bat,
+    function (widget, args)
+        if  args[2] >= 75 and args[2] < 95 then
+            return "<span color='#9acd32'>" .. args[2] .. "%</span>"
+        elseif args[2] >= 50 and args[2] < 75 then
+            return "<span color='#d79b1e'>" .. args[2] .. "%</span>"
+        elseif args[2] >= 20 and args[2] < 50 then
+            return "<span color='#ff4b4b'>" .. args[2] .. "%</span>"
+        elseif args[2] < 20 and args[1] == "-" then
+            naughty.notify({ title = "Battery Warning", text = "Battery low! "..args[2].."% left!\nBetter get some power.", timeout = 10, position = "top_right", fg = beautiful.fg_urgent, bg = beautiful.bg_urgent })
+            return "<span color='#ff4b4b'>" .. args[2] .. "%</span>"
+        elseif args[2] < 20 then
+            return "<span color='#ff4b4b'>" .. args[2] .. "%</span>"
+        else
+            return "<span color='#9acd32'>" .. args[2] .. "%</span>"
+        end
+    end, 23, "BAT1" )
+
 -- }}}
 
 -- {{{ Memory usage
@@ -228,7 +269,7 @@ volbar:set_gradient_colors({ beautiful.fg_widget,
    beautiful.fg_center_widget, beautiful.fg_end_widget
 }) -- Enable caching
 -- Register widgets
-vicious.register(volbar, vicious.widgets.volume, "$1",  2, "PCM")
+vicious.register(volbar, vicious.widgets.volume, "$1",  2, "Master")
 -- }}}
 
 -- {{{ Date and time
@@ -287,6 +328,7 @@ for s = 1, screen.count() do
         separator, volbar.widget, volicon,
         separator, membar.widget, memicon,
         separator, batwidget, baticon,
+        separator, tempwidget, tempicon,
         separator, cpugraph.widget, cpuicon,
         separator, ["layout"] = awful.widget.layout.horizontal.rightleft
     }
