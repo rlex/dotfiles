@@ -6,7 +6,7 @@ export ext_toast="1"            # add toast environment variables
 
 #### paths
 # main path
-export PATH="~/bin:$PATH:/usr/local/sbin:/sbin:/usr/local/bin:/usr/local/sbin:/usr/libexec:/opt/local/bin:/opt/local/sbin:/usr/local/mysql/bin:~/.rc/.bin"
+export PATH="$PATH:/usr/local/sbin:/sbin:/usr/local/bin:/usr/local/sbin:/usr/libexec:$HOME/.rc/.bin"
 # ruby 1.8 in /opt
 # export PATH=/opt/ruby1.8/bin:$PATH
 # rubygems in $HOME
