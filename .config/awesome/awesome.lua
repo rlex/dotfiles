@@ -164,8 +164,9 @@ mylauncher = awful.widget.launcher({ image = beautiful.awesome_icon,
 -- }}}
 
 -- {{{ Wibox
+
 -- {{{ Widgets configuration
---
+
 -- {{{ Reusable separators
 spacer    = widget({ type = "textbox"  })
 separator = widget({ type = "imagebox" })
@@ -283,6 +284,7 @@ vicious.register(datewidget, vicious.widgets.date, "%R", 61)
 -- {{{ System tray
 systray = widget({ type = "systray" })
 -- }}}
+
 -- }}}
 
 -- {{{ Wibox initialisation
@@ -324,7 +326,7 @@ for s = 1, screen.count() do
             ["layout"] = awful.widget.layout.horizontal.leftright
         },
         s == screen.count() and systray or nil,
-        separator, datewidget,
+        separator, netvpnwidget,
         separator, volbar.widget, volicon,
         separator, membar.widget, memicon,
         separator, batwidget, baticon,
@@ -341,6 +343,7 @@ shifty.taglist = taglist
 -- }}}
 
 -- }}}
+
 -- }}}
 
 -- {{{ Mouse bindings

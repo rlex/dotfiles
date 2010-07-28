@@ -167,10 +167,17 @@ vicious.widgets.fs
 
 vicious.widgets.dio
   - provides I/O statistics for requested storage devices
-  - takes the disk as an argument, i.e. "sda"
+  - takes the disk as an argument, i.e. "sda" (or a specific
+    partition, i.e. "sda/sda2")
   - returns a table with string keys: {total_s}, {total_kb}, {total_mb},
     {read_s}, {read_kb}, {read_mb}, {write_s}, {write_kb}, {write_mb}
     and {sched}
+
+vicious.widgets.raid
+  - provides state information for a requested RAID array
+  - takes the RAID array ID as an argument
+  - returns 1st value as the number of assigned, and 2nd as active,
+    devices in the array
 
 vicious.widgets.hddtemp
   - provides hard drive temperatures using the hddtemp daemon
@@ -180,12 +187,12 @@ vicious.widgets.hddtemp
     {/dev/sda} and {/dev/sdc} for example
 
 vicious.widgets.net
-  - provides usage statistics for all network interfaces
+  - provides state and usage statistics of all network interfaces
   - returns a table with string keys, using net interfaces as a base:
-    {eth0 rx_b}, {eth0 tx_b}, {eth0 rx_kb}, {eth0 tx_kb}, {eth0 rx_mb},
-    {eth0 tx_mb}, {eth0 rx_gb}, {eth0 tx_gb}, {eth0 down_b}, {eth0 up_b},
-    {eth0 down_kb}, {eth0 up_kb}, {eth0 down_mb}, {eth0 up_mb},
-    {eth0 down_gb}, {eth0 up_gb}, {eth1 rx_b} etc.
+    {eth0 carrier}, {eth0 rx_b}, {eth0 tx_b}, {eth0 rx_kb}, {eth0 tx_kb},
+    {eth0 rx_mb}, {eth0 tx_mb}, {eth0 rx_gb}, {eth0 tx_gb}, {eth0 down_b},
+    {eth0 up_b}, {eth0 down_kb}, {eth0 up_kb}, {eth0 down_mb},
+    {eth0 up_mb}, {eth0 down_gb}, {eth0 up_gb}, {eth1 rx_b} etc.
 
 vicious.widgets.wifi
   - provides wireless information for a requested interface
@@ -336,9 +343,8 @@ the owner. Other than that we can not force all users to conform to
 one standard, one way of keeping it secure, like in some keyring.
 
 First let's clear why we simply don't encrypt the login information
-and store it in ciphertext. Answer is simple, that is no more secure
-than having it stored in plaintext. By exposing the algorithm anyone
-can reverse the encryption steps. Some claim even that's better than
+and store it in ciphertext. By exposing the algorithm anyone can
+reverse the encryption steps. Some claim even that's better than
 plaintext but it's just security trough obscurity.
 
 Here are some ideas actually worth your time. Users that have KDE (or
@@ -501,3 +507,4 @@ Vicious contributors:
   - Henning Glawe            <glaweh debian.org>
   - Rémy C.                  <shikamaru mandriva.org>
   - Hiltjo Posthuma          <hiltjo codemadness.org>
+  - Hagen Schink             <troja84 googlemail.com>
