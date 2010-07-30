@@ -171,3 +171,20 @@ ssh-send-id() {
         cat ~/.ssh/${1}.pub | ssh $2 'mkdir .ssh; cat >> .ssh/authorized_keys'
         return $?
 }
+nss-manage() {
+    case "$1" in
+
+    list)    certutil -d sql:$HOME/.pki/nssdb -L ;;
+    details) certutil -d sql:$HOME/.pki/nssdb -L -n "$2" ;;
+    add-ca)  certutil -d sql:$HOME/.pki/nssdb -A -t "$2" -n "$3" -i "$4" ;;
+    add)     pk12util -d sql:$HOME/.pki/nssdb -i "$2" ;;
+    del)     certutil -d sql:$HOME/.pki/nssdb -D -n "$2" ;;
+    *)
+    echo "Usage list|details|add-ca|add|del"
+    echo " \"details\" requires <nickname>"
+    echo " \"add-ca\" requires <trustargs> <nickname> <certificate filename>"
+    echo " \"add\" requires <filename>"
+    echo " \"del\" requires <nickname>"
+    ;;
+    esac
+}
