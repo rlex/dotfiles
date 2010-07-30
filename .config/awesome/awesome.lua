@@ -80,15 +80,15 @@ commands.browser = "chromium"
 shifty.config.tags = {
   ["G"] =          { layout = awful.layout.suit.tile,         mwfact=0.60, exclusive = false, solitary = false, position = 1, init = true, screen = 1, slave = true, persist = true } ,
   ["www"] =        { layout = awful.layout.suit.max,                       exclusive = true , solitary = true , position = 2  } ,
-  ["im"] =         { layout = awful.layout.suit.tile,         mwfact=0.85, exclusive = true , solitary = true , position = 3  } ,
-  ["media"] =      { layout = awful.layout.suit.float,                     exclusive = false, solitary = false, position = 4  } ,
-  ["office"] =     { layout = awful.layout.suit.tile,                                                           position = 5  } ,
-  ["code"] =       { layout = awful.layout.suit.tile.bottom,  mwfact=0.65, exclusive = true , solitary = true , position = 6  } ,
-  ["skype"] =      { layout = awful.layout.suit.tile.bottom,  mwfact=0.65, exclusive = true , solitary = true , position = 7  } ,
-  ["irc"] =        { layout = awful.layout.suit.tile.bottom,  mwfact=0.65, exclusive = true , solitary = true , position = 8  } ,
-  ["doc"] =        { layout = awful.layout.suit.tile.bottom,  mwfact=0.65, exclusive = true , solitary = true , position = 9  } ,
-  ["rdesktop"] =   { layout = awful.layout.suit.tile.max,                  exclusive = true , solitary = true , position = 10 } ,
-  ["vmc"] =        { layout = awful.layout.suit.tile.max,                  exclusive = true , solitary = true , position = 11 } ,
+  ["swww"] =       { layout = awful.layout.suit.max,                       exclusive = true , solitary = true , position = 3  } ,
+  ["im"] =         { layout = awful.layout.suit.tile,         mwfact=0.85, exclusive = true , solitary = true , position = 4  } ,
+  ["media"] =      { layout = awful.layout.suit.float,                     exclusive = false, solitary = false, position = 5  } ,
+  ["office"] =     { layout = awful.layout.suit.tile,                                                           position = 6  } ,
+  ["code"] =       { layout = awful.layout.suit.tile.bottom,  mwfact=0.65, exclusive = true , solitary = true , position = 7  } ,
+  ["skype"] =      { layout = awful.layout.suit.tile.bottom,  mwfact=0.65, exclusive = true , solitary = true , position = 8  } ,
+  ["irc"] =        { layout = awful.layout.suit.tile.bottom,  mwfact=0.65, exclusive = true , solitary = true , position = 9  } ,
+  ["doc"] =        { layout = awful.layout.suit.tile.bottom,  mwfact=0.65, exclusive = true , solitary = true , position = 10 } ,
+  ["rdesktop"] =   { layout = awful.layout.suit.tile.max,                  exclusive = true , solitary = true , position = 11 } ,
 }
 --}}}
  
@@ -107,7 +107,7 @@ shifty.config.apps = {
          { match = { terminal                                              } , honorsizehints = false, slave = true   } ,
          { match = { "Okular"                                              } , tag = "doc"    } ,
          { match = { "rdesktop", "remmina"                                 } , tag = "rdesktop" } ,
-         { match = { "Vodafone Mobile Connect"                             } , tag = "vmc"    } ,
+         { match = { "iron"                                                } , tag = "swww"    } ,
          -- match all
          { match = { "" } ,  buttons = awful.util.table.join(
                                         awful.button({ }, 1, function (c) client.focus = c; c:raise() end),
