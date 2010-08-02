@@ -56,7 +56,8 @@ layouts =
 
 -- some commands
 local commands = {}
-commands.suspend = "sudo s2ram -f -p -s"
+commands.poweroff = "sudo poweroff"
+commands.suspend = "sudo s2ram -f"
 commands.lock = "/usr/lib/kde4/libexec/kscreenlocker --forcelock"
 commands.screenshot = "scrot -e `mv $f ~/tmp/`"
 --audio stuff
@@ -199,14 +200,14 @@ tempwidget = widget({ type = "textbox" })
     vicious.register(tempwidget, vicious.widgets.thermal,
     function (widget, args)
         if  args[1] >= 65 and args[1] < 75 then
-            return "<span color='#d79b1e'>" .. args[1] .. "°C</span>"
+            return "<span color='#d79b1e'> " .. args[1] .. "°C</span>"
         elseif args[1] >= 75 and args[1] < 80 then
-            return "<span color='#ff4b4b'>" .. args[1] .. "°C</span>"
+            return "<span color='#ff4b4b'> " .. args[1] .. "°C</span>"
         elseif args[1] > 80 then
             naughty.notify({ title = "Temperature Warning", text = "Running hot! " .. args[1] .. "°C!\nTake it easy.", timeout = 10, position = "top_right", fg = beautiful.fg_urgent, bg = beautiful.bg_urgent })
-            return "<span color='#ff4b4b'>" .. args[1] .. "°C</span>"
+            return "<span color='#ff4b4b'> " .. args[1] .. "°C</span>"
         else
-            return "<span color='#9acd32'>" .. args[1] .. "°C</span>"
+            return "<span color='#9acd32'> " .. args[1] .. "°C</span>"
         end
     end, 19, "thermal_zone0" )
 
@@ -326,12 +327,10 @@ for s = 1, screen.count() do
             ["layout"] = awful.widget.layout.horizontal.leftright
         },
         s == screen.count() and systray or nil,
-        separator, netvpnwidget,
         separator, volbar.widget, volicon,
         separator, membar.widget, memicon,
         separator, batwidget, baticon,
-        separator, tempwidget, tempicon,
-        separator, cpugraph.widget, cpuicon,
+        separator, tempwidget, cpugraph.widget, cpuicon,
         separator, ["layout"] = awful.widget.layout.horizontal.rightleft
     }
 end
@@ -357,8 +356,8 @@ root.buttons(awful.util.table.join(
 -- {{{ Key bindings
 globalkeys = awful.util.table.join(
     --user defined
-    awful.key({                   }, "XF86PowerOff",         function() awful.util.spawn_with_shell(commands.suspend) end ),
-    awful.key({ modkey,           }, "F12",                  function () awful.util.spawn_with_shell(commands.lock) end),
+    awful.key({                   }, "XF86PowerOff",         function() awful.util.spawn_with_shell(commands.poweroff) end ),
+    awful.key({ modkey,           }, "F12",                  function() awful.util.spawn_with_shell(commands.lock) end),
     --audio stuff
     awful.key({                   }, "XF86AudioMute",        function() awful.util.spawn_with_shell(commands.mute) end ),
     awful.key({                   }, "XF86AudioRaiseVolume", function() awful.util.spawn_with_shell(commands.raisevol) end ),
