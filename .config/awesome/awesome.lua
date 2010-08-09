@@ -59,9 +59,9 @@ commands.suspend = "sudo s2ram --force"
 commands.lock = "xscreensaver-command --lock"
 commands.screenshot = "scrot -e `mv $f ~/tmp/`"
 --audio stuff
-commands.raisevol = "amixer set PCM 2%+"
-commands.lowervol = "amixer set PCM 2%-"
-commands.mute = "amixer set PCM toggle"
+commands.raisevol = "amixer set Master 2%+"
+commands.lowervol = "amixer set Master 2%-"
+commands.mute = "amixer set Master toggle"
 commands.musnext = "mpc next"
 commands.musprev = "mpc prev"
 commands.muspause = "mpc pause"
@@ -190,7 +190,7 @@ baticon.image = image(beautiful.widget_bat)
 -- Initialize widget
 batwidget = widget({ type = "textbox" })
 -- Register widget
-vicious.register(batwidget, vicious.widgets.bat, "$1$2%", 61, "C1C0")
+vicious.register(batwidget, vicious.widgets.bat, "$1$2%", 61, "BAT1")
 -- }}}
 
 -- {{{ Memory usage
