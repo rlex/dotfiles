@@ -90,13 +90,13 @@ copymove_persistent_attr=1
 select_flags=6
 quick_search_case_sensitive=2
 mcview_eof=
-skin=default
+skin=gotar
 keymap=mc.keymap
 auto_save_setup_panels=1
 
 [Layout]
 equal_split=1
-first_panel_size=85
+first_panel_size=113
 message_visible=1
 keybar_visible=1
 xterm_title=1
@@ -152,9 +152,11 @@ timeformat_old=%b %e  %Y
 source_codepage=Other_8_bit
 autodetect_codeset=
 
-[Colors]
-base_color=cyan,gray:normal=gray,black:selected=cyan,gray:marked=brightcyan,gray:markselect=brightcyan,gray:directory=default,default:executable=lightgray,default:link=cyan,default:device=brightmagenta,default:special=lightgray,default:errors=red,default:reverse=red,default:gauge=lightgray,default:input=white,gray:dnormal=gray,black:dfocus=brightcyan,gray:dhotnormal=brightcyan,black:dhotfocus=brightcyan,gray:menu=lightgrey,default:menuhot=brightcyan,gray:menusel=brightcyan,gray:menuhotsel=brightcyan,gray:helpnormal=lightgray,default:editnormal=green,default:editbold=blue,default:editmarked=gray,blue:stalelink=red,default
+rxvt-256color=
+color_terminals=
 
+[Colors]
+base_color=
 rxvt-256color=
 color_terminals=
 
