@@ -27,3 +27,5 @@ alias sdate="date +%d.%m.%Y"
 alias iddqd="sudo -s"
 alias gosleep="sudo s2ram -f -p -s"
 alias changewmac="sudo macchanger -a wlan0"
+alias dualhead="xrandr --auto --output DVI-0 --left-of VGA-0"
+
