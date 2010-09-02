@@ -204,7 +204,7 @@ if $TERM == "xterm" || $TERM == "rxvt" || $TERM == "xterm-256color" ||
 \ $TERM == "rxvt-unicode" || &term =~ "builtin_gui" || $TERM == "dumb" || $TERM == "screen-256color" ||
 \ $TERM == "rxvt-256color"
     set t_Co=256
-    colorscheme neverland
+    colorscheme neverland2
 else
     colorscheme desert
 endif
