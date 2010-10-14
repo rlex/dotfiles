@@ -1,5 +1,7 @@
 ### VIM BLOCK ###
-.vim/swap/*
+.vim/swap/*.swp
+.vim/swap/undodir/*
+.vim/swap/*~
 .vim/GetLatest/Installed/*
 .vim/GetLatest/GetLatestVimScripts.dist
 .vim/backup/*
