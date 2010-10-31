@@ -174,6 +174,7 @@ filetype plugin on
 au BufRead,BufNewFile *.phps       set filetype=php
 au BufRead,BufNewFile *.vcl        set filetype=varnish
 au BufRead,BufNewFile *etc/nginx/* set filetype=nginx
+au BufRead,BufNewFile /*etc/nagios/*.cfg,*sample-config/template-object/*.cfg{,.in},/var/lib/nagios/objects.cache set filetype=nagios
 " }}}
 
 " {{{ Various plugins settings
