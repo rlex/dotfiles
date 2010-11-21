@@ -86,7 +86,7 @@ ee() {
     if [ -f $1 ] ; then
         case $1 in
             *.tbz2 | *.tar.bz2)   tar -xvjf  "$1"        ;;
-            *.tgz |*.tar.gz)      tar -xvJf  "$1"     ;;
+            *.tgz |*.tar.gz)      tar -xvjf  "$1"     ;;
             *.txz | *.tar.xz)     tar -xvJf  "$1"     ;;
             *.tar | *.cbt)        tar -xvf   "$1"     ;;
             *.zip | *.cbz)        unzip      "$1"     ;;
