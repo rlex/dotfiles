@@ -301,3 +301,7 @@ if !has('unix')
   set keywordprg=:help
 endif
 " }}}
+
+" {{{ Syntastic plugin
+let g:syntastic_enable_signs=1
+" }}}
