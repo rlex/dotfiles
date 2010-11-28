@@ -1,0 +1,5 @@
+# Source PATH and other ENVs for toast package manager
+if [ -f $HOME/.toast/armed/bin/toast ]; then
+    eval `$HOME/.toast/armed/bin/toast env`
+fi
+

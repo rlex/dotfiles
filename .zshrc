@@ -94,8 +94,7 @@ zstyle ":completion:*" list-colors ""
 ## Keybindings ##
 #bindkey -e
 
-# load env variables
-if [ -f $HOME/.rc/.sh_env ];
-then
-    source $HOME/.rc/.sh_env
-fi
+# load env
+for envfile in ~/.rc/sh.d/S[0-9][0-9]*[^~] ; do
+    source $envfile
+done

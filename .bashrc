@@ -57,9 +57,8 @@ prompt_command () {
 }
 PROMPT_COMMAND=prompt_command
 
+# load env
+for envfile in ~/.rc/sh.d/S[0-9][0-9]*[^~] ; do
+    source $envfile
+done
 
-# load env variables
-if [ -f $HOME/.rc/.sh_env ];
-  then
-        source $HOME/.rc/.sh_env
-fi
