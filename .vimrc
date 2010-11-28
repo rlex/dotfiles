@@ -206,11 +206,9 @@ smap <silent><C-l>     <Plug>(neocomplcache_snippets_expand)
 " }}}
 
 " {{{ Colorscheme based on $TERM
-if $TERM == "xterm" || $TERM == "rxvt" || $TERM == "xterm-256color" ||
-\ $TERM == "rxvt-unicode" || &term =~ "builtin_gui" || $TERM == "dumb" || $TERM == "screen-256color" ||
-\ $TERM == "rxvt-256color"
+if $TERM =~ "xterm" || $TERM =~ "rxvt" || &term =~ "builtin_gui" || $TERM == "dumb"
     set t_Co=256
-    colorscheme neverland
+    colorscheme xoria256
 else
     colorscheme desert
 endif
