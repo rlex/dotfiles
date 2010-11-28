@@ -1,6 +1,6 @@
 -- {{{ License
--- rc.lua, currently works with awesome 3.4.3
--- author: x-demon <x-demon [at] x-demon.org>
+-- rc.lua, currently works with awesome 3.4.8
+-- author: Lex Rivera <me at lex.io>
 -- based on multiple rc.lua files from different awesome users
 --
 -- This work is licensed under the Creative Commons Attribution Share
