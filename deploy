@@ -1,12 +1,26 @@
 #!/bin/bash
-# dotfiles, for example .bashrc, .bash_profile... 
-dotfiles=( screenrc vimrc zshrc bashrc bash_profile gemrc htoprc gitconfig hgrc biewrc dircolors ackrc muttrc my.cnf toprc Xdefaults gvimrc nanorc )
-# dotdirs, for example .vim, .mc...
+### Simple shell script for symlinking all files from .rc dir to home directory (c) Lex Rivera
+
+### Array of all config files and directories
+# dotfiles, for example .bashrc. Put it in array without leading dot
+dotfiles=( screenrc vimrc zshrc bashrc bash_profile gemrc htoprc gitconfig biewrc dircolors ackrc muttrc my.cnf toprc Xdefaults gvimrc nanorc )
+# dotdirs, for example .vim, also, without leading dot
 dotdirs=( mc vim mutt )
-# dirs inside ~/.config
-dotconf=( fish awesome )
+# dirs inside ~/.config. They do not include leading dot at all, even when deployed :)
+dotconf=( awesome )
 
 
+# Function to symlink dotfiles
+# We checking if OS is Linux (GNU coreutils), if no, we assume OS use BSD utils
+# Yeah this is fuckin' dirty, but works in most of cases
+symlink() {
+    if [[ `uname` == "Linux" ]];
+        then
+            ln -sfv $1 $2
+        else
+            ln -sv $2 $1
+    fi
+}
 
 # dotfiles deployment
 
@@ -17,25 +31,25 @@ echo "Deploying dotfiles from `pwd` to ${HOME}"
 echo "Deploying standart dotfiles..."
 for file in ${dotfiles[@]}
     do
-        ln -sfv ~/.rc/.$(basename ${file}) ~/.${file}
+        symlink ~/.rc/.${file} ~/.${file}
     done
 echo "Finished!"
 
-# dotdirs deployment
-echo "Deploying dotdirs in ${HOME}..."
+# dotdirs deployment. It needs a workaround to not create infinite symlinks
+echo "Deploying dotdirs to ${HOME}..."
 for dir in ${dotdirs[@]}
     do
         if [[ -L ${HOME}/.${dir} ]];
             then
                 echo "~/.${dir} already exists!"
             else
-                ln -sfv ~/.rc/.${dir}/ ~/.${dir}
+                symlink ~/.rc/.${dir}/ ~/.${dir}
         fi
 done
 echo "Finished!"
 
-# awesome deployment
-echo "Deploying dotdirs to ${HOME}/.config"
+# awesome deployment to .config directory.
+echo "Deploying confdirs to ${HOME}/.config"
 confdir() {
 for confdir in ${dotconf[@]}
     do
@@ -43,7 +57,7 @@ for confdir in ${dotconf[@]}
             then
                 echo "~/.rc/.config/${confdir} already exists!"
             else    
-                ln -sfv ~/.rc/.config/${confdir} ~/.config/${confdir}
+                symlink ~/.rc/.config/${confdir} ~/.config/${confdir}
         fi
 done
 }
