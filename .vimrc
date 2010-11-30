@@ -206,7 +206,7 @@ smap <silent><C-l>     <Plug>(neocomplcache_snippets_expand)
 " }}}
 
 " {{{ Colorscheme based on $TERM
-if $TERM =~ "xterm" || $TERM =~ "rxvt" || &term =~ "builtin_gui" || $TERM == "dumb"
+if $TERM =~ "xterm" || $TERM =~ "rxvt" || $TERM =~ "screen" || &term =~ "builtin_gui" || $TERM == "dumb"
     set t_Co=256
     colorscheme xoria256
 else
