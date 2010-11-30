@@ -85,18 +85,18 @@ bu()
 ee() {
     if [ -f $1 ] ; then
         case $1 in
-            *.tbz2 | *.tar.bz2)   tar -xvjf  "$1"        ;;
-            *.tgz |*.tar.gz)      tar -xvjf  "$1"     ;;
+            *.tbz2 | *.tar.bz2)   tar -xvjf  "$1"     ;;
+            *.tgz | *.tar.gz)     tar -xvjf  "$1"     ;;
             *.txz | *.tar.xz)     tar -xvJf  "$1"     ;;
             *.tar | *.cbt)        tar -xvf   "$1"     ;;
             *.zip | *.cbz)        unzip      "$1"     ;;
             *.rar | *.cbr)        unrar x    "$1"     ;;
-            *.bz2)                bunzip2    "$1"       ;;
+            *.bz2)                bunzip2    "$1"     ;;
             *.gz)                 gunzip     "$1"     ;;
-            *.tgz)                tar xzf    "$1"       ;;
-            *.Z)                  uncompress "$1"  ;;
-            *.7z)                 7z x       "$1"    ;;
-            *.dmg)                hdiutil mount "$1" ;;
+            *.tgz)                tar xzf    "$1"     ;;
+            *.Z)                  uncompress "$1"     ;;
+            *.7z)                 7z x       "$1"     ;;
+            *.dmg)                hdiutil mount "$1"  ;;
             *.gpg)                gpg2 -d "$1" | tar -xvzf - ;;
             *)                    echo 'Failed to extract "$1"' ;;
         esac
