@@ -17,11 +17,6 @@
 #set pgp_sign_as=0x00000000
 set delete = yes
 
-# ignores
-ignore "Authentication-Results:"
-ignore "DomainKey-Signature:"
-ignore "DKIM-Signature:"
-
 # Custom headers example
 my_hdr X-Homepage: http://example.org
 my_hdr X-PGP-Key: http://example.org/pubinfo/user.asc
