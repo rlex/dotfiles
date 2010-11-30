@@ -175,6 +175,8 @@ au BufRead,BufNewFile *.phps       set filetype=php
 au BufRead,BufNewFile *.vcl        set filetype=varnish
 au BufRead,BufNewFile *etc/nginx/* set filetype=nginx
 au BufRead,BufNewFile /*etc/nagios/*.cfg,/*etc/nagios3/*.cfg,*sample-config/template-object/*.cfg{,.in},/var/lib/nagios/objects.cache set filetype=nagios
+au BufRead,BufNewFile /etc/network/interfaces set filetype=interfaces
+au BufRead,BufNewFile *.json set filetype=json
 " }}}
 
 " {{{ Various plugins settings
