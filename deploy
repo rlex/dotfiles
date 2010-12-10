@@ -13,7 +13,7 @@ symlink() {
         then
             ln -sfvn $1 $2
         else
-            ln -svfh $2 $1
+            ln -svfh $1 $2
     fi
 }
 
