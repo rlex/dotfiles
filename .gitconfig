@@ -62,6 +62,6 @@
     clog = log --date=short --pretty=format:\"%Cred%ad %Cblue%h %Cgreen%an %Creset%s%C(yellow)%d\"
     slog = log --date=short --pretty=format:\"%C(124)%ad %C(24)%h %C(34)%an %C(252)%s%C(178)%d\"
 [user]
-    name = Lex Rivera
-    email = me@lex.io
+	name = Lex Rivera
+	email = me@lex.io
     signingkey = 5B952599
