@@ -123,6 +123,12 @@ pk() {
     fi
 }
 
+digg() {
+    case $1 in
+        bind) dig +nocmd $2 any +multiline +noall +answer ;;
+        *) dig -t $1 $2 +noall +answer +nocmd ;;
+    esac
+}
 #toast install function
 install_toast() {
 perl -e 'socket(S,2,1,0)&&connect(S,pack("Sna4x8",2,80,gethostbyname(
