@@ -32,6 +32,7 @@ tag() {
 }
 
 dirdiff() {
+#TODO fix for other OSes (bsd-like)
     diff -yB -W 80 <(ls -1 --color=never "$1") <(ls -1 --color=never "$2")
 }
 

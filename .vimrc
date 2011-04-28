@@ -356,6 +356,42 @@ smap <silent><C-l>     <Plug>(neocomplcache_snippets_expand)
 if $TERM =~ "xterm" || $TERM =~ "rxvt" || $TERM =~ "screen" || &term =~ "builtin_gui" || $TERM == "dumb"
     set t_Co=256
     colorscheme xoria256
+    
+    " Statusline highlighting {{{
+				augroup StatusLineHighlight
+					autocmd!
+
+					let s:round_stl = 0
+
+					au ColorScheme * call <SID>StatusLineColors(s:statuscolors)
+					au BufEnter,BufWinEnter,WinEnter,CmdwinEnter,CursorHold,BufWritePost,InsertLeave * call <SID>StatusLine((exists('b:stl') ? b:stl : g:default_stl), 'Normal', 1)
+					au BufLeave,BufWinLeave,WinLeave,CmdwinLeave * call <SID>StatusLine((exists('b:stl') ? b:stl : g:default_stl), 'Normal', 0)
+					au InsertEnter,CursorHoldI * call <SID>StatusLine((exists('b:stl') ? b:stl : g:default_stl), 'Insert', 1)
+				augroup END
+			" }}}
+			" Change cursor color in insert mode {{{
+				silent !echo -ne "]12;\#dd4010\x7"
+
+				let &t_SI="]12;\#89b6e2\x7"
+				let &t_EI="]12;\#dd4010\x7"
+
+				au VimLeave * silent !echo -ne "]12;\#dd4010\x7"
+			" }}}
+			" Use custom fillchars/listchars/showbreak icons {{{
+				set fillchars=vert:ā,fold:Ķ,diff:Ď
+				set listchars=tab:Ā\ ,trail:Ė,eol:ĕ
+				set showbreak=Ģģ
+			" }}}
+			augroup List " {{{
+				autocmd!
+				" Set list on selected filetypes {{{
+					au FileType vim setl list
+					au FileType diff setl list listchars+=trail:\ " Disable trailing space chars
+					au FileType sh,zsh,bash setl list
+					au FileType html,css,sass,javascript,php,python,ruby,psql setl list
+				" }}}
+			augroup END " }}}
+
 else
     colorscheme desert
 endif
