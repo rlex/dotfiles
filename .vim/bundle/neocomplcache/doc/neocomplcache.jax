@@ -1,6 +1,6 @@
 *neocomplcache.txt*	究極の自動補完環境
 
-Version: 6.0
+Version: 6.1
 Author : Shougo <Shougo.Matsu@gmail.com>
 License: MIT license  {{{
     Permission is hereby granted, free of charge, to any person obtaining
@@ -115,6 +115,11 @@ COMMANDS 						*neocomplcache-commands*
 		すると、カレントバッファを指定したことになる。 [bufname]のバッ
 		ファがまだキャッシュされていない場合、簡易キャッシュのみを行
 		う。
+
+:NeoComplCacheCachingDictionary [filetype]		*:NeoComplCacheCachingDictionary*
+		[filetype]で示されるディクショナリを再キャッシュする。
+		[filetype]を省略すると、カレントバッファのファイルタイプを指
+		定したことになる。
 
 :NeoComplCacheCachingSyntax [filetype]			*:NeoComplCacheCachingSyntax*
 		[filetype]のシンタックスをもう一度キャッシュする。
@@ -505,6 +510,8 @@ g:neocomplcache_quick_match_patterns			*g:neocomplcache_quick_match_patterns*
 		はファイルタイプ毎に入力文字列の末尾にマッチする正規表現で指
 		定されている。 defaultを指定すると、通常時の入力パターンを設
 		定できる。
+		パターンを空文字列にすると、クイックマッチリストが毎回表示され
+		る。
 		
 		初期値は { 'default' : '-' } である。
 
@@ -753,9 +760,9 @@ neocomplcacheではスニペット機能を内蔵している。 スニペット
 	snippet     if
 	abbr        if endif
 	prev_word   '^'
-	if ${1:condition}
-	    ${2}
-	endif
+	    if ${1:condition}
+	        ${2}
+	    endif
 <
 例えば上記のようなファイルを
 'autoload/neocomplcache/snippet_complete/vim.snip' として保存すると、vimファ
@@ -884,10 +891,15 @@ vnoremapやvmap, mapはselect modeでも有効になるので、変なマッピ�
 <
 
 snipMateのmulti snippetにも対応している。
+ただし、triggerとdescriptionの間のスペースは'_'に変換される。
 >
-	snippet ${1:trigger} ${2:description}
-	${3}
+	snippet trigger description1
+		hoge
+	snippet trigger description2
+		piyo
 <
+<C-n>や<C-p>でスニペットを選択し、<Plug>(neocomplcache_snippets_expand)で展開す
+る。
 
 プレースホルダの中にプレースホルダを書くことができる。ただ し、'}'はエスケー
 プしなればならない。 '\'がエスケープ文字になっている。

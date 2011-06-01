@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: snippets_complete.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 22 Apr 2011.
+" Last Modified: 08 May 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -53,7 +53,13 @@ function! s:source.initialize()"{{{
 
   " Set snippets dir.
   let s:runtime_dir = split(globpath(&runtimepath, 'autoload/neocomplcache/sources/snippets_complete'), '\n')
-  let s:snippets_dir = split(globpath(&runtimepath, 'snippets'), '\n') + s:runtime_dir
+
+  if exists("g:snippets_dir")
+      let s:snippets_dir = split(g:snippets_dir,',') + s:runtime_dir
+  else
+      let s:snippets_dir = split(globpath(&runtimepath, 'snippets'), '\n') + s:runtime_dir
+  endif
+
   if exists('g:neocomplcache_snippets_dir')
     for l:dir in split(g:neocomplcache_snippets_dir, ',')
       let l:dir = expand(l:dir)
@@ -293,13 +299,6 @@ function! s:edit_snippets(filetype, isruntime)"{{{
     let l:filename = s:snippets_dir[-1].'/'.l:filetype.'.snip'
   endif
 
-  " Split nicely.
-  if winheight(0) > &winheight
-    split
-  else
-    vsplit
-  endif
-
   if filereadable(l:filename)
     edit `=l:filename`
   else
@@ -350,7 +349,8 @@ function! s:load_snippets(snippet, snippets_file)"{{{
         let l:snippet_pattern = { 'word' : '' }
       endif
 
-      let l:snippet_pattern.name = matchstr(line, '^snippet\s\+\zs.*$')
+      let l:snippet_pattern.name =
+            \ substitute(matchstr(line, '^snippet\s\+\zs.*$'), '\s', '_', 'g')
 
       " Check for duplicated names.
       if has_key(l:dup_check, l:snippet_pattern.name)
@@ -370,7 +370,7 @@ function! s:load_snippets(snippet, snippets_file)"{{{
           let l:snippet_pattern.word = matchstr(line, '^\s\+\zs.*$')
         elseif line =~ '^\t'
           let line = substitute(line, '^\s', '', '')
-          let l:snippet_pattern.word .= '<\n>' . 
+          let l:snippet_pattern.word .= '<\n>' .
                 \substitute(line, '^\t\+', repeat('<\\t>', matchend(line, '^\t\+')), '')
         else
           let l:snippet_pattern.word .= '<\n>' . matchstr(line, '^\s\+\zs.*$')

@@ -10,7 +10,7 @@ func! vundle#installer#install(bang, ...) abort
   call vundle#config#require(bundles)
 
   call s:log("Installed bundles:\n".join((empty(installed) ? 
-  \      ['no new bundless installed'] : 
+  \      ['no new bundles installed'] : 
   \      map(installed, 'v:val.name')),"\n"))
 
   call vundle#installer#helptags(bundles)
@@ -46,7 +46,7 @@ endf
 
 func! s:reload_bundles()
   " TODO: obtain Bundles without sourcing .vimrc
-  silent source $MYVIMRC
+  if filereadable($MYVIMRC)| silent source $MYVIMRC | endif
   if filereadable($MYGVIMRC)| silent source $MYGVIMRC | endif
   return g:bundles
 endf
@@ -58,11 +58,15 @@ func! s:has_doc(rtp) abort
 endf
 
 func! s:helptags(rtp) abort
-  helptags `=a:rtp.'/doc'`
+  try
+    helptags `=a:rtp.'/doc/'`
+  catch
+    echohl Error | echo "Error generating helptags in ".a:rtp | echohl None
+  endtry
 endf
 
 func! s:sync(bang, bundle) abort
-  let git_dir = expand(a:bundle.path().'/.git')
+  let git_dir = expand(a:bundle.path().'/.git/')
   if isdirectory(git_dir)
     if !(a:bang) | return 0 | endif
     let cmd = 'cd '.shellescape(a:bundle.path()).' && git pull'

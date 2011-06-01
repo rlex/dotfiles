@@ -2,6 +2,7 @@
 :Neco	neocomplcache.jax	/*:Neco*
 :NeoComplCacheAutoCompletionLength	neocomplcache.jax	/*:NeoComplCacheAutoCompletionLength*
 :NeoComplCacheCachingBuffer	neocomplcache.jax	/*:NeoComplCacheCachingBuffer*
+:NeoComplCacheCachingDictionary	neocomplcache.jax	/*:NeoComplCacheCachingDictionary*
 :NeoComplCacheCachingInclude	neocomplcache.jax	/*:NeoComplCacheCachingInclude*
 :NeoComplCacheCachingSyntax	neocomplcache.jax	/*:NeoComplCacheCachingSyntax*
 :NeoComplCacheCachingTags	neocomplcache.jax	/*:NeoComplCacheCachingTags*

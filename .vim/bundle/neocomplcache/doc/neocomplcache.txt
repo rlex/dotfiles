@@ -1,6 +1,6 @@
 *neocomplcache.txt*	Ultimate auto completion system for Vim
 
-Version: 6.0
+Version: 6.1
 Author : Shougo <Shougo.Matsu@gmail.com>
 License: MIT license  {{{
     Permission is hereby granted, free of charge, to any person obtaining
@@ -539,6 +539,8 @@ g:neocomplcache_quick_match_patterns			*g:neocomplcache_quick_match_patterns*
 		match the end of the input character string every file type.
 		You can set default input patterns when you appoint
 		'default'.
+		If you set this pattern is empty, neocomplcache is always print
+		quick match candidates.
 		
 		Default value is { 'default' : '-' }.
 
@@ -863,9 +865,9 @@ Example:
 	snippet     if
 	abbr        if endif
 	prev_word   '^'
-	if ${1:condition}
-	    ${2}
-	endif
+	    if ${1:condition}
+	        ${2}
+	    endif
 <
 
 By the way, it is warned that the snippet name is already defined by same snippet file.
@@ -929,10 +931,15 @@ The placeholder value can't be contained new line. Below snippet is illegal.
 <
 
 Multi snippet feature is supported in snipMate.
+neocomplcache substitutes trigger and descriptions spaces to '_'.
 >
-	snippet ${1:trigger} ${2:description}
-	${3}
+	snippet trigger description1
+		hoge
+	snippet trigger description2
+		piyo
 <
+You choose snippet <C-n> or <C-p> and expand it with
+|<Plug>(neocomplcache_snippets_expand)| key-mappings.
 
 Nested placeholder feature is supported.
 But must escape inner '}'. '\' is eacape sequence.
@@ -959,6 +966,58 @@ ability of neocomplcache will spread by creating plugin by yourself.
 
 ==============================================================================
 CHANGELOG						*neocomplcache-changelog*
+
+2011-06-01
+- Fixed filename_complete.
+- Improved :NeoComplCacheToggle, :NeoComplCacheLock, :NeoComplCacheUnlock commands.
+
+2011-05-31
+- Added :NeoComplCacheCachingDictionary in Japanese documentation.
+- Fixed filename_complete.
+
+2011-05-29
+- Optimized filename_complete.
+
+2011-05-26
+- Don't caching when open buffer in preview window.
+- Changed caching conditions.
+
+2011-05-21
+- Genetate relative path in include_complete.
+
+2011-05-19
+- Improved features dictionary.
+
+2011-05-18
+- Fixed filename_complete.
+
+2011-05-17
+- Added neocomplcache#sources#filename_complete#get_complete_words().
+
+2011-05-11
+- Fixed asyn caching error.
+
+2011-05-08
+- Don't split when execute :NeoComplCacheEditRuntimeSnippets and :NeoComplCacheEditSnippets commands.
+- Improved quick match behavior.
+
+2011-05-06
+- Changed :NeoComplCacheEditRuntimeSnippets and :NeoComplCacheEditSnippets split behavior.
+- Fixed rails snippet.
+- Added .gitignore file.
+- Fixed snippet like multi snippet behavior.
+- Improved quick match behavior.
+- Improved multi snippet description.
+
+2011-05-01
+- Fixed neocomplcache snippet sample.
+- Ver.6.1 development is started.
+
+------------------------------------------------------------------------------
+ChangeLog neocomplcache 6.0:
+
+2011-04-26
+- Fixed comment typo.
 
 2011-04-22
 - Improved close popup.
@@ -1169,7 +1228,7 @@ CHANGELOG						*neocomplcache-changelog*
 - Ver.6.0 development started.
 
 ------------------------------------------------------------------------------
-ChangeLog NeoComplCache 5.3:
+ChangeLog neocomplcache 5.3:
 2010-12-10
 - Released Ver.5.3.
 
@@ -1238,7 +1297,7 @@ ChangeLog NeoComplCache 5.3:
 - Ver.5.3 development started.
 
 ------------------------------------------------------------------------------
-ChangeLog NeoComplCache 5.2:
+ChangeLog neocomplcache 5.2:
 2010-09-30
 - Deleted member filter.
 - Fixed delimiter.
@@ -1412,7 +1471,7 @@ ChangeLog NeoComplCache 5.2:
 - Fixed filename_complete.
 
 ------------------------------------------------------------------------------
-ChangeLog NeoComplCache 5.1:
+ChangeLog neocomplcache 5.1:
 2010-08-02
 - Released neocomplcache Ver.5.1
 - Fixed css snippet.
@@ -1565,7 +1624,7 @@ ChangeLog NeoComplCache 5.1:
 - Added "nothing" in text mode filetype.
 
 ------------------------------------------------------------------------------
-ChangeLog NeoComplCache 5.0:
+ChangeLog neocomplcache 5.0:
 2010-06-24
 - Improved eruby support.
 - Improved ruby keyword.
@@ -1712,7 +1771,7 @@ ChangeLog NeoComplCache 5.0:
 - Check obsolute options.
 
 ------------------------------------------------------------------------------
-ChangeLog NeoComplCache 4.30:
+ChangeLog neocomplcache 4.30:
 2010-05-31
 - Marked as ver.4.30.
 
@@ -1844,7 +1903,7 @@ ChangeLog NeoComplCache 4.30:
 * Deleted g:NeoComplCache_EnableSkipCompletion and g:NeoComplCache_SkipCompletionTime options.
 
 ------------------------------------------------------------------------------
-ChangeLog NeoComplCache 4.20:
+ChangeLog neocomplcache 4.20:
 2010-04-15
     * Changed default value of g:neocomplcache_enable_ignore_case.
 
@@ -1908,7 +1967,7 @@ ChangeLog NeoComplCache 4.20:
     * Fixed filename pattern.
 
 ------------------------------------------------------------------------------
-ChangeLog NeoComplCache 4.00-:
+ChangeLog neocomplcache 4.00-:
    4.10:
     - Fixed interactive Gauche support.
     - Added omni_complete and vim_complete rank.
@@ -2059,7 +2118,7 @@ ChangeLog NeoComplCache 4.00-:
     - Improved analyse in syntax_complete.
 
 ------------------------------------------------------------------------------
-ChangeLog NeoComplCache 3.00-:
+ChangeLog neocomplcache 3.00-:
    3.22:
     - Fixed manual completion error.
     - Fixed set completeopt bug.
@@ -2072,7 +2131,7 @@ ChangeLog NeoComplCache 3.00-:
     - Fixed snippet expand bug in snippets_complete.
     - Implemented keyword cache in omni_complete.
     - Implemented skip directory in filename_complete.
-    
+
    3.21:
     - Catch error in omni_complete.
     - Deleted Filename() and g:snips_author in snippets_complete.
@@ -2171,7 +2230,7 @@ ChangeLog NeoComplCache 3.00-:
     - Auto complete when CursorMovedI not CursorHoldI.
     - Reimplemented g:NeoComplCache_SkipInputTime option.
     - Fixed dup check bug in syntax_complete.
-    
+
    3.11:
     - Filtering same word.
     - Implemented member filter.
@@ -2205,7 +2264,7 @@ ChangeLog NeoComplCache 3.00-:
     - Improved manual completion.
     - Fixed filtering bug.
     - Print filename when caching.
-    
+
    3.08:
     - Implemented NeoComplCacheCachingTags command.
     - Disable auto caching in tags_complete.
@@ -2247,7 +2306,7 @@ ChangeLog NeoComplCache 3.00-:
     - Changed g:neocomplcache_max_list and g:neocomplcache_QuickMatchmax_list default value.
     - Fixed skip error.
     - Implemented completion skip if previous completion is empty.
-    
+
    3.04:
     - Expand tilde.
     - Use complete_check().
@@ -2288,7 +2347,7 @@ ChangeLog NeoComplCache 3.00-:
     - Added xhtml snippet(Thanks just!).
     - Fixed css error.
     - Implemented optional placeholder.
-   
+
    3.00:
     - Implemented multiple keyword.
     - Improved html keyword completion.
@@ -2301,7 +2360,7 @@ ChangeLog NeoComplCache 3.00-:
     - Renamed keyword_complete.vim as buffer_complete.vim.
 
 ------------------------------------------------------------------------------
-ChangeLog NeoComplCache 2.51-:
+ChangeLog neocomplcache 2.51-:
    2.78:
     - Supported abbr in omni completion.
     - Clear quickmatch cache when auto complete is skipped.
@@ -2503,7 +2562,7 @@ ChangeLog NeoComplCache 2.51-:
     - Fixed on InsertLeave error.
 
 ------------------------------------------------------------------------------
-ChangeLog NeoComplCache 2.00-2.50:
+ChangeLog neocomplcache 2.00-2.50:
    2.50: Caching on editing file.
     - Optimized NeoComplCacheCachingBuffer.
     - Implemented neocomplcache#close_popup() and neocomplcache#cancel_popup().
@@ -2760,7 +2819,7 @@ ChangeLog NeoComplCache 2.00-2.50:
      - Deleted g:NeoComplCache_DrawWordsRank option.
 
 ------------------------------------------------------------------------------
-ChangeLog NeoComplCache 1.00-1.60:
+ChangeLog neocomplcache 1.00-1.60:
    1.60:
      - Improved calc similar algorithm.
    1.59:

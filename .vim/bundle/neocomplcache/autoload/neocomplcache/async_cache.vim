@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: async_cache.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 22 Apr 2011.
+" Last Modified: 11 May 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -33,7 +33,7 @@ function! s:main(argv)"{{{
         \ = a:argv
 
   let l:pattern = get(readfile(l:pattern_file_name), 0, '\h\w*')
-  let l:keyword_list = s:load_from_file(l:filename, l:pattern, l:mark, l:minlen, l:maxfilename)
+  let l:keyword_list = s:load_from_file(l:filename, l:pattern, l:mark, l:minlen, l:maxfilename, l:fileencoding)
 
   " Create dictionary key.
   for keyword in l:keyword_list
@@ -56,15 +56,13 @@ function! s:main(argv)"{{{
   endfor
 
   if !empty(l:word_list)
-    call writefile(map(l:word_list, 'iconv(v:val, &encoding, l:fileencoding)'), l:outputname)
+    call writefile(l:word_list, l:outputname)
   endif
 endfunction"}}}
 
-function! s:load_from_file(filename, pattern, mark, minlen, maxfilename)"{{{
-  if bufloaded(a:filename)
-    let l:lines = getbufline(bufnr(a:filename), 1, '$')
-  elseif filereadable(a:filename)
-    let l:lines = readfile(a:filename)
+function! s:load_from_file(filename, pattern, mark, minlen, maxfilename, fileencoding)"{{{
+  if filereadable(a:filename)
+    let l:lines = map(readfile(a:filename), 'iconv(v:val, a:fileencoding, &encoding)')
   else
     " File not found.
     return []

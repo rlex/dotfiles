@@ -2,7 +2,7 @@
 " Author:       gmarik
 " HomePage:     http://github.com/gmarik/vundle
 " Readme:       http://github.com/gmarik/vundle/blob/master/README.md
-" Version:      0.7
+" Version:      0.8
 
 com! -nargs=+         Bundle
 \ call vundle#config#bundle(<args>)
@@ -28,7 +28,7 @@ au Filetype  vundle    call vundle#scripts#setup_view()
 au Syntax    vim       syn keyword vimCommand Bundle
 
 
-func! vundle#rc()
-  let g:bundle_dir = expand('$HOME/.vim/bundle')
+func! vundle#rc(...) abort
+  let g:bundle_dir = len(a:000) > 0 ? expand(a:1) : expand('$HOME/.vim/bundle')
   call vundle#config#init()
 endf

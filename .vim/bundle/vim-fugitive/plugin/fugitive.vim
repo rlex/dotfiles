@@ -1,6 +1,6 @@
 " fugitive.vim - A Git wrapper so awesome, it should be illegal
 " Maintainer:   Tim Pope <vimNOSPAM@tpope.org>
-" Version:      1.1
+" Version:      1.2
 " GetLatestVimScripts: 2975 1 :AutoInstall: fugitive.vim
 
 if exists('g:loaded_fugitive') || &cp
@@ -592,10 +592,34 @@ function! s:StageToggle(lnum1,lnum2) abort
     let output = ''
     for lnum in range(a:lnum1,a:lnum2)
       let line = getline(lnum)
-      if getline('.') == '# Changes to be committed:'
-        return 'Gcommit'
+      let repo = s:repo()
+      if line ==# '# Changes to be committed:'
+        call repo.git_chomp_in_tree('reset','-q')
+        silent! edit!
+        1
+        if !search('^# Untracked files:$','W')
+          call search('^# Change','W')
+        endif
+        return ''
+      elseif line =~# '^# Change\%(d but not updated\|s not staged for commit\):$'
+        call repo.git_chomp_in_tree('add','-u')
+        silent! edit!
+        1
+        if !search('^# Untracked files:$','W')
+          call search('^# Change','W')
+        endif
+        return ''
+      elseif line ==# '# Untracked files:'
+        " Work around Vim parser idiosyncrasy
+        call repo.git_chomp_in_tree('add','-N','.')
+        silent! edit!
+        1
+        if !search('^# Change\%(d but not updated\|s not staged for commit\):$','W')
+          call search('^# Change','W')
+        endif
+        return ''
       endif
-      let filename = matchstr(line,'^#\t\%([[:alpha:] ]\+: *\)\=\zs.\{-\}\ze\%( (new commits)\)\=$')
+      let filename = matchstr(line,'^#\t\%([[:alpha:] ]\+: *\)\=\zs.\{-\}\ze\%( (\a\+ [[:alpha:], ]\+)\)\=$')
       if filename ==# ''
         continue
       endif
@@ -614,7 +638,7 @@ function! s:StageToggle(lnum1,lnum2) abort
       else
         let cmd = ['add','--',filename]
       endif
-      let output .= call(s:repo().git_chomp_in_tree,cmd,s:repo())."\n"
+      let output .= call(repo.git_chomp_in_tree,cmd,s:repo())."\n"
     endfor
     if exists('first_filename')
       let jump = first_filename
@@ -640,9 +664,9 @@ function! s:StagePatch(lnum1,lnum2) abort
 
   for lnum in range(a:lnum1,a:lnum2)
     let line = getline(lnum)
-    if line == '# Changes to be committed:'
+    if line ==# '# Changes to be committed:'
       return 'Git reset --patch'
-    elseif line == '# Changed but not updated:'
+    elseif line =~# '^# Change\%(d but not updated\|s not staged for commit\):$'
       return 'Git add --patch'
     endif
     let filename = matchstr(line,'^#\t\%([[:alpha:] ]\+: *\)\=\zs.\{-\}\ze\%( (new commits)\)\=$')
@@ -710,6 +734,9 @@ function! s:Commit(args) abort
     else
       silent execute '!'.command.' > '.outfile.' 2> '.errorfile
     endif
+    if !has('gui_running')
+      redraw!
+    endif
     if !v:shell_error
       if filereadable(outfile)
         for line in readfile(outfile)
@@ -729,13 +756,14 @@ function! s:Commit(args) abort
         if args !~# '\%(^\| \)--cleanup\>'
           let args = '--cleanup=strip '.args
         endif
+        let old_nr = bufnr('')
         if bufname('%') == '' && line('$') == 1 && getline(1) == '' && !&mod
           edit `=msgfile`
         else
-          split `=msgfile`
+          keepalt split `=msgfile`
         endif
         if old_type ==# 'index'
-          bdelete #
+          execute 'bdelete '.old_nr
         endif
         let b:fugitive_commit_arguments = args
         setlocal bufhidden=delete filetype=gitcommit
@@ -1102,10 +1130,13 @@ function! s:Diff(bang,...) abort
   if exists(':DiffGitCached')
     return 'DiffGitCached'
   elseif (!a:0 || a:1 == ':') && s:buffer().commit() =~# '^[0-1]\=$' && s:repo().git_chomp_in_tree('ls-files', '--unmerged', '--', s:buffer().path()) !=# ''
+    let nr = bufnr('')
     execute 'leftabove '.split.' `=fugitive#buffer().repo().translate(s:buffer().expand('':2''))`'
+    execute 'nnoremap <buffer> <silent> dp :diffput '.nr.'<Bar>diffupdate<CR>'
     diffthis
     wincmd p
     execute 'rightbelow '.split.' `=fugitive#buffer().repo().translate(s:buffer().expand('':3''))`'
+    execute 'nnoremap <buffer> <silent> dp :diffput '.nr.'<Bar>diffupdate<CR>'
     diffthis
     wincmd p
     diffthis
@@ -1163,8 +1194,7 @@ function! s:Move(force,destination)
   endif
   if isdirectory(s:buffer().name())
     " Work around Vim parser idiosyncrasy
-    let b = s:buffer()
-    call b.setvar('&swapfile',0)
+    let discarded = s:buffer().setvar('&swapfile',0)
   endif
   let message = call(s:repo().git_chomp_in_tree,['mv']+(a:force ? ['-f'] : [])+['--', s:buffer().path(), destination], s:repo())
   if v:shell_error
@@ -1582,7 +1612,6 @@ endfunction
 function! s:ReplaceCmd(cmd,...) abort
   let fn = bufname('')
   let tmp = tempname()
-  let aw = &autowrite
   let prefix = ''
   try
     if a:0 && a:1 != ''
@@ -1593,10 +1622,8 @@ function! s:ReplaceCmd(cmd,...) abort
         let prefix = 'env GIT_INDEX_FILE='.s:shellesc(a:1).' '
       endif
     endif
-    set noautowrite
-    silent exe '!'.escape(prefix.a:cmd,'%#').' > '.tmp
+    call writefile(split(system(prefix.a:cmd), "\n", 1), tmp)
   finally
-    let &autowrite = aw
     if exists('old_index')
       let $GIT_INDEX_FILE = old_index
     endif
@@ -1746,7 +1773,7 @@ function! s:BufReadObject()
       if b:fugitive_display_format
         call s:ReplaceCmd(s:repo().git_command('ls-tree',hash))
       else
-        call s:ReplaceCmd(s:repo().git_command('show',hash))
+        call s:ReplaceCmd(s:repo().git_command('show','--no-color',hash))
       endif
     elseif b:fugitive_type == 'tag'
       let b:fugitive_display_format = b:fugitive_display_format % 2
@@ -1760,7 +1787,7 @@ function! s:BufReadObject()
       if b:fugitive_display_format
         call s:ReplaceCmd(s:repo().git_command('cat-file',b:fugitive_type,hash))
       else
-        call s:ReplaceCmd(s:repo().git_command('show','--pretty=format:tree %T%nparent %P%nauthor %an <%ae> %ad%ncommitter %cn <%ce> %cd%nencoding %e%n%n%s%n%n%b',hash))
+        call s:ReplaceCmd(s:repo().git_command('show','--no-color','--pretty=format:tree %T%nparent %P%nauthor %an <%ae> %ad%ncommitter %cn <%ce> %cd%nencoding %e%n%n%s%n%n%b',hash))
         call search('^parent ')
         if getline('.') ==# 'parent '
           silent delete_
