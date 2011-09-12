@@ -30,7 +30,9 @@ compinit
 promptinit
 
 ## dircolors ##
-eval `dircolors ~/.dircolors -b`
+if [ -x /usr/bin/dircolors ]; then
+    eval `dircolors ~/.dircolors -b`
+fi
 
 # Prompt!
 function precmd {
