@@ -71,6 +71,7 @@ Bundle "buftabs"
 Bundle "Rename"
 Bundle "AutoTag"
 Bundle "project.tar.gz"
+Bundle "indexer.tar.gz"
 
 " }}}
 
@@ -93,6 +94,41 @@ function SMap(key, action, ...)
     if (match(modes, '\Vv') != -1)
         execute 'vmap ' . a:key . ' <Esc>' . a:action
     endif
+endfunction
+
+function! Resize(dir)
+  let this = winnr()
+  if '+' == a:dir || '-' == a:dir
+    execute "normal \<c-w>k"
+    let up = winnr()
+    if up != this
+      execute "normal \<c-w>j"
+      let x = 'bottom'
+    else
+      let x = 'top'
+    endif
+  elseif '>' == a:dir || '<' == a:dir
+    execute "normal \<c-w>h"
+    let left = winnr()
+    if left != this
+      execute "normal \<c-w>l"
+      let x = 'right'
+    else
+      let x = 'left'
+    endif
+  endif
+  if ('+' == a:dir && 'bottom' == x) || ('-' == a:dir && 'top' == x)
+    return "5\<c-v>\<c-w>+"
+  elseif ('-' == a:dir && 'bottom' == x) || ('+' == a:dir && 'top' == x)
+    return "5\<c-v>\<c-w>-"
+  elseif ('<' == a:dir && 'left' == x) || ('>' == a:dir && 'right' == x)
+    return "5\<c-v>\<c-w><"
+  elseif ('>' == a:dir && 'left' == x) || ('<' == a:dir && 'right' == x)
+    return "5\<c-v>\<c-w>>"
+  else
+    echo "oops. check your ~/.vimrc"
+    return ""
+  endif
 endfunction
 " }}}
 
@@ -121,6 +157,9 @@ imap <C-v> <esc>"+p
 
 " shift-insert fix for Xterm
 map <S-Insert> <MiddleMouse>
+
+"Project mode
+map <C-p> <Esc>:Tlist <Bar> wincmd h <Bar> wincmd s <Bar> NERDTree <Bar> set nonu <Bar> wincmd l<CR>
 
 " F2 - quick save
 call SMap("<F2>", ":w<cr>")
@@ -158,6 +197,12 @@ call SMap("<F7>", ":emenu Encoding.<TAB>")
 
 " C-Q - Exit Vim
 map <C-Q> <Esc>:qa<cr>
+
+" Window resizing 
+nnoremap <S-Up> <C-W>+<CR>
+nnoremap <S-Down> <C-W>-<CR>
+nnoremap <S-Left> <C-w>><CR>
+nnoremap <S-Right> <C-w><<CR>
 
 " Folding toggle with ctrl-f
 call SMap("<C-f>", "za<space>")
