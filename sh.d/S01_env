@@ -1,4 +1,8 @@
 #### paths
+#source system files
+if [ -x /etc/profile ]; then
+    source "/etc/profile"
+fi
 #main path
 export PATH="$PATH:/usr/local/sbin:/usr/local/bin:/usr/libexec:/sbin:$HOME/.rc/.bin"
 #rvm
