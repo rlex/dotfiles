@@ -1,6 +1,6 @@
 autodetach on
 crlf off
-deflogin off
+#deflogin off
 hardcopy_append on
 maptimeout 5
 multiuser on
@@ -24,6 +24,7 @@ hardstatus string '%{= kG}[ %{G}%H %{g}][%= %{= kw}%?%-Lw%?%{r}(%{W}%n*%f%t%?(%u
 activity "%c activity -> %n%f %t"
 bell "%c bell -> %n%f %t^G"
 vbell_msg " *beep* "
+caption always "%{+b rk}%H%{gk} |%c %{yk}%d.%m.%Y | %{wk} %?%-Lw%?%{bw}%n*%f %t%?(%u)%?%{wk}%?%+Lw%? | %{rk} Load: %l %{wk}" 
 # caption always " %m%d %c |  %w"
 bind ~ activity "%c activity -> %n%f %t"
 bind * activity "%c activity -> %n%f %t"
