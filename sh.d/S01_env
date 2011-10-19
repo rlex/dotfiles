@@ -3,6 +3,7 @@
 if [ -x /etc/profile ]; then
     source "/etc/profile"
 fi
+
 #main path
 export PATH="$PATH:/usr/local/sbin:/usr/local/bin:/usr/libexec:/sbin:$HOME/.rc/.bin"
 #rvm
@@ -13,6 +14,11 @@ fi
 if [ -x $HOME/.toast/armed/bin/toast ]; then
     eval `$HOME/.toast/armed/bin/toast env`
 fi
+
+#Locales
+export LC_ALL=en_US.UTF-8
+export LANG=en_US.UTF-8
+export LANGUAGE=en_US.UTF-8
 
 #### user variables
 export EDITOR="vim"
