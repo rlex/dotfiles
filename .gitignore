@@ -1,14 +1,9 @@
-### VIM BLOCK ###
+### VIM ###
 .vim/swap/*.swp
 .vim/swap/undodir/*
 .vim/swap/*~
-.vim/GetLatest/Installed/*
-.vim/GetLatest/GetLatestVimScripts.dist
 .vim/backup/*
 .vim/.netrwhist
-
-### MC ###
-.mc/history
 
 ### MUTT ###
 .mutt/.localprofile
@@ -16,10 +11,6 @@
 
 ### AWESOME AUTORUN ###
 .config/awesome/autorun/*
-
-### FISH ###
-.config/fish/fish_history
-.config/fish/fishd.*
 
 ### NCMPCPP ###
 .ncmpcpp/error.log
