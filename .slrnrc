@@ -1,7 +1,7 @@
 set signature ".signature"
-set realname "Lex Rivera"
-set hostname "x-demon.org"
-set username "x-demon"
+set realname ""
+set hostname ""
+set username ""
 set editor_command "vim '+set tw=72' +%d '%s'"
 set sorting_method 12
 set custom_sort_order "Date,Date"
