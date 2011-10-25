@@ -38,7 +38,7 @@ set sts=4
 set nolist
 set expandtab
 " Persistent undo
-set undodir=~/.vim/swap/undodir
+set undodir=~/.vim/swap
 set undofile
 set undolevels=1000
 set undoreload=10000

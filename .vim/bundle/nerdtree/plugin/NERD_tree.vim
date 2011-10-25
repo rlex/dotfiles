@@ -169,6 +169,10 @@ command! -n=0 -bar NERDTreeFind call s:findAndRevealPath()
 augroup NERDTree
     "Save the cursor position whenever we close the nerd tree
     exec "autocmd BufWinLeave ". s:NERDTreeBufName ."* call <SID>saveScreenState()"
+
+    "disallow insert mode in the NERDTree
+    exec "autocmd BufEnter ". s:NERDTreeBufName ."* stopinsert"
+
     "cache bookmarks when vim loads
     autocmd VimEnter * call s:Bookmark.CacheBookmarks(0)
 
@@ -561,7 +565,7 @@ function! s:MenuController._echoPrompt()
 endfunction
 
 "FUNCTION: MenuController._current(key) {{{3
-"get the MenuItem that is curently selected
+"get the MenuItem that is currently selected
 function! s:MenuController._current()
     return self.menuItems[self.selection]
 endfunction
@@ -866,8 +870,10 @@ function! s:TreeFileNode.copy(dest)
     let parent = b:NERDTreeRoot.findNode(newPath.getParent())
     if !empty(parent)
         call parent.refresh()
+        return parent.findNode(newPath)
+    else
+        return {}
     endif
-    return parent.findNode(newPath)
 endfunction
 
 "FUNCTION: TreeFileNode.delete {{{3
@@ -991,7 +997,7 @@ function! s:TreeFileNode.getLineNum()
     "the path components we have matched so far
     let pathcomponents = [substitute(b:NERDTreeRoot.path.str({'format': 'UI'}), '/ *$', '', '')]
     "the index of the component we are searching for
-    let curPathComponent = 0
+    let curPathComponent = 1
 
     let fullpath = self.path.str({'format': 'UI'})
 

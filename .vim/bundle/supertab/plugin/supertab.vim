@@ -260,6 +260,16 @@ function! s:InitBuffer()
 
   " set the current completion type to the default
   call SuperTabSetCompletionType(b:SuperTabDefaultCompletionType)
+
+  " hack to programatically revert a change to snipmate that breaks supertab
+  " but which the new maintainers don't care about:
+  " http://github.com/garbas/vim-snipmate/issues/37
+  let snipmate = maparg('<tab>', 'i')
+  if snipmate =~ '<C-G>u' && g:SuperTabMappingForward =~? '<tab>'
+    let snipmate = substitute(snipmate, '<C-G>u', '', '')
+    iunmap <tab>
+    exec "inoremap <silent> <tab> " . snipmate
+  endif
 endfunction " }}}
 
 " s:ManualCompletionEnter() {{{
@@ -370,10 +380,11 @@ function! s:SuperTab(command)
     " already in completion mode and not resetting for longest enhancement, so
     " just scroll to next/previous
     elseif pumvisible() && !b:complReset
+      let type = b:complType == 'context' ? b:complTypeContext : b:complType
       if a:command == 'n'
-        return b:complType == "\<c-p>" ? "\<c-p>" : "\<c-n>"
+        return type == "\<c-p>" ? "\<c-p>" : "\<c-n>"
       endif
-      return b:complType == "\<c-p>" ? "\<c-n>" : "\<c-p>"
+      return type == "\<c-p>" ? "\<c-n>" : "\<c-p>"
     endif
 
     " handle 'context' completion.

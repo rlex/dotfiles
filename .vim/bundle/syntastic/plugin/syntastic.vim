@@ -19,6 +19,10 @@ let g:loaded_syntastic_plugin = 1
 
 let s:running_windows = has("win16") || has("win32") || has("win64")
 
+if !s:running_windows
+    let s:uname = system('uname')
+endif
+
 if !exists("g:syntastic_enable_signs") || !has('signs')
     let g:syntastic_enable_signs = 0
 endif
@@ -46,9 +50,6 @@ endif
 if !exists("g:syntastic_stl_format")
     let g:syntastic_stl_format = '[Syntax: line:%F (%t)]'
 endif
-
-"load all the syntax checkers
-runtime! syntax_checkers/*.vim
 
 "refresh and redraw all the error info for this buf when saving or reading
 autocmd bufreadpost,bufwritepost * call s:UpdateErrors()
@@ -261,7 +262,7 @@ function! SyntasticMake(options)
     let old_shell = &shell
     let old_errorformat = &errorformat
 
-    if !s:running_windows
+    if !s:running_windows && (s:uname !~ "FreeBSD")
         "this is a hack to stop the screen needing to be ':redraw'n when
         "when :lmake is run. Otherwise the screen flickers annoyingly
         let &shellpipe='&>'
@@ -289,6 +290,10 @@ function! SyntasticMake(options)
 endfunction
 
 function! s:Checkable(ft)
+    if !exists("g:loaded_" . a:ft . "_syntax_checker")
+        exec "runtime syntax_checkers/" . a:ft . ".vim"
+    endif
+
     return exists("*SyntaxCheckers_". a:ft ."_GetLocList") &&
                 \ index(g:syntastic_disabled_filetypes, a:ft) == -1
 endfunction
@@ -303,6 +308,9 @@ function! s:Disable(...)
     if !empty(ft) && index(g:syntastic_disabled_filetypes, ft) == -1
         call add(g:syntastic_disabled_filetypes, ft)
     endif
+
+    "will cause existing errors to be cleared
+    call s:UpdateErrors()
 endfunction
 
 "enable syntax checking for the given filetype (defaulting to current ft)
@@ -312,6 +320,13 @@ function! s:Enable(...)
     let i = index(g:syntastic_disabled_filetypes, ft)
     if i != -1
         call remove(g:syntastic_disabled_filetypes, i)
+    endif
+
+    if !&modified
+        call s:UpdateErrors()
+        redraw!
+    else
+        echom "Syntasic: enabled for the '" . ft . "' filetype. :write out to update errors"
     endif
 endfunction
 
