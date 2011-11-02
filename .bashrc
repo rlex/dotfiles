@@ -1,7 +1,7 @@
 # check for interactive
-#if [[ $- != *i* ]] ; then
-#         return
-#fi
+if [[ $- != *i* ]] ; then
+         return
+fi
 
 # bash completion
 if [ -f /etc/bash_completion ]; then
