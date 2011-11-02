@@ -5,7 +5,7 @@ if [ -x /etc/profile ]; then
 fi
 
 #main path
-export PATH="$PATH:/usr/local/sbin:/usr/local/bin:/usr/libexec:/sbin:$HOME/.rc/.bin"
+export PATH="/usr/local/sbin:/usr/local/bin:/usr/libexec:/sbin:$HOME/.rc/.bin:$PATH"
 #rvm
 if [ -x $HOME/.rvm/scripts/rvm ]; then
     source "$HOME/.rvm/scripts/rvm"
