@@ -1,7 +1,6 @@
 ### VIM ###
-.vim/swap/*.swp
 .vim/swap/undodir/*
-.vim/swap/*~
+.vim/swap/*
 .vim/backup/*
 .vim/.netrwhist
 
