@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: syntax_complete.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 10 Oct 2011.
+" Last Modified: 31 Mar 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -35,20 +35,23 @@ let s:source = {
 function! s:source.initialize()"{{{
   " Initialize.
   let s:syntax_list = {}
-  let s:completion_length = neocomplcache#get_auto_completion_length('syntax_complete')
+  let s:completion_length =
+        \ neocomplcache#get_auto_completion_length('syntax_complete')
 
   " Set rank.
-  call neocomplcache#set_dictionary_helper(g:neocomplcache_plugin_rank, 'syntax_complete', 7)
+  call neocomplcache#set_dictionary_helper(
+        \ g:neocomplcache_source_rank, 'syntax_complete', 7)
 
   " Set caching event.
   autocmd neocomplcache Syntax * call s:caching()
 
   " Add command.
-  command! -nargs=? -complete=customlist,neocomplcache#filetype_complete NeoComplCacheCachingSyntax call s:recaching(<q-args>)
+  command! -nargs=? -complete=customlist,neocomplcache#filetype_complete
+        \ NeoComplCacheCachingSyntax call s:recaching(<q-args>)
 
   " Create cache directory.
-  if !isdirectory(g:neocomplcache_temporary_dir . '/syntax_cache')
-    call mkdir(g:neocomplcache_temporary_dir . '/syntax_cache')
+  if !isdirectory(neocomplcache#get_temporary_directory() . '/syntax_cache')
+    call mkdir(neocomplcache#get_temporary_directory() . '/syntax_cache')
   endif
 
   " Initialize check.
@@ -68,7 +71,8 @@ function! s:source.get_keyword_list(cur_keyword_str)"{{{
 
   let filetype = neocomplcache#get_context_filetype()
   if !has_key(s:syntax_list, filetype)
-    let keyword_lists = neocomplcache#cache#index_load_from_cache('syntax_cache', filetype, s:completion_length)
+    let keyword_lists = neocomplcache#cache#index_load_from_cache('syntax_cache',
+          \ filetype, s:completion_length)
     if !empty(keyword_lists)
       " Caching from cache.
       let s:syntax_list[filetype] = keyword_lists
@@ -76,7 +80,8 @@ function! s:source.get_keyword_list(cur_keyword_str)"{{{
   endif
 
   for source in neocomplcache#get_sources_list(s:syntax_list, filetype)
-    let list += neocomplcache#dictionary_filter(source, a:cur_keyword_str, s:completion_length)
+    let list += neocomplcache#dictionary_filter(
+          \ source, a:cur_keyword_str, s:completion_length)
   endfor
 
   return list
@@ -141,17 +146,20 @@ function! s:caching_from_syn(filetype)"{{{
   let dup_check = {}
   let menu = '[S] '
 
+  let filetype_pattern = substitute(a:filetype, '\W', '\\A', 'g') . '\u'
+
   let keyword_lists = {}
   for line in split(syntax_list, '\n')
     if line =~ '^\h\w\+'
       " Change syntax group name.
-      let menu = printf('[S] %.'.
-            \ g:neocomplcache_max_menu_width.'s', matchstr(line, '^\h\w\+'))
-      let line = substitute(line, '^\h\w\+\s*xxx', '', '')
+      let group_name = matchstr(line, '^\S\+')
+      let menu = printf('[S] %.'.g:neocomplcache_max_menu_width.'s', group_name)
+      let line = substitute(line, '^\S\s*xxx', '', '')
     endif
 
     if line =~ 'Syntax items' || line =~ '^\s*links to' ||
-          \line =~ '^\s*nextgroup='
+          \ line =~ '^\s*nextgroup=' ||
+          \ group_name !~# filetype_pattern
       " Next line.
       continue
     endif

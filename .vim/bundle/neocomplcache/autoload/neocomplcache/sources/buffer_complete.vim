@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: buffer_complete.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 14 Oct 2011.
+" Last Modified: 11 May 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -40,23 +40,23 @@ let s:source = {
 function! s:source.initialize()"{{{
   augroup neocomplcache"{{{
     " Caching events
-    autocmd InsertEnter * call s:check_source()
-    autocmd CursorHold * call s:check_deleted_buffer()
-    autocmd InsertLeave *
-          \ call neocomplcache#sources#buffer_complete#caching_current_cache_line()
+    autocmd BufRead,FileType,BufNewFile *
+          \ call s:check_source()
+    autocmd CursorHold *
+          \ call s:check_cache()
+    autocmd InsertEnter,InsertLeave *
+          \ call s:caching_current_buffer(line('.') - 1,
+          \          line('.') + 1, 1)
     autocmd VimLeavePre * call s:save_all_cache()
   augroup END"}}}
 
   " Set rank.
-  call neocomplcache#set_dictionary_helper(g:neocomplcache_plugin_rank,
-        \ 'buffer_complete', 4)
-
-  " Set completion length.
-  call neocomplcache#set_completion_length('buffer_complete', 2)
+  call neocomplcache#set_dictionary_helper(g:neocomplcache_source_rank,
+        \ 'buffer_complete', 5)
 
   " Create cache directory.
-  if !isdirectory(g:neocomplcache_temporary_dir . '/buffer_cache')
-    call mkdir(g:neocomplcache_temporary_dir . '/buffer_cache', 'p')
+  if !isdirectory(neocomplcache#get_temporary_directory() . '/buffer_cache')
+    call mkdir(neocomplcache#get_temporary_directory() . '/buffer_cache', 'p')
   endif
 
   " Initialize script variables."{{{
@@ -65,17 +65,30 @@ function! s:source.initialize()"{{{
   let s:cache_line_count = 70
   let s:rank_cache_count = 1
   let s:disable_caching_list = {}
-  let s:completion_length = g:neocomplcache_auto_completion_start_length
+  let s:async_dictionary_list = {}
+  let s:completion_length =
+        \ neocomplcache#get_auto_completion_length('buffer_complete')
   "}}}
 
+  call neocomplcache#set_completion_length('buffer_complete',
+        \ g:neocomplcache_auto_completion_start_length)
+
   " Add commands."{{{
-  command! -nargs=? -complete=buffer NeoComplCacheCachingBuffer call s:caching_buffer(<q-args>)
-  command! -nargs=? -complete=buffer NeoComplCachePrintSource call s:print_source(<q-args>)
-  command! -nargs=? -complete=buffer NeoComplCacheOutputKeyword call s:output_keyword(<q-args>)
-  command! -nargs=? -complete=buffer NeoComplCacheSaveCache call s:save_all_cache()
-  command! -nargs=? -complete=buffer NeoComplCacheDisableCaching call s:disable_caching(<q-args>)
-  command! -nargs=? -complete=buffer NeoComplCacheEnableCaching call s:enable_caching(<q-args>)
+  command! -nargs=? -complete=buffer -bar
+        \ NeoComplCacheCachingBuffer call s:caching_buffer(<q-args>)
+  command! -nargs=? -complete=buffer -bar
+        \ NeoComplCachePrintSource call s:print_source(<q-args>)
+  command! -nargs=? -complete=buffer -bar
+        \ NeoComplCacheOutputKeyword call s:output_keyword(<q-args>)
+  command! -nargs=? -complete=buffer -bar
+        \ NeoComplCacheSaveCache call s:save_all_cache()
+  command! -nargs=? -complete=buffer -bar
+        \ NeoComplCacheDisableCaching call s:disable_caching(<q-args>)
+  command! -nargs=? -complete=buffer -bar
+        \ NeoComplCacheEnableCaching call s:enable_caching(<q-args>)
   "}}}
+
+  call s:check_source()
 endfunction
 "}}}
 
@@ -93,22 +106,25 @@ function! s:source.finalize()"{{{
 endfunction"}}}
 
 function! s:source.get_keyword_pos(cur_text)"{{{
-  let [cur_keyword_pos, cur_keyword_str] = neocomplcache#match_word(a:cur_text)
+  let [cur_keyword_pos, _] = neocomplcache#match_word(a:cur_text)
 
   return cur_keyword_pos
 endfunction"}}}
 
 function! s:source.get_complete_words(cur_keyword_pos, cur_keyword_str)"{{{
   let keyword_list = []
-  for src in s:get_sources_list()
-    let keyword_cache = neocomplcache#dictionary_filter(
-          \ s:buffer_sources[src].keyword_cache,
-          \ a:cur_keyword_str, s:completion_length)
-    if src == bufnr('%')
+  for [key, source] in s:get_sources_list()
+    call neocomplcache#cache#check_cache_list('buffer_cache',
+          \ source.path,
+          \ s:async_dictionary_list,
+          \ source.keyword_cache, s:completion_length)
+
+    let keyword_list += neocomplcache#dictionary_filter(
+          \ source.keyword_cache, a:cur_keyword_str, s:completion_length)
+    if key == bufnr('%')
+      let source.accessed_time = localtime()
       call s:calc_frequency()
     endif
-
-    let keyword_list += keyword_cache
   endfor
 
   return keyword_list
@@ -127,21 +143,37 @@ function! neocomplcache#sources#buffer_complete#get_frequencies()"{{{
   return s:filetype_frequencies[filetype]
 endfunction"}}}
 
-function! neocomplcache#sources#buffer_complete#caching_current_cache_line()"{{{
+function! neocomplcache#sources#buffer_complete#caching_current_line()"{{{
   " Current line caching.
-  return s:caching_current_buffer(line('.')-1, line('.')+1)
+  return s:caching_current_buffer(line('.') - 1, line('.') + 1, 1)
 endfunction"}}}
-function! s:caching_current_buffer(start, end)"{{{
+function! neocomplcache#sources#buffer_complete#caching_word(keyword)"{{{
+  let source = s:buffer_sources[bufnr('%')]
+  let key = tolower(a:keyword[: s:completion_length-1])
+  if !has_key(source.keyword_cache, key)
+        \ || !has_key(source.keyword_cache[key], a:keyword)
+    return
+  endif
+  if !has_key(source.frequencies, a:keyword)
+    let source.frequencies[a:keyword] = 1
+  endif
+
+  let source.frequencies[a:keyword] += 1
+endfunction"}}}
+function! s:caching_current_buffer(start, end, is_auto)"{{{
   " Current line caching.
 
-  if !s:exists_current_source() || has_key(s:disable_caching_list, bufnr('%'))
-    return
+  if !s:exists_current_source()
+    call s:check_source()
+
+    if !s:exists_current_source()
+      return
+    endif
   endif
 
   let source = s:buffer_sources[bufnr('%')]
-  let filename = fnamemodify(source.name, ':t')
   let menu = '[B] ' . neocomplcache#util#strwidthpart(
-        \ filename, g:neocomplcache_max_menu_width)
+        \ source.name, g:neocomplcache_max_menu_width)
   let keyword_pattern = source.keyword_pattern
   let keyword_pattern2 = '^\%('.keyword_pattern.'\m\)'
   let keywords = source.keyword_cache
@@ -163,6 +195,10 @@ function! s:caching_current_buffer(start, end)"{{{
         " Append list.
         let keywords[key][match_str] =
               \ { 'word' : match_str, 'menu' : menu, 'rank' : 0 }
+        if a:is_auto
+          " Save line number.
+          let keywords[key][match_str].line = a:start
+        endif
       endif
       if !has_key(frequencies, match_str)
         let frequencies[match_str] = 1
@@ -241,11 +277,11 @@ function! s:get_sources_list()"{{{
     let filetypes_dict[filetype] = 1
   endfor
 
-  for key in keys(s:buffer_sources)
-    if has_key(filetypes_dict, s:buffer_sources[key].filetype)
+  for [key, source] in items(s:buffer_sources)
+    if has_key(filetypes_dict, source.filetype)
           \ || bufnr('%') == key
-          \ || (bufname('%') ==# '[Command Line]' && bufnr('#') == key)
-      call add(sources_list, key)
+          \ || (source.name ==# '[Command Line]' && bufnr('#') == key)
+      call add(sources_list, [key, source])
     endif
   endfor
 
@@ -269,12 +305,15 @@ function! s:initialize_source(srcname)"{{{
   let keyword_pattern = neocomplcache#get_keyword_pattern(ft)
 
   let s:buffer_sources[a:srcname] = {
-        \ 'keyword_cache' : {}, 'frequencies' : {}, 'prev_frequencies' : {},
-        \ 'name' : filename, 'filetype' : ft, 'keyword_pattern' : keyword_pattern,
+        \ 'keyword_cache' : {}, 'frequencies' : {},
+        \ 'prev_frequencies' : {},
+        \ 'name' : filename, 'filetype' : ft,
+        \ 'keyword_pattern' : keyword_pattern,
         \ 'end_line' : len(buflines),
-        \ 'check_sum' : len(join(buflines[:4], '\n')),
+        \ 'accessed_time' : localtime(),
         \ 'path' : path, 'loaded_cache' : 0,
-        \ 'cache_name' : neocomplcache#cache#encode_name('buffer_cache', path),
+        \ 'cache_name' : neocomplcache#cache#encode_name(
+        \   'buffer_cache', path),
         \}
 endfunction"}}}
 
@@ -283,32 +322,31 @@ function! s:word_caching(srcname)"{{{
   call s:initialize_source(a:srcname)
 
   let source = s:buffer_sources[a:srcname]
-  let srcname = fnamemodify(source.name, ':p')
 
-  if neocomplcache#cache#check_old_cache('buffer_cache', srcname)
-    if source.name ==# '[Command Line]'
-          \ || getbufvar(a:srcname, '&buftype') =~ 'nofile'
-      " Ignore caching.
-      return
+  if !filereadable(source.path)
+        \ || getbufvar(a:srcname, '&buftype') =~ 'nofile'
+    if a:srcname == bufnr('%')
+      " Make buffer cache.
+      call s:caching_current_buffer(1, line('$'), 0)
     endif
 
+    return
+  endif
+
+  if neocomplcache#cache#check_old_cache('buffer_cache', source.path)
     let source.cache_name =
           \ neocomplcache#cache#async_load_from_file(
-          \     'buffer_cache', source.path, source.keyword_pattern, 'B')
+          \     'buffer_cache', source.path,
+          \     source.keyword_pattern, 'B')
+    let s:async_dictionary_list[source.path] = [{
+          \ 'filename' : source.path,
+          \ 'cachename' : source.cache_name,
+          \ }]
   endif
 endfunction"}}}
 
 function! s:check_changed_buffer(bufnumber)"{{{
   let source = s:buffer_sources[a:bufnumber]
-
-  if getbufvar(a:bufnumber, '&buftype') =~ 'nofile'
-    " Check buffer changed.
-    let check_sum = len(join(getbufline(a:bufnumber, 1, 5), '\n'))
-    if check_sum != source.check_sum
-      " Recaching.
-      return 1
-    endif
-  endif
 
   let ft = getbufvar(a:bufnumber, '&filetype')
   if ft == ''
@@ -339,31 +377,46 @@ function! s:check_source()"{{{
     call s:word_caching(bufnumber)
   endif
 
-  if has_key(s:buffer_sources, bufnumber)
-        \ && !s:buffer_sources[bufnumber].loaded_cache
-    let source = s:buffer_sources[bufnumber]
-
-    if filereadable(source.cache_name)
-      " Caching from cache.
-      call neocomplcache#cache#list2index(
-            \ neocomplcache#cache#load_from_cache('buffer_cache', source.path),
-            \ source.keyword_cache,
-            \ s:completion_length)
-
-      let source.loaded_cache = 1
-    endif
+  if !has_key(s:buffer_sources, bufnumber)
+    return
   endif
+
+  let source = s:buffer_sources[bufnumber]
+  call neocomplcache#cache#check_cache_list('buffer_cache',
+        \ source.path,
+        \ s:async_dictionary_list,
+        \ source.keyword_cache, s:completion_length)
 endfunction"}}}
-function! s:check_deleted_buffer()"{{{
-  " Check deleted buffer.
-  for key in keys(s:buffer_sources)
+function! s:check_cache()"{{{
+  let release_accessd_time =
+        \ localtime() - g:neocomplcache_release_cache_time
+
+  for [key, source] in items(s:buffer_sources)
+    " Check deleted buffer and access time.
     if !bufloaded(str2nr(key))
+          \ || source.accessed_time < release_accessd_time
+
       " Save cache.
       call s:save_cache(key)
 
       " Remove item.
       call remove(s:buffer_sources, key)
     endif
+  endfor
+
+  if !s:exists_current_source()
+    return
+  endif
+
+  let bufnumber = bufnr('%')
+  let source = s:buffer_sources[bufnumber]
+
+  " Check current line caching.
+  for cache in values(source.keyword_cache)
+    call filter(cache, "!has_key(v:val, 'line')
+          \ || stridx(getline(v:val.line), v:val.word) >= 0
+          \ || search('\\<'.neocomplcache#util#escape_pattern(v:val.word).'\\>',
+          \       'wn', 0, 300) > 0")
   endfor
 endfunction"}}}
 
@@ -372,7 +425,8 @@ function! s:exists_current_source()"{{{
 endfunction"}}}
 
 function! s:save_cache(srcname)"{{{
-  if s:buffer_sources[a:srcname].end_line < 500
+  let source = s:buffer_sources[a:srcname]
+  if source.end_line < 500
     return
   endif
 
@@ -402,7 +456,8 @@ function! s:save_cache(srcname)"{{{
   endif
 
   " Output buffer.
-  call neocomplcache#cache#save_cache('buffer_cache', srcname, neocomplcache#unpack_dictionary(s:buffer_sources[a:srcname].keyword_cache))
+  call neocomplcache#cache#save_cache('buffer_cache', srcname,
+        \ neocomplcache#unpack_dictionary(source.keyword_cache))
 endfunction "}}}
 function! s:save_all_cache()"{{{
   try
@@ -411,7 +466,7 @@ function! s:save_all_cache()"{{{
     endfor
   catch
     call neocomplcache#print_error('Error occured while saving cache!')
-    let error_file = g:neocomplcache_temporary_dir . strftime('/error-%Y-%m-%d.log')
+    let error_file = neocomplcache#get_temporary_directory() . strftime('/error-%Y-%m-%d.log')
     call writefile([v:exception . ' ' . v:throwpoint], error_file)
     call neocomplcache#print_error('Please check error file: ' . error_file)
   endtry
@@ -432,7 +487,7 @@ function! s:caching_buffer(name)"{{{
 
   " Word recaching.
   call s:word_caching(number)
-  call s:caching_current_buffer(1, line('$'))
+  call s:caching_current_buffer(1, line('$'), 0)
 endfunction"}}}
 function! s:print_source(name)"{{{
   if a:name == ''
@@ -472,7 +527,8 @@ function! s:output_keyword(name)"{{{
   endif
 
   " Output buffer.
-  for keyword in neocomplcache#unpack_dictionary(s:buffer_sources[number].keyword_cache)
+  for keyword in neocomplcache#unpack_dictionary(
+        \ s:buffer_sources[number].keyword_cache)
     silent put=string(keyword)
   endfor
 endfunction "}}}

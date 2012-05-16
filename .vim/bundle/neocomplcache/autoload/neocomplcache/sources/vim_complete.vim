@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vim_complete.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 16 Oct 2011.
+" Last Modified: 26 Mar 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -43,17 +43,19 @@ function! s:source.initialize()"{{{
   "}}}
 
   " Set rank.
-  call neocomplcache#set_dictionary_helper(g:neocomplcache_plugin_rank,
+  call neocomplcache#set_dictionary_helper(g:neocomplcache_source_rank,
         \ 'vim_complete', 300)
 
   " Call caching event.
-  autocmd neocomplcache FileType * call neocomplcache#sources#vim_complete#helper#on_filetype()
+  autocmd neocomplcache FileType *
+        \ call neocomplcache#sources#vim_complete#helper#on_filetype()
 
   " Initialize check.
   call neocomplcache#sources#vim_complete#helper#on_filetype()
 
   " Add command.
-  command! -nargs=? -complete=buffer NeoComplCacheCachingVim call neocomplcache#sources#vim_complete#helper#recaching(<q-args>)
+  command! -nargs=? -complete=buffer NeoComplCacheCachingVim
+        \ call neocomplcache#sources#vim_complete#helper#recaching(<q-args>)
 endfunction"}}}
 
 function! s:source.finalize()"{{{
@@ -72,17 +74,22 @@ function! s:source.get_keyword_pos(cur_text)"{{{
     return -1
   endif
 
-  let pattern = '\.\%(\h\w*\)\?$\|' . neocomplcache#get_keyword_pattern_end('vim')
-  if cur_text != '' && cur_text !~ '^[[:digit:],[:space:][:tab:]$''<>]*\h\w*$'
-    let command_completion = neocomplcache#sources#vim_complete#helper#get_completion_name(
-          \ neocomplcache#sources#vim_complete#get_command(cur_text))
+  let pattern = '\.\%(\h\w*\)\?$\|' .
+        \ neocomplcache#get_keyword_pattern_end('vim')
+  if cur_text != '' && cur_text !~
+        \ '^[[:digit:],[:space:][:tab:]$''<>]*\h\w*$'
+    let command_completion =
+          \ neocomplcache#sources#vim_complete#helper#get_completion_name(
+          \   neocomplcache#sources#vim_complete#get_command(cur_text))
     if command_completion =~ '\%(dir\|file\|shellcmd\)'
       let pattern = neocomplcache#get_keyword_pattern_end('filename')
     endif
   endif
 
-  let [cur_keyword_pos, cur_keyword_str] = neocomplcache#match_word(a:cur_text, pattern)
+  let [cur_keyword_pos, cur_keyword_str] =
+        \ neocomplcache#match_word(a:cur_text, pattern)
   if a:cur_text !~ '\.\%(\h\w*\)\?$' && neocomplcache#is_auto_complete()
+        \ && bufname('%') !=# '[Command Line]'
         \ && neocomplcache#util#mb_strlen(cur_keyword_str)
         \      < g:neocomplcache_auto_completion_start_length
     return -1
@@ -93,8 +100,9 @@ endfunction"}}}
 
 function! s:source.get_complete_words(cur_keyword_pos, cur_keyword_str)"{{{
   let cur_text = neocomplcache#sources#vim_complete#get_cur_text()
-  if (neocomplcache#is_auto_complete() && cur_text !~ '\h\w*\.\%(\h\w*\)\?$'
-        \&& len(a:cur_keyword_str) < g:neocomplcache_auto_completion_start_length)
+  if neocomplcache#is_auto_complete() && cur_text !~ '\h\w*\.\%(\h\w*\)\?$'
+        \ && len(a:cur_keyword_str) < g:neocomplcache_auto_completion_start_length
+        \ && bufname('%') !=# '[Command Line]'
     return []
   endif
 
@@ -106,35 +114,47 @@ function! s:source.get_complete_words(cur_keyword_pos, cur_keyword_str)"{{{
   elseif a:cur_keyword_str =~# '^&\%([gl]:\)\?'
     " Options.
     let prefix = matchstr(a:cur_keyword_str, '&\%([gl]:\)\?')
-    let list = deepcopy(neocomplcache#sources#vim_complete#helper#option(cur_text, a:cur_keyword_str))
+    let list = deepcopy(
+          \ neocomplcache#sources#vim_complete#helper#option(
+          \   cur_text, a:cur_keyword_str))
     for keyword in list
-      let keyword.word = prefix . keyword.word
-      let keyword.abbr = prefix . keyword.abbr
+      let keyword.word =
+            \ prefix . keyword.word
+      let keyword.abbr = prefix .
+            \ get(keyword, 'abbr', keyword.word)
     endfor
   elseif a:cur_keyword_str =~? '^\c<sid>'
     " SID functions.
     let prefix = matchstr(a:cur_keyword_str, '^\c<sid>')
     let cur_keyword_str = substitute(a:cur_keyword_str, '^\c<sid>', 's:', '')
-    let list = deepcopy(neocomplcache#sources#vim_complete#helper#function(cur_text, cur_keyword_str))
+    let list = deepcopy(
+          \ neocomplcache#sources#vim_complete#helper#function(
+          \     cur_text, cur_keyword_str))
     for keyword in list
       let keyword.word = prefix . keyword.word[2:]
-      let keyword.abbr = prefix . keyword.abbr[2:]
+      let keyword.abbr = prefix .
+            \ get(keyword, 'abbr', keyword.word)[2:]
     endfor
   elseif cur_text =~# '\<has([''"]\w*$'
     " Features.
-    let list = neocomplcache#sources#vim_complete#helper#feature(cur_text, a:cur_keyword_str)
+    let list = neocomplcache#sources#vim_complete#helper#feature(
+          \ cur_text, a:cur_keyword_str)
   elseif cur_text =~# '\<expand([''"][<>[:alnum:]]*$'
     " Expand.
-    let list = neocomplcache#sources#vim_complete#helper#expand(cur_text, a:cur_keyword_str)
+    let list = neocomplcache#sources#vim_complete#helper#expand(
+          \ cur_text, a:cur_keyword_str)
   elseif a:cur_keyword_str =~ '^\$'
     " Environment.
-    let list = neocomplcache#sources#vim_complete#helper#environment(cur_text, a:cur_keyword_str)
+    let list = neocomplcache#sources#vim_complete#helper#environment(
+          \ cur_text, a:cur_keyword_str)
   elseif cur_text =~ '^[[:digit:],[:space:][:tab:]$''<>]*!\s*\f\+$'
     " Shell commands.
-    let list = neocomplcache#sources#vim_complete#helper#shellcmd(cur_text, a:cur_keyword_str)
+    let list = neocomplcache#sources#vim_complete#helper#shellcmd(
+          \ cur_text, a:cur_keyword_str)
   else
     " Commands.
-    let list = neocomplcache#sources#vim_complete#helper#command(cur_text, a:cur_keyword_str)
+    let list = neocomplcache#sources#vim_complete#helper#command(
+          \ cur_text, a:cur_keyword_str)
   endif
 
   return neocomplcache#keyword_filter(copy(list), a:cur_keyword_str)
@@ -145,7 +165,7 @@ function! neocomplcache#sources#vim_complete#define()"{{{
 endfunction"}}}
 
 function! neocomplcache#sources#vim_complete#get_cur_text()"{{{
-  let cur_text = neocomplcache#get_cur_text()
+  let cur_text = neocomplcache#get_cur_text(1)
   if &filetype == 'vimshell' && exists('*vimshell#get_secondary_prompt')
     return cur_text[len(vimshell#get_secondary_prompt()) :]
   endif

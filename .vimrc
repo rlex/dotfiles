@@ -62,7 +62,6 @@ Bundle "scrooloose/nerdtree"
 Bundle "scrooloose/nerdcommenter"
 Bundle "scrooloose/syntastic"
 Bundle "Shougo/neocomplcache"
-Bundle "tpope/vim-fugitive"
 Bundle "ervandew/supertab"
 
 Bundle "TaskList.vim"
@@ -71,8 +70,6 @@ Bundle "buftabs"
 Bundle "Rename"
 Bundle "AutoTag"
 Bundle "project.tar.gz"
-Bundle "indexer.tar.gz"
-
 " }}}
 
 " {{{ Functions
