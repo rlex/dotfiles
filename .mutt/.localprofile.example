@@ -1,9 +1,9 @@
-# Save this as ~/.mutt/.localprofile - this file will be sourced upon load
-# It must contain machine-specific and private data, see below for example
+## Save this as ~/.mutt/.localprofile - this file will be sourced upon load
+## It must contain machine-specific and private data, see below for example
 
-# Main settings - mailboxes
+## Main settings - mailboxes
 
-# IMAP EXAMPLE
+## IMAP example (gmail)
 #set from = "user@example.org"  
 #set realname = "IMAP USER"       
 #set imap_user = "user@example.org"
@@ -13,11 +13,29 @@
 #set trash = "imaps://imap.gmail.com/[Gmail]/Trash"
 #set smtp_url = "smtp://user@example.org@smtp.gmail.com:587/"
 
-# Various settings
-#set pgp_sign_as=0x00000000
-set delete = yes
+## Local mailbox example (in maildir format)
+#set mbox_type=Maildir
+#set spoolfile="~/Maildir/"
+#set folder="~/Maildir/"
+#set mask="!^\\.[^.]"
+#set record="+.Sent"
+#set postponed="+.Drafts"
 
-# Custom headers example
-my_hdr X-Homepage: http://example.org
-my_hdr X-PGP-Key: http://example.org/pubinfo/user.asc
-hdr_order Date From To Cc
+#mailboxes ! + `\ 
+#for file in ~/Maildir/.*; do \ 
+#  box=$(basename "$file"); \ 
+#  if [ ! "$box" = '.' -a ! "$box" = '..' -a ! "$box" = '.customflags' \ 
+#      -a ! "$box" = '.subscriptions' ]; then \ 
+#    echo -n "\"+$box\" "; \ 
+#  fi; \ 
+#done`
+
+
+## Various settings
+#set pgp_sign_as=0x00000000
+#set delete = yes
+
+## Custom headers example
+#my_hdr X-Homepage: http://example.org
+#my_hdr X-PGP-Key: http://example.org/pubinfo/user.asc
+#hdr_order Date From To Cc
