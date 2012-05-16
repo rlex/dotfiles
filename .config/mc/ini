@@ -1,3 +1,4 @@
+
 [Midnight-Commander]
 verbose=1
 pause_after_run=1
@@ -5,8 +6,8 @@ shell_patterns=1
 auto_save_setup=1
 preallocate_space=0
 auto_menu=0
-use_internal_view=1
-use_internal_edit=1
+use_internal_view=0
+use_internal_edit=0
 clear_before_exec=1
 confirm_delete=1
 confirm_overwrite=1
@@ -79,8 +80,11 @@ ignore_ftp_chattr_errors=true
 keymap=mc.keymap
 skin=xoria256
 
+
+
+
 [Layout]
-message_visible=1
+message_visible=0
 keybar_visible=1
 xterm_title=1
 output_lines=0
@@ -92,6 +96,9 @@ vertical_equal=1
 left_panel_size=106
 horizontal_equal=1
 top_panel_size=1
+
+
+
 
 [Misc]
 timeformat_recent=%b %e %H:%M
