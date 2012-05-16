@@ -12,6 +12,7 @@
 #set postponed ="+[Gmail]/Drafts"         
 #set trash = "imaps://imap.gmail.com/[Gmail]/Trash"
 #set smtp_url = "smtp://user@example.org@smtp.gmail.com:587/"
+## end IMAP example
 
 ## Local mailbox example (in maildir format)
 #set mbox_type=Maildir
@@ -21,14 +22,12 @@
 #set record="+.Sent"
 #set postponed="+.Drafts"
 
-#mailboxes ! + `\ 
-#for file in ~/Maildir/.*; do \ 
-#  box=$(basename "$file"); \ 
-#  if [ ! "$box" = '.' -a ! "$box" = '..' -a ! "$box" = '.customflags' \ 
-#      -a ! "$box" = '.subscriptions' ]; then \ 
-#    echo -n "\"+$box\" "; \ 
-#  fi; \ 
-#done`
+#mailboxes `echo -n "+ "; find ~/Maildir -maxdepth 1 -type d -name ".*" -printf "+'%f' "`
+
+#macro index c "<change-folder>?<toggle-mailboxes>" "open a different folder"
+#macro pager c "<change-folder>?<toggle-mailboxes>" "open a different folder"
+
+## end local mailbox example
 
 
 ## Various settings
