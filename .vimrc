@@ -70,6 +70,7 @@ Bundle "buftabs"
 Bundle "Rename"
 Bundle "AutoTag"
 Bundle "project.tar.gz"
+Bundle "sudo.vim"
 " }}}
 
 " {{{ Functions
