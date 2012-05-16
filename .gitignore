@@ -8,11 +8,11 @@
 .mutt/.localprofile
 .mutt/certificates
 
+### MC ###
+.config/mc/panels.ini
+
 ### AWESOME AUTORUN ###
 .config/awesome/autorun/*
-
-### NCMPCPP ###
-.ncmpcpp/error.log
 
 ### SHELL ENV ###
 sh.d/S99_local
