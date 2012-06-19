@@ -17,7 +17,7 @@ alias serv="cat /etc/services | grep"
 alias pg="ps aux | grep"
 alias tcpdump="tcpdump -ttttnnn"
 alias nano="I_must_use_vim"
-alias back="cd $OLDPWD"
+alias b="cd $OLDPWD"
 alias recent="ls -lAt | head"
 alias r="screen -DRA"
 alias sudo='A=`alias` sudo  '
