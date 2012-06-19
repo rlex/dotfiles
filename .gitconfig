@@ -33,7 +33,6 @@
 [color "status"]
     changed = yellow
 [alias]
-    s = status
     b = branch
     ba = branch -a -v -v
     bs = !git-branch-status
@@ -60,7 +59,8 @@
     ls-new = ls-files --exclude-standard -o
     ls-ign = ls-files --exclude-standard -o -i
     clog = log --date=short --pretty=format:\"%Cred%ad %Cblue%h %Cgreen%an %Creset%s%C(yellow)%d\"
-    slog = log --date=short --pretty=format:\"%C(124)%ad %C(24)%h %C(34)%an %C(252)%s%C(178)%d\"
+    lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --
+    s = status -sb
 [user]
 	name = Lex Rivera
 	email = me@lex.io
