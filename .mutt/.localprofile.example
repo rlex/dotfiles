@@ -7,12 +7,20 @@
 #set from = "user@example.org"  
 #set realname = "IMAP USER"       
 #set imap_user = "user@example.org"
+#set imap_pass = "password"
 #set folder = "imaps://imap.gmail.com:993"
 #set spoolfile = "+INBOX"                 
 #set postponed ="+[Gmail]/Drafts"         
 #set trash = "imaps://imap.gmail.com/[Gmail]/Trash"
 #set smtp_url = "smtp://user@example.org@smtp.gmail.com:587/"
+#set smtp_pass = "password"
 ## end IMAP example
+
+## Encrypted passwords example:
+#create ~/.mutt/pwd file with set imap_pass and set smtp_pass
+#encrypt it with GPG: gpg -r id -e ~/.mutt/pwd
+#shred & rm source file (~/.mutt/pwd)
+#add that line to your localprofile - source "gpg -d ~/.mutt/passwords.gpg |"
 
 ## Local mailbox example (in maildir format)
 #set mbox_type=Maildir
