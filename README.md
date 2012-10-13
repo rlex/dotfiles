@@ -39,8 +39,9 @@ Yeah, i still use mutt. You will find:
 
 1. 256-color theme (yay!)
 2. Support for GPG
-3. Sourcing system, so you can customize mutt on every machine. See .mutt/.localprofile.example - very easy to configure!
-4. A lot of aliases and generic settings (as usual)
+3. Support for encrypting passwords using GPG
+4. Sourcing system, so you can customize mutt on every machine. See .mutt/.localprofile.example - very easy to configure!
+5. A lot of aliases and generic settings (as usual)
 
 ### Screen
 
@@ -98,6 +99,5 @@ This folder is sourced in shells, so you can just drop any app here and it will 
 It's constantly changing. Things i will do soon:
 
 1. Cleanup. There is a lot of stuff i do not use anymore.
-2. Support for encrypted password for mutt using GPG
-3. Some way to share .ssh folder and encrypted passwords database
-4. Fix bug with bash autocompletion sometimes do not work.
+2. Some way to share .ssh folder and encrypted passwords database
+3. Fix bug with bash autocompletion sometimes do not work.
