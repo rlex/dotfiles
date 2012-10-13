@@ -3,7 +3,7 @@
 .vim/swap/*
 .vim/backup/*
 .vim/.netrwhist
-
+.vim/bundle/vundle/.netrwhist
 ### MUTT ###
 .mutt/.localprofile
 .mutt/certificates
