@@ -4,10 +4,12 @@
 .vim/backup/*
 .vim/.netrwhist
 .vim/bundle/vundle/.netrwhist
+
 ### MUTT ###
 .mutt/.localprofile
 .mutt/certificates
-
+.mutt/pwd
+.mutt/pwd.gpg
 ### MC ###
 .config/mc/panels.ini
 
