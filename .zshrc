@@ -5,9 +5,6 @@ setopt NO_HUP               # don't send kill to background jobs when exiting
 
 ## History options ##
 export HISTFILE="$HOME/.zsh-history"                      # path to history file
-export HISTIGNORE="ls:l:pwd:mc:su:df:clear:fg:bg:history" # ignore some common commands
-export HISTSIZE="5000"
-export SAVEHIST="1000"
 setopt append_history
 setopt inc_append_history
 setopt extended_history

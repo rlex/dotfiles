@@ -4,6 +4,13 @@ if [ -x /etc/profile ]; then
     source "/etc/profile"
 fi
 
+#history settings
+export HISTCONTROL=ignoredups
+export HISTSIZE=20000
+export HISTFILESIZE=20000
+export HISTTIMEFORMAT="[%Y-%m-%d - %H:%M:%S]"
+export HISTIGNORE="&:ls:ll:la:l:pwd:exit:clear:b:r:exit:env:date:.:..:...:....:.....:pwd:cfg:rb:eb:!!:fg:bg:cd:h:mc"
+
 #main path
 export PATH="/usr/local/sbin:/usr/local/bin:/usr/libexec:/sbin:$HOME/.rc/.bin:$PATH"
 #rvm

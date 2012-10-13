@@ -10,11 +10,6 @@ fi
 
 # user preferences
 # bash-settings
-export HISTCONTROL=ignoredups
-export HISTSIZE=20000
-export HISTFILESIZE=20000
-export HISTTIMEFORMAT="[%Y-%m-%d - %H:%M:%S]"
-export HISTIGNORE="&:ls:ll:la:l:pwd:exit:clear:b:r:exit:env:date:.:..:...:....:.....:pwd:cfg:rb:eb:!!:fg:bg:cd:h:mc"
 export HISTFILE=~/.bash_history
 export CLICOLOR=1
 shopt -s checkwinsize
