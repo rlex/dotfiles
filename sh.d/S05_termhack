@@ -1,5 +1,0 @@
-#Dirty workaround for 256 colors support (mostly for mc)
-if [[ $TERM == xterm ]] ;
-    then
-       export TERM=xterm-256color
-fi
