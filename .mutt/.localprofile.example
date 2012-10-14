@@ -16,11 +16,14 @@
 #set smtp_pass = "password"
 ## end IMAP example
 
+#by default, mutt saves all sent messages to ~/sent, which is not really good. You can disable it with something like that...
+#set record = "/dev/null"
+
 ## Encrypted passwords example:
 #create ~/.mutt/pwd file with set imap_pass and set smtp_pass
 #encrypt it with GPG: gpg -r id -e ~/.mutt/pwd
-#shred & rm source file (~/.mutt/pwd)
-#mv pwd.gpg pwd
+#rm source file (~/.mutt/pwd)
+#move pwd.gpg to pwd
 #add that line to your localprofile - source "gpg -d ~/.mutt/pwd |"
 
 ## Local mailbox example (in maildir format)
