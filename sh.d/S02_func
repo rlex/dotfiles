@@ -132,6 +132,9 @@ perl -e 'socket(S,2,1,0)&&connect(S,pack("Sna4x8",2,80,gethostbyname(
     ."HTTP/1.0\nHost: $h\n\n")&&open(STDIN,"<&S")&&exec($^X,qw(-x -
     arm toast))||die($!)';
 }
+install_rvm () {
+curl -L https://get.rvm.io | bash -s stable
+}
 
 history-all() { 
 history -E 1;
