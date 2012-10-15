@@ -23,6 +23,11 @@
 #mv pwd.gpg pwd
 #add that line to your localprofile - source "gpg -d ~/.mutt/pwd |"
 
+#caching settings, here we can cache headers:
+#set header_cache = "~/.mutt/.cache"
+#and messages body:
+#set message_cachedir = "~/.mutt/.cache"
+
 ## Local mailbox example (in maildir format)
 #set mbox_type=Maildir
 #set spoolfile="~/Maildir/"
