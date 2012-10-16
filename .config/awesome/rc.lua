@@ -19,5 +19,5 @@ for s = 1,screen.count() do
     mypromptbox[s].text = awful.util.escape(err:match("[^\n]*"));
 end
  
-naughty.notify{text="Awesome crashed during startup on " .. os.date("%d%/%m/%Y %T:\n\n")
+naughty.notify{text="Awesome crashed during startup on " .. os.date("%d/%m/%Y %T:\n\n")
 .. err .. "\n", timeout = 0}
