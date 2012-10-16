@@ -16,7 +16,6 @@ require("awful.rules")
 require("beautiful")
 -- Notification library
 require("naughty")
-require("vicious")
 require("lib/shifty")
 -- Menu library
 require("lib/freedesktop.utils")
@@ -24,7 +23,6 @@ require("lib/freedesktop.menu")
 require("lib/freedesktop.desktop")
 -- This is needed for vicious from some version
 vicious = require("vicious")
-vicious = require("vicious.contrib")
 -- }}}
 
 -- {{{ Variable definitions
