@@ -1,39 +1,39 @@
 --- Shifty: Dynamic tagging library for awesome3-git
 -- @author koniu &lt;gkusnierz@gmail.com&gt;
--- @author bioe007 &lt;perry.hargrave@gmail.com&gt;
+-- @author resixian (aka bioe007) &lt;resixian@gmail.com&gt;
 --
 -- http://awesome.naquadah.org/wiki/index.php?title=Shifty
 
--- {{{environment
+-- environment
 local type = type
-local tag = tag
 local ipairs = ipairs
 local table = table
-local client = client
-local image = image
 local string = string
-local screen = screen
-local button = button
-local mouse = mouse
 local beautiful = require("beautiful")
 local awful = require("awful")
 local pairs = pairs
 local io = io
 local tonumber = tonumber
-local wibox = wibox
-local root = root
 local dbg= dbg
-local timer = timer
-local print = print
+local capi = {
+    client = client,
+    tag = tag,
+    image = image,
+    screen = screen,
+    button = button,
+    mouse = mouse,
+    root = root,
+    timer = timer
+}
 
 module("shifty")
---}}}
 
--- {{{variables
+-- variables
 config = {}
 config.tags = {}
 config.apps = {}
 config.defaults = {}
+config.float_bars = false
 config.guess_name = true
 config.guess_position = true
 config.remember_index = true
@@ -42,23 +42,31 @@ config.default_name = "new"
 config.clientkeys = {}
 config.globalkeys = nil
 config.layouts = {}
-config.prompt_sources = {"config_tags", "config_apps", "existing", "history"}
-config.prompt_matchers = {"^", ":", ""}
+config.prompt_sources = {
+    "config_tags",
+    "config_apps",
+    "existing",
+    "history"
+}
+config.prompt_matchers = {
+    "^",
+    ":",
+    ""
+}
 
 local matchp = ""
 local index_cache = {}
-for i = 1, screen.count() do index_cache[i] = {} end
---}}}
+for i = 1, capi.screen.count() do index_cache[i] = {} end
 
---{{{name2tags: matches string 'name' to tag objects
+--name2tags: matches string 'name' to tag objects
 -- @param name : tag name to find
 -- @param scr : screen to look for tags on
 -- @return table of tag objects or nil
 function name2tags(name, scr)
     local ret = {}
-    local a, b = scr or 1, scr or screen.count()
+    local a, b = scr or 1, scr or capi.screen.count()
     for s = a, b do
-        for i, t in ipairs(screen[s]:tags()) do
+        for i, t in ipairs(capi.screen[s]:tags()) do
             if name == t.name then
                 table.insert(ret, t)
             end
@@ -71,26 +79,24 @@ function name2tag(name, scr, idx)
     local ts = name2tags(name, scr)
     if ts then return ts[idx or 1] end
 end
---}}}
 
---{{{tag2index: finds index of a tag object
+--tag2index: finds index of a tag object
 -- @param scr : screen number to look for tag on
 -- @param tag : the tag object to find
 -- @return the index [or zero] or end of the list
 function tag2index(scr, tag)
-    for i, t in ipairs(screen[scr]:tags()) do
+    for i, t in ipairs(capi.screen[scr]:tags()) do
         if t == tag then return i end
     end
 end
---}}}
 
---{{{rename
+--rename
 --@param tag: tag object to be renamed
 --@param prefix: if any prefix is to be added
 --@param no_selectall:
 function rename(tag, prefix, no_selectall)
     local theme = beautiful.get()
-    local t = tag or awful.tag.selected(mouse.screen)
+    local t = tag or awful.tag.selected(capi.mouse.screen)
     local scr = t.screen
     local bg = nil
     local fg = nil
@@ -108,7 +114,7 @@ function rename(tag, prefix, no_selectall)
     awful.prompt.run({
         fg_cursor = fg, bg_cursor = bg, ul_cursor = "single",
         text = text, selectall = not no_selectall},
-        taglist[scr][tag2index(scr, t)][2],
+        taglist[scr][tag2index(scr, t) * 2],
         function (name) if name:len() > 0 then t.name = name; end end,
         completion,
         awful.util.getdir("cache") .. "/history_tags",
@@ -120,38 +126,36 @@ function rename(tag, prefix, no_selectall)
                 awful.tag.setproperty(t, "initial", true)
                 set(t)
             end
-            tagkeys(screen[scr])
+            tagkeys(capi.screen[scr])
             t:emit_signal("property::name")
         end
         )
 end
---}}}
 
---{{{send: moves client to tag[idx]
+--send: moves client to tag[idx]
 -- maybe this isn't needed here in shifty?
 -- @param idx the tag number to send a client to
 function send(idx)
-    local scr = client.focus.screen or mouse.screen
+    local scr = capi.client.focus.screen or capi.mouse.screen
     local sel = awful.tag.selected(scr)
     local sel_idx = tag2index(scr, sel)
-    local tags = screen[scr]:tags()
+    local tags = capi.screen[scr]:tags()
     local target = awful.util.cycle(#tags, sel_idx + idx)
-    awful.client.movetotag(tags[target], client.focus)
+    awful.client.movetotag(tags[target], capi.client.focus)
     awful.tag.viewonly(tags[target])
 end
 
 function send_next() send(1) end
 function send_prev() send(-1) end
---}}}
 
---{{{pos2idx: translate shifty position to tag index
+--pos2idx: translate shifty position to tag index
 --@param pos: position (an integer)
 --@param scr: screen number
 function pos2idx(pos, scr)
     local v = 1
     if pos and scr then
-        for i = #screen[scr]:tags() , 1, -1 do
-            local t = screen[scr]:tags()[i]
+        for i = #capi.screen[scr]:tags() , 1, -1 do
+            local t = capi.screen[scr]:tags()[i]
             if awful.tag.getproperty(t, "position") and
                 awful.tag.getproperty(t, "position") <= pos then
                 v = i + 1
@@ -161,9 +165,8 @@ function pos2idx(pos, scr)
     end
     return v
 end
---}}}
 
---{{{select : helper function chooses the first non-nil argument
+--select : helper function chooses the first non-nil argument
 --@param args - table of arguments
 function select(args)
     for i, a in pairs(args) do
@@ -172,19 +175,19 @@ function select(args)
         end
     end
 end
---}}}
 
---{{{tagtoscr : move an entire tag to another screen
+--tagtoscr : move an entire tag to another screen
 --
 --@param scr : the screen to move tag to
 --@param t : the tag to be moved [awful.tag.selected()]
 --@return the tag
 function tagtoscr(scr, t)
     -- break if called with an invalid screen number
-    if not scr or scr < 1 or scr > screen.count() then return end
+    if not scr or scr < 1 or scr > capi.screen.count() then return end
     -- tag to move
     local otag = t or awful.tag.selected()
 
+    otag.screen = scr
     -- set screen and then reset tag to order properly
     if #otag:clients() > 0 then
         for _ , c in ipairs(otag:clients()) do
@@ -198,9 +201,8 @@ function tagtoscr(scr, t)
     end
     return otag
 end
----}}}
 
---{{{set : set a tags properties
+--set : set a tags properties
 --@param t: the tag
 --@param args : a table of optional (?) tag properties
 --@return t - the tag object
@@ -219,15 +221,15 @@ function set(t, args)
     local scr = args.screen or
     (not t.screen and preset.screen) or
     t.screen or
-    mouse.screen
+    capi.mouse.screen
 
     local clientstomove = nil
-    if scr > screen.count() then scr = screen.count() end
+    if scr > capi.screen.count() then scr = capi.screen.count() end
     if t.screen and scr ~= t.screen then
         tagtoscr(scr, t)
         t.screen = nil
     end
-    local tags = screen[scr]:tags()
+    local tags = capi.screen[scr]:tags()
 
     -- try to guess position from the name
     local guessed_position = nil
@@ -276,10 +278,10 @@ function set(t, args)
                         config.defaults.max_clients},
         position = select{args.position, preset.position, guessed_position,
                         awful.tag.getproperty(t, "position")},
-        icon = select{args.icon and image(args.icon),
-                        preset.icon and image(preset.icon),
+        icon = select{args.icon and capi.image(args.icon),
+                        preset.icon and capi.image(preset.icon),
                         awful.tag.getproperty(t, "icon"),
-                    config.defaults.icon and image(config.defaults.icon)},
+                    config.defaults.icon and capi.image(config.defaults.icon)},
         icon_only = select{args.icon_only, preset.icon_only,
                         awful.tag.getproperty(t, "icon_only"),
                         config.defaults.icon_only},
@@ -340,7 +342,7 @@ function set(t, args)
     end
 
     -- set tag properties and push the new tag table
-    screen[scr]:tags(tags)
+    capi.screen[scr]:tags(tags)
     for prop, val in pairs(props) do awful.tag.setproperty(t, prop, val) end
 
     -- execute run/spawn
@@ -360,17 +362,15 @@ end
 
 function shift_next() set(awful.tag.selected(), {rel_index = 1}) end
 function shift_prev() set(awful.tag.selected(), {rel_index = -1}) end
---}}}
 
---{{{add : adds a tag
+--add : adds a tag
 --@param args: table of optional arguments
---
 function add(args)
     if not args then args = {} end
     local name = args.name or " "
 
     -- initialize a new tag object and its data structure
-    local t = tag{name = name}
+    local t = capi.tag{name = name}
 
     -- tell set() that this is the first time
     awful.tag.setproperty(t, "initial", true)
@@ -380,7 +380,7 @@ function add(args)
 
     -- unless forbidden or if first tag on the screen, show the tag
     if not (awful.tag.getproperty(t, "nopopup") or args.noswitch) or
-        #screen[t.screen]:tags() == 1 then
+        #capi.screen[t.screen]:tags() == 1 then
         awful.tag.viewonly(t)
     end
 
@@ -393,25 +393,25 @@ function add(args)
         -- from being rendered until input
         awful.tag.setproperty(t, "initial", true)
         local f
+        local tmr
         if args.position then
             f = function() rename(t, args.rename, true); tmr:stop() end
         else
             f = function() rename(t); tmr:stop() end
         end
-        tmr = timer({timeout = 0.01})
+        tmr = capi.timer({timeout = 0.01})
         tmr:add_signal("timeout", f)
         tmr:start()
     end
 
     return t
 end
---}}}
 
---{{{del : delete a tag
+--del : delete a tag
 --@param tag : the tag to be deleted [current tag]
 function del(tag)
-    local scr = (tag and tag.screen) or mouse.screen or 1
-    local tags = screen[scr]:tags()
+    local scr = (tag and tag.screen) or capi.mouse.screen or 1
+    local tags = capi.screen[scr]:tags()
     local sel = awful.tag.selected(scr)
     local t = tag or sel
     local idx = tag2index(scr, t)
@@ -441,11 +441,10 @@ function del(tag)
     end
 
     -- FIXME: what is this for??
-    if client.focus then client.focus:raise() end
+    if capi.client.focus then capi.client.focus:raise() end
 end
---}}}
 
---{{{is_client_tagged : replicate behavior in tag.c - returns true if the
+--is_client_tagged : replicate behavior in tag.c - returns true if the
 --given client is tagged with the given tag
 function is_client_tagged(tag, client)
     for i, c in ipairs(tag:clients()) do
@@ -455,9 +454,8 @@ function is_client_tagged(tag, client)
     end
     return false
 end
---}}}
 
---{{{match : handles app->tag matching, a replacement for the manage hook in
+--match : handles app->tag matching, a replacement for the manage hook in
 --            rc.lua
 --@param c : client to be matched
 function match(c, startup)
@@ -470,113 +468,172 @@ function match(c, startup)
     local role = c.role
     local name = c.name
     local keys = config.clientkeys or c:keys() or {}
-    local target_screen = mouse.screen
+    local target_screen = capi.mouse.screen
 
     c.border_color = beautiful.border_normal
     c.border_width = beautiful.border_width
 
     -- try matching client to config.apps
     for i, a in ipairs(config.apps) do
-        -- {{{
         if a.match then
-            for k, w in ipairs(a.match) do
-                if
-                    (cls and cls:find(w)) or
-                    (inst and inst:find(w)) or
-                    (name and name:find(w)) or
-                    (role and role:find(w)) or
-                    (typ and typ:find(w)) then
-                    if a.screen then target_screen = a.screen end
-                    if a.tag then
-                        if type(a.tag) == "string" then
-                            target_tag_names = {a.tag}
-                        else
-                            target_tag_names = a.tag
-                        end
+            local matched = false
+            -- match only class
+            if not matched and cls and a.match.class then
+                for k, w in ipairs(a.match.class) do
+                    matched = cls:find(w)
+                    if matched then
+                        break
                     end
-                    if a.startup and startup then
-                        a = awful.util.table.join(a, a.startup)
+                end
+            end
+            -- match only instance
+            if not matched and inst and a.match.instance then
+                for k, w in ipairs(a.match.instance) do
+                    matched = inst:find(w)
+                    if matched then
+                        break
                     end
-                    if a.geometry ~=nil then
-                        geom = {x = a.geometry[1],
-                        y = a.geometry[2],
-                        width = a.geometry[3],
-                        height = a.geometry[4]}
+                end
+            end
+            -- match only name
+            if not matched and name and a.match.name then
+                for k, w in ipairs(a.match.name) do
+                    matched = name:find(w)
+                    if matched then
+                        break
                     end
-                    if a.float ~= nil then float = a.float end
-                    if a.slave ~=nil then slave = a.slave end
-                    if a.border_width ~= nil then
-                        c.border_width = a.border_width
+                end
+            end
+            -- match only role
+            if not matched and role and a.match.role then
+                for k, w in ipairs(a.match.role) do
+                    matched = role:find(w)
+                    if matched then
+                        break
                     end
-                    if a.nopopup ~=nil then nopopup = a.nopopup end
-                    if a.intrusive ~=nil then
-                        intrusive = a.intrusive
+                end
+            end
+            -- match only type
+            if not matched and typ and a.match.type then
+                for k, w in ipairs(a.match.type) do
+                    matched = typ:find(w)
+                    if matched then
+                        break
                     end
-                    if a.fullscreen ~=nil then
-                        c.fullscreen = a.fullscreen
+                end
+            end
+            -- check everything else against all attributes
+            if not matched then
+                for k, w in ipairs(a.match) do
+                    matched = (cls and cls:find(w)) or
+                            (inst and inst:find(w)) or
+                            (name and name:find(w)) or
+                            (role and role:find(w)) or
+                            (typ and typ:find(w))
+                    if matched then
+                        break
                     end
-                    if a.honorsizehints ~=nil then
-                        c.size_hints_honor = a.honorsizehints
+                end
+            end
+            -- set attributes
+            if matched then
+                if a.screen then target_screen = a.screen end
+                if a.tag then
+                    if type(a.tag) == "string" then
+                        target_tag_names = {a.tag}
+                    else
+                        target_tag_names = a.tag
                     end
-                    if a.kill ~=nil then c:kill(); return end
-                    if a.ontop ~= nil then c.ontop = a.ontop end
-                    if a.above ~= nil then c.above = a.above end
-                    if a.below ~= nil then c.below = a.below end
-                    if a.buttons ~= nil then
-                        c:buttons(a.buttons)
-                    end
-                    if a.nofocus ~= nil then nofocus = a.nofocus end
-                    if a.keys ~= nil then
-                        keys = awful.util.table.join(keys, a.keys)
-                    end
-                    if a.hidden ~= nil then c.hidden = a.hidden end
-                    if a.minimized ~= nil then
-                        c.minimized = a.minimized
-                    end
-                    if a.dockable ~= nil then
-                        awful.client.dockable.set(c, a.dockable)
-                    end
-                    if a.urgent ~= nil then
-                        c.urgent = a.urgent
-                    end
-                    if a.opacity ~= nil then
-                        c.opacity = a.opacity
-                    end
-                    if a.run ~= nil then run = a.run end
-                    if a.sticky ~= nil then c.sticky = a.sticky end
-                    if a.wfact ~= nil then wfact = a.wfact end
-                    if a.struts then struts = a.struts end
-                    if a.skip_taskbar ~= nil then
-                        c.skip_taskbar = a.skip_taskbar
-                    end
-                    if a.props then
-                        for kk, vv in pairs(a.props) do
-                            awful.client.property.set(c, kk, vv)
-                        end
+                end
+                if a.startup and startup then
+                    a = awful.util.table.join(a, a.startup)
+                end
+                if a.geometry ~=nil then
+                    geom = {x = a.geometry[1],
+                    y = a.geometry[2],
+                    width = a.geometry[3],
+                    height = a.geometry[4]}
+                end
+                if a.float ~= nil then float = a.float end
+                if a.slave ~=nil then slave = a.slave end
+                if a.border_width ~= nil then
+                    c.border_width = a.border_width
+                end
+                if a.nopopup ~=nil then nopopup = a.nopopup end
+                if a.intrusive ~=nil then
+                    intrusive = a.intrusive
+                end
+                if a.fullscreen ~=nil then
+                    c.fullscreen = a.fullscreen
+                end
+                if a.honorsizehints ~=nil then
+                    c.size_hints_honor = a.honorsizehints
+                end
+                if a.kill ~=nil then c:kill(); return end
+                if a.ontop ~= nil then c.ontop = a.ontop end
+                if a.above ~= nil then c.above = a.above end
+                if a.below ~= nil then c.below = a.below end
+                if a.buttons ~= nil then
+                    c:buttons(a.buttons)
+                end
+                if a.nofocus ~= nil then nofocus = a.nofocus end
+                if a.keys ~= nil then
+                    keys = awful.util.table.join(keys, a.keys)
+                end
+                if a.hidden ~= nil then c.hidden = a.hidden end
+                if a.minimized ~= nil then
+                    c.minimized = a.minimized
+                end
+                if a.dockable ~= nil then
+                    awful.client.dockable.set(c, a.dockable)
+                end
+                if a.urgent ~= nil then
+                    c.urgent = a.urgent
+                end
+                if a.opacity ~= nil then
+                    c.opacity = a.opacity
+                end
+                if a.run ~= nil then run = a.run end
+                if a.sticky ~= nil then c.sticky = a.sticky end
+                if a.wfact ~= nil then wfact = a.wfact end
+                if a.struts then struts = a.struts end
+                if a.skip_taskbar ~= nil then
+                    c.skip_taskbar = a.skip_taskbar
+                end
+                if a.props then
+                    for kk, vv in pairs(a.props) do
+                        awful.client.property.set(c, kk, vv)
                     end
                 end
             end
         end
     end
-    --}}}
 
     -- set key bindings
     c:keys(keys)
 
+    -- Add titlebars to all clients when the float, remove when they are
+    -- tiled.
+    if config.float_bars then
+        c:add_signal("property::floating", function(c)
+            if awful.client.floating.get(c) then
+                awful.titlebar.add(c, {modkey=modkey})
+            else
+                awful.titlebar.remove(c)
+            end
+            awful.placement.no_offscreen(c)
+        end)
+    end
+
     -- set properties of floating clients
     if float ~= nil then
-        -- {{{
         awful.client.floating.set(c, float)
-        -- if config.float_bars then
-        -- awful.titlebar.add(c, modkey)
-        awful.placement.centered(c, c.transient_for)
         awful.placement.no_offscreen(c)
     end
-    --}}}
 
     local sel = awful.tag.selectedlist(target_screen)
     if not target_tag_names or #target_tag_names == 0 then
-        -- {{{if not matched to some names try putting
+        -- if not matched to some names try putting
         -- client in c.transient_for or current tags
         if c.transient_for then
             target_tags = c.transient_for:tags()
@@ -591,11 +648,10 @@ function match(c, startup)
             end
         end
     end
-    --}}}
 
     if (not target_tag_names or #target_tag_names == 0) and
         (not target_tags or #target_tags == 0) then
-        -- {{{if we still don't know any target names/tags guess
+        -- if we still don't know any target names/tags guess
         -- name from class or use default
         if config.guess_name and cls then
             target_tag_names = {cls:lower()}
@@ -603,10 +659,9 @@ function match(c, startup)
             target_tag_names = {config.default_name}
         end
     end
-    --}}}
 
     if #target_tag_names > 0 and #target_tags == 0 then
-        -- {{{translate target names to tag objects, creating
+        -- translate target names to tag objects, creating
         -- missing ones
         for i, tn in ipairs(target_tag_names) do
             local res = {}
@@ -632,7 +687,6 @@ function match(c, startup)
             end
         end
     end
-    --}}}
 
     -- set client's screen/tag if needed
     target_screen = target_tags[1].screen or target_screen
@@ -647,7 +701,7 @@ function match(c, startup)
     local showtags = {}
     local u = nil
     if #target_tags > 0 and not startup then
-        -- {{{switch or highlight
+        -- switch or highlight
         for i, t in ipairs(target_tags) do
             if not (nopopup or awful.tag.getproperty(t, "nopopup")) then
                 table.insert(showtags, t)
@@ -670,44 +724,41 @@ function match(c, startup)
                 awful.tag.viewmore(showtags, c.screen)
             end
         end
-    end --}}}
+    end
 
     if not (nofocus or c.hidden or c.minimized) then
-        --{{{focus and raise accordingly or lower if supressed
+        --focus and raise accordingly or lower if supressed
         if (target and target ~= sel) and
            (awful.tag.getproperty(target, "nopopup") or nopopup)  then
             awful.client.focus.history.add(c)
         else
-            client.focus = c
+            capi.client.focus = c
         end
         c:raise()
     else
         c:lower()
     end
-    --}}}
 
     if config.sloppy then
-        -- {{{Enable sloppy focus
+        -- Enable sloppy focus
         c:add_signal("mouse::enter", function(c)
             if awful.client.focus.filter(c) and
                 awful.layout.get(c.screen) ~= awful.layout.suit.magnifier then
-                client.focus = c
+                capi.client.focus = c
             end
         end)
     end
-    --}}}
 
     -- execute run function if specified
     if run then run(c, target) end
 
 end
---}}}
 
---{{{sweep : hook function that marks tags as used, visited,
+--sweep : hook function that marks tags as used, visited,
 --deserted also handles deleting used and empty tags
 function sweep()
-    for s = 1, screen.count() do
-        for i, t in ipairs(screen[s]:tags()) do
+    for s = 1, capi.screen.count() do
+        for i, t in ipairs(capi.screen[s]:tags()) do
             local clients = t:clients()
             local sticky = 0
             for i, c in ipairs(clients) do
@@ -720,10 +771,11 @@ function sweep()
                         not awful.tag.getproperty(t, "leave_kills") then
                         local delay = awful.tag.getproperty(t, "sweep_delay")
                         if delay then
+                            local tmr
                             local f = function()
                                         del(t); tmr:stop()
                                     end
-                            tmr = timer({timeout = delay})
+                            tmr = capi.timer({timeout = delay})
                             tmr:add_signal("timeout", f)
                             tmr:start()
                         else
@@ -745,20 +797,19 @@ function sweep()
         end
     end
 end
---}}}
 
---{{{getpos : returns a tag to match position
+--getpos : returns a tag to match position
 -- @param pos : the index to find
 -- @return v : the tag (found or created) at position == 'pos'
 function getpos(pos, scr_arg)
     local v = nil
     local existing = {}
     local selected = nil
-    local scr = scr_arg or mouse.screen or 1
+    local scr = scr_arg or capi.mouse.screen or 1
 
     -- search for existing tag assigned to pos
-    for i = 1, screen.count() do
-        for j, t in ipairs(screen[i]:tags()) do
+    for i = 1, capi.screen.count() do
+        for j, t in ipairs(capi.screen[i]:tags()) do
             if awful.tag.getproperty(t, "position") == pos then
                 table.insert(existing, t)
                 if t.selected and i == scr then
@@ -805,12 +856,11 @@ function getpos(pos, scr_arg)
     end
     return v
 end
---}}}
 
---{{{init : search shifty.config.tags for initial set of
+--init : search shifty.config.tags for initial set of
 --tags to open
 function init()
-    local numscr = screen.count()
+    local numscr = capi.screen.count()
 
     for i, j in pairs(config.tags) do
         local scr = j.screen or {1}
@@ -828,9 +878,8 @@ function init()
         end
     end
 end
---}}}
 
---{{{count : utility function returns the index of a table element
+--count : utility function returns the index of a table element
 --FIXME: this is currently used only in remove_dup, so is it really
 --necessary?
 function count(table, element)
@@ -840,9 +889,8 @@ function count(table, element)
     end
     return v
 end
---}}}
 
---{{{remove_dup : used by shifty.completion when more than one
+--remove_dup : used by shifty.completion when more than one
 --tag at a position exists
 function remove_dup(table)
     local v = {}
@@ -851,9 +899,8 @@ function remove_dup(table)
     end
     return v
 end
---}}}
 
---{{{completion : prompt completion
+--completion : prompt completion
 --
 function completion(cmd, cur_pos, ncomp, sources, matchers)
 
@@ -888,10 +935,10 @@ function completion(cmd, cur_pos, ncomp, sources, matchers)
         -- current screen
         existing = function()
             local ret = {}
-            for i = 1, screen.count() do
-                local s = awful.util.cycle(screen.count(),
-                                            mouse.screen + i - 1)
-                local tags = screen[s]:tags()
+            for i = 1, capi.screen.count() do
+                local s = awful.util.cycle(capi.screen.count(),
+                                            capi.mouse.screen + i - 1)
+                local tags = capi.screen[s]:tags()
                 for j, t in pairs(tags) do
                     table.insert(ret, t.name)
                 end
@@ -950,18 +997,16 @@ function completion(cmd, cur_pos, ncomp, sources, matchers)
     -- return match and position
     return matches[ncomp], cur_pos
 end
---}}}
 
--- {{{tagkeys : hook function that sets keybindings per tag
+-- tagkeys : hook function that sets keybindings per tag
 function tagkeys(s)
     local sel = awful.tag.selected(s.index)
     local keys = awful.tag.getproperty(sel, "keys") or
                     config.globalkeys
-    if keys and sel.selected then root.keys(keys) end
+    if keys and sel.selected then capi.root.keys(keys) end
 end
---}}}
 
--- {{{squash_keys: helper function which removes duplicate
+-- squash_keys: helper function which removes duplicate
 -- keybindings by picking only the last one to be listed in keys
 -- table arg
 function squash_keys(keys)
@@ -975,9 +1020,8 @@ function squash_keys(keys)
     end
     return ret
 end
---}}}
 
--- {{{getlayout: returns a layout by name
+-- getlayout: returns a layout by name
 function getlayout(name)
     for _, layout in ipairs(config.layouts) do
         if awful.layout.getname(layout) == name then
@@ -985,18 +1029,15 @@ function getlayout(name)
         end
     end
 end
---}}}
 
--- {{{signals
-client.add_signal("manage", match)
-client.add_signal("unmanage", sweep)
-client.remove_signal("manage", awful.tag.withcurrent)
+-- signals
+capi.client.add_signal("manage", match)
+capi.client.add_signal("unmanage", sweep)
+capi.client.remove_signal("manage", awful.tag.withcurrent)
 
-for s = 1, screen.count() do
+for s = 1, capi.screen.count() do
     awful.tag.attached_add_signal(s, "property::selected", sweep)
     awful.tag.attached_add_signal(s, "tagged", sweep)
-    screen[s]:add_signal("tag::history::update", tagkeys)
+    capi.screen[s]:add_signal("tag::history::update", tagkeys)
 end
---}}}
 
--- vim:set ft=lua fdm=marker tw=80 ts=4 sw=4 et sta ai si: --

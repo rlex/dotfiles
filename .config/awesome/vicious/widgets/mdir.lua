@@ -11,7 +11,8 @@ local setmetatable = setmetatable
 
 
 -- Mdir: provides the number of new and unread messages in Maildir structures/dirs
-module("vicious.widgets.mdir")
+-- vicious.widgets.mdir
+local mdir = {}
 
 
 -- {{{ Maildir widget type
@@ -23,12 +24,12 @@ local function worker(format, warg)
 
     for i=1, #warg do
         -- Recursively find new messages
-        local f = io.popen("find "..warg[i].." -type f -wholename '*/new/*'")
+        local f = io.popen("find '"..warg[i].."' -type f -wholename '*/new/*'")
         for line in f:lines() do count.new = count.new + 1 end
         f:close()
 
         -- Recursively find "old" messages lacking the Seen flag
-        local f = io.popen("find "..warg[i].." -type f -regex '.*/cur/.*2,[^S]*$'")
+        local f = io.popen("find '"..warg[i].."' -type f -regex '.*/cur/.*2,[^S]*$'")
         for line in f:lines() do count.cur = count.cur + 1 end
         f:close()
     end
@@ -37,4 +38,4 @@ local function worker(format, warg)
 end
 -- }}}
 
-setmetatable(_M, { __call = function(_, ...) return worker(...) end })
+return setmetatable(mdir, { __call = function(_, ...) return worker(...) end })

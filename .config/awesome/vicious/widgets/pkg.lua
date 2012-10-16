@@ -10,8 +10,9 @@ local setmetatable = setmetatable
 -- }}}
 
 
--- Pkg: provides number of pending updates on GNU/Linux
-module("vicious.widgets.pkg")
+-- Pkg: provides number of pending updates on UNIX systems
+-- vicious.widgets.pkg
+local pkg = {}
 
 
 -- {{{ Packages widget type
@@ -22,24 +23,25 @@ local function worker(format, warg)
     local updates = 0
     local manager = {
         ["Arch"]   = { cmd = "pacman -Qu" },
-        ["Arch S"] = { cmd = "yes | pacman -Sup", sub = 2 },
+        ["Arch S"] = { cmd = "yes | pacman -Sup", sub = 1 },
         ["Debian"] = { cmd = "apt-show-versions -u -b" },
         ["Ubuntu"] = { cmd = "aptitude search '~U'" },
         ["Fedora"] = { cmd = "yum list updates", sub = 3 },
+        ["FreeBSD"] ={ cmd = "pkg_version -I -l '<'" },
         ["Mandriva"]={ cmd = "urpmq --auto-select" }
     }
 
     -- Check if updates are available
-    local pkg = manager[warg]
-    local f = io.popen(pkg.cmd)
+    local _pkg = manager[warg]
+    local f = io.popen(_pkg.cmd)
 
     for line in f:lines() do
         updates = updates + 1
     end
     f:close()
 
-    return {pkg.sub and math.max(updates-pkg.sub, 0) or updates}
+    return {_pkg.sub and math.max(updates-_pkg.sub, 0) or updates}
 end
 -- }}}
 
-setmetatable(_M, { __call = function(_, ...) return worker(...) end })
+return setmetatable(pkg, { __call = function(_, ...) return worker(...) end })

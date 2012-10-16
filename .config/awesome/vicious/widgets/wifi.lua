@@ -5,7 +5,9 @@
 
 -- {{{ Grab environment
 local tonumber = tonumber
+local math = { ceil = math.ceil }
 local setmetatable = setmetatable
+local helpers = require("vicious.helpers")
 local io = {
     open = io.open,
     popen = io.popen
@@ -18,22 +20,24 @@ local string = {
 
 
 -- Wifi: provides wireless information for a requested interface
-module("vicious.widgets.wifi")
+-- vicious.widgets.wifi
+local wifi = {}
 
-
--- Initialize function tables
-local winfo = {
-    ["{ssid}"] = "N/A",
-    ["{mode}"] = "N/A",
-    ["{chan}"] = 0,
-    ["{rate}"] = 0,
-    ["{link}"] = 0,
-    ["{sign}"] = 0
-}
 
 -- {{{ Wireless widget type
 local function worker(format, warg)
     if not warg then return end
+
+    -- Default values
+    local winfo = {
+        ["{ssid}"] = "N/A",
+        ["{mode}"] = "N/A",
+        ["{chan}"] = 0,
+        ["{rate}"] = 0,
+        ["{link}"] = 0,
+        ["{linp}"] = 0,
+        ["{sign}"] = 0
+    }
 
     -- Get data from iwconfig where available
     local iwconfig = "/sbin/iwconfig"
@@ -55,7 +59,7 @@ local function worker(format, warg)
     -- Output differs from system to system, some stats can be
     -- separated by =, and not all drivers report all stats
     winfo["{ssid}"] =  -- SSID can have almost anything in it
-      string.match(iw, 'ESSID[=:]"([%w%p]+[%s]*[%w%p]*]*)"') or winfo["{ssid}"]
+      helpers.escape(string.match(iw, 'ESSID[=:]"(.-)"') or winfo["{ssid}"])
     winfo["{mode}"] =  -- Modes are simple, but also match the "-" in Ad-Hoc
       string.match(iw, "Mode[=:]([%w%-]*)") or winfo["{mode}"]
     winfo["{chan}"] =  -- Channels are plain digits
@@ -67,8 +71,11 @@ local function worker(format, warg)
     winfo["{sign}"] =  -- Signal level can be a negative value, don't display decibel notation
       tonumber(string.match(iw, "Signal level[=:]([%-]?[%d]+)") or winfo["{sign}"])
 
+    -- Link quality percentage if quality was available
+    if winfo["{link}"] ~= 0 then winfo["{linp}"] = math.ceil(winfo["{link}"] / 0.7) end
+
     return winfo
 end
 -- }}}
 
-setmetatable(_M, { __call = function(_, ...) return worker(...) end })
+return setmetatable(wifi, { __call = function(_, ...) return worker(...) end })

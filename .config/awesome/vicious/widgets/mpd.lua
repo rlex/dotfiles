@@ -13,7 +13,8 @@ local helpers = require("vicious.helpers")
 
 
 -- Mpd: provides Music Player Daemon information
-module("vicious.widgets.mpd")
+-- vicious.widgets.mpd
+local mpd = {}
 
 
 -- {{{ MPD widget type
@@ -24,13 +25,15 @@ local function worker(format, warg)
         ["{Artist}"] = "N/A",
         ["{Title}"]  = "N/A",
         ["{Album}"]  = "N/A",
-        ["{Genre}"]  = "N/A"
+        ["{Genre}"]  = "N/A",
+        --["{Name}"] = "N/A",
+        --["{file}"] = "N/A",
     }
 
     -- Fallback to MPD defaults
-    local pass = warg and warg[1] or "\"\""
-    local host = warg and warg[2] or "127.0.0.1"
-    local port = warg and warg[3] or "6600"
+    local pass = warg and (warg.password or warg[1]) or "\"\""
+    local host = warg and (warg.host or warg[2]) or "127.0.0.1"
+    local port = warg and (warg.port or warg[3]) or "6600"
 
     -- Construct MPD client options
     local mpdh = "telnet://"..host..":"..port
@@ -47,6 +50,8 @@ local function worker(format, warg)
             elseif k == "Title"  then mpd_state["{"..k.."}"] = helpers.escape(v)
             elseif k == "Album"  then mpd_state["{"..k.."}"] = helpers.escape(v)
             elseif k == "Genre"  then mpd_state["{"..k.."}"] = helpers.escape(v)
+            --elseif k == "Name" then mpd_state["{"..k.."}"] = helpers.escape(v)
+            --elseif k == "file" then mpd_state["{"..k.."}"] = helpers.escape(v)
             end
         end
     end
@@ -56,4 +61,4 @@ local function worker(format, warg)
 end
 -- }}}
 
-setmetatable(_M, { __call = function(_, ...) return worker(...) end })
+return setmetatable(mpd, { __call = function(_, ...) return worker(...) end })
