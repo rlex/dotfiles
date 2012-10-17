@@ -29,7 +29,7 @@ URxvt.borderless: true
 
 !{{{ Xterm rules
 XTerm*FaceName: terminus
-XTerm*FaceSize: 8
+XTerm*FaceSize: 11
 !}}}
 
 !{{{ Yeahconsole rules
