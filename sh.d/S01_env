@@ -1,8 +1,8 @@
 #### paths
 #source system files
-if [ -x /etc/profile ]; then
-    source "/etc/profile"
-fi
+#if [ -x /etc/profile ]; then
+#    source "/etc/profile"
+#fi
 
 #history settings
 export HISTCONTROL=ignoredups
@@ -12,10 +12,12 @@ export HISTTIMEFORMAT="[%Y-%m-%d - %H:%M:%S]"
 export HISTIGNORE="&:ls:ll:la:l:pwd:exit:clear:b:r:exit:env:date:.:..:...:....:.....:pwd:cfg:rb:eb:!!:fg:bg:cd:h:mc"
 
 #main path
-export PATH="/usr/local/sbin:/usr/local/bin:/usr/libexec:/sbin:$HOME/.rc/.bin:$PATH"
+export PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:$HOME/.rc/.bin:$PATH"
 #rvm
-if [ -x $HOME/.rvm/scripts/rvm ]; then
-    source "$HOME/.rvm/scripts/rvm"
+if [[ -s "$HOME/.rvm/scripts/rvm" ]] ; then
+  source "$HOME/.rvm/scripts/rvm"
+elif [[ -s "/usr/local/rvm/scripts/rvm" ]] ; then
+  source "/usr/local/rvm/scripts/rvm"
 fi
 #toast
 if [ -x $HOME/.toast/armed/bin/toast ]; then
