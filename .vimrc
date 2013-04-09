@@ -65,11 +65,8 @@ Bundle "Shougo/neocomplcache"
 Bundle "ervandew/supertab"
 
 Bundle "TaskList.vim"
-Bundle "taglist.vim"
 Bundle "buftabs"
 Bundle "Rename"
-Bundle "AutoTag"
-Bundle "project.tar.gz"
 Bundle "sudo.vim"
 " }}}
 
