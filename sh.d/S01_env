@@ -1,8 +1,8 @@
 #### paths
 #source system files
-#if [ -x /etc/profile ]; then
-#    source "/etc/profile"
-#fi
+if [ -x /etc/profile ]; then
+    source "/etc/profile"
+fi
 
 #history settings
 export HISTCONTROL=ignoredups
