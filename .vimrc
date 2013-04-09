@@ -37,11 +37,13 @@ set sw=4
 set sts=4
 set nolist
 set expandtab
-" Persistent undo
-set undodir=~/.vim/swap
-set undofile
-set undolevels=1000
-set undoreload=10000
+" Persistent undo. Only in vim >= 7.3
+if v:version >= 703
+    set undodir=~/.vim/swap
+    set undofile
+    set undolevels=1000
+    set undoreload=10000
+endif
 " Turn on syntax highlighting
 syntax on
 " Status line settings
