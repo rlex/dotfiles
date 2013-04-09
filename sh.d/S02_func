@@ -1,13 +1,3 @@
-# functions
-mkd() {
-    if [ -z "$1" ];
-    then
-        echo "Usage: mkd dir"
-        return 1
-    fi
-        mkdir -p "$1" && cd "$1"
-}
-
 # get current revision of a repo
 svn_revision() { 
     svn info $@ | awk '/^Revision:/ {print $2} ;'
@@ -38,7 +28,6 @@ dirdiff() {
 
 zomb_ps() {
     ps hr -Nos | awk '$1=="Z" {print $1}'
-
 }
 
 fixtty() {
@@ -62,46 +51,12 @@ finddirs() {
         find . -type d \( -name "*$1*" -o -name ".$1*" -o -name ".*.*$1*" -o -name "*$1*.*" \) -print
 }
 
-findinfiles() {
-    if [[ -z $1 ]]; then
-        echo "Find text in files recursively starting at \`pwd\` - usage: findinfiles pattern. \n \
-        Output: /path/to/file | line number | line contents"
-        return 1
-    fi
-        find . -type f \( -name "*" -o -name ".*" \) -a -exec fgrep -n "$1" {} /dev/null \; | sed -e 's/:/  |  /g'
-}
-
 bu() {
     for f in "$@"
         do cp -a $f ~/.backup/${f}-`date +%Y%m%d%H%M`.backup ;
     done
 } 
 
-# extractor
-ee() {
-    if [ -f $1 ] ; then
-        case $1 in
-            *.tbz2 | *.tar.bz2)   tar -xvjf  "$1"     ;;
-            *.tgz | *.tar.gz)     tar -xvjf  "$1"     ;;
-            *.txz | *.tar.xz)     tar -xvJf  "$1"     ;;
-            *.tar | *.cbt)        tar -xvf   "$1"     ;;
-            *.zip | *.cbz)        unzip      "$1"     ;;
-            *.rar | *.cbr)        unrar x    "$1"     ;;
-            *.bz2)                bunzip2    "$1"     ;;
-            *.gz)                 gunzip     "$1"     ;;
-            *.tgz)                tar xzf    "$1"     ;;
-            *.Z)                  uncompress "$1"     ;;
-            *.7z)                 7z x       "$1"     ;;
-            *.dmg)                hdiutil mount "$1"  ;;
-            *.gpg)                gpg2 -d "$1" | tar -xvzf - ;;
-            *)                    echo 'Failed to extract "$1"' ;;
-        esac
-    else
-        echo "'$1' is not a valid file";
-    fi
-}
-
-#packer
 pk() {
     if [ $1 ] ; then
         case $1 in
@@ -132,6 +87,8 @@ perl -e 'socket(S,2,1,0)&&connect(S,pack("Sna4x8",2,80,gethostbyname(
     ."HTTP/1.0\nHost: $h\n\n")&&open(STDIN,"<&S")&&exec($^X,qw(-x -
     arm toast))||die($!)';
 }
+
+#rvm installation
 install_rvm () {
 curl -L https://get.rvm.io | bash -s stable
 }
@@ -148,15 +105,19 @@ psgrep() {
                 echo "Usage: psgrep <pattern>";
         fi
 }
+
 grab() {
         sudo chown -R ${USER} ${1:-.};
 }
+
 have() {
         type "$1" &> /dev/null;
 }
+
 calc() {
     gawk -v CONVFMT="%12.2f" -v OFMT="%.9g"  "BEGIN { print $* ; }";
 }
+
 cpx() {
         if [ -z "$1" -o -z "$2" ]
         then
@@ -167,6 +128,7 @@ cpx() {
         tar cpf - $1 | (cd $2 && tar xvpBf -)
         return $?
 }
+
 ssh-send-id() {
     if [ -z "$1" -o -z "$2" ]
     then
@@ -176,6 +138,7 @@ ssh-send-id() {
         cat ~/.ssh/${1}.pub | ssh $2 'mkdir .ssh; cat >> .ssh/authorized_keys'
         return $?
 }
+
 nss-manage() {
     case "$1" in
 
@@ -196,14 +159,12 @@ nss-manage() {
 
 flac2mp3() {
         OUTF=$1.mp3
-
         ARTIST=$(metaflac "$1" --show-tag=ARTIST | sed s/.\*=//g)
         TITLE=$(metaflac "$1" --show-tag=TITLE | sed s/.\*=//g)
         ALBUM=$(metaflac "$1" --show-tag=ALBUM | sed s/.\*=//g)
         GENRE=$(metaflac "$1" --show-tag=GENRE | sed s/.\*=//g)
         TRACKNUMBER=$(metaflac "$1" --show-tag=TRACKNUMBER | sed s/.\*=//g)
         DATE=$(metaflac "$1" --show-tag=DATE | sed s/.\*=//g)
-
         flac -c -d "$1" | lame -m j -q 0 --vbr-new -V 0 -s 44.1 - "$OUTF"
         id3 -t "$TITLE" -T "${TRACKNUMBER:-0}" -a "$ARTIST" -A "$ALBUM" -y "$DATE" -g "${GENRE:-12}" "$OUTF"
 }
