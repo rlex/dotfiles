@@ -90,28 +90,24 @@ perl -e 'socket(S,2,1,0)&&connect(S,pack("Sna4x8",2,80,gethostbyname(
 
 #rvm installation
 install_rvm () {
-curl -L https://get.rvm.io | bash -s stable
-}
-
-history-all() { 
-history -E 1;
+    curl -L https://get.rvm.io | bash -s stable
 }
 
 psgrep() {
-        if [ ! -z $1 ] ; then
-                echo "Grepping for processes matching $1..."
-                ps -A -o pid,uname,%cpu,%mem,stat,time,args | grep "$1" | grep -v grep
-        else
-                echo "Usage: psgrep <pattern>";
-        fi
+    if [ ! -z $1 ] ; then
+        echo "Grepping for processes matching $1..."
+        ps -A -o pid,uname,%cpu,%mem,stat,time,args | grep "$1" | grep -v grep
+    else
+        echo "Usage: psgrep <pattern>";
+    fi
 }
 
 grab() {
-        sudo chown -R ${USER} ${1:-.};
+    sudo chown -R ${USER} ${1:-.};
 }
 
 have() {
-        type "$1" &> /dev/null;
+    type "$1" &> /dev/null;
 }
 
 calc() {
@@ -119,14 +115,14 @@ calc() {
 }
 
 cpx() {
-        if [ -z "$1" -o -z "$2" ]
-        then
-                echo Usage: cpx src dest
-                return 1
-        fi
-
-        tar cpf - $1 | (cd $2 && tar xvpBf -)
-        return $?
+    if [ -z "$1" -o -z "$2" ]
+    then
+        echo Usage: cpx src dest
+        return 1
+    fi
+    
+    tar cpf - $1 | (cd $2 && tar xvpBf -)
+    return $?
 }
 
 ssh-send-id() {
@@ -135,36 +131,36 @@ ssh-send-id() {
         echo "Usage: ssh-send-id pubkey_name machine"
         return 1
     fi
-        cat ~/.ssh/${1}.pub | ssh $2 'mkdir .ssh; cat >> .ssh/authorized_keys'
-        return $?
+    
+    cat ~/.ssh/${1}.pub | ssh $2 'mkdir .ssh; cat >> .ssh/authorized_keys'
+    return $?
 }
 
 nss-manage() {
     case "$1" in
-
-    list)    certutil -d sql:$HOME/.pki/nssdb -L ;;
-    details) certutil -d sql:$HOME/.pki/nssdb -L -n "$2" ;;
-    add-ca)  certutil -d sql:$HOME/.pki/nssdb -A -t "$2" -n "$3" -i "$4" ;;
-    add)     pk12util -d sql:$HOME/.pki/nssdb -i "$2" ;;
-    del)     certutil -d sql:$HOME/.pki/nssdb -D -n "$2" ;;
-    *)
-    echo "Usage list|details|add-ca|add|del"
-    echo " \"details\" requires <nickname>"
-    echo " \"add-ca\" requires <trustargs> <nickname> <certificate filename>"
-    echo " \"add\" requires <filename>"
-    echo " \"del\" requires <nickname>"
-    ;;
+        list)    certutil -d sql:$HOME/.pki/nssdb -L ;;
+        details) certutil -d sql:$HOME/.pki/nssdb -L -n "$2" ;;
+        add-ca)  certutil -d sql:$HOME/.pki/nssdb -A -t "$2" -n "$3" -i "$4" ;;
+        add)     pk12util -d sql:$HOME/.pki/nssdb -i "$2" ;;
+        del)     certutil -d sql:$HOME/.pki/nssdb -D -n "$2" ;;
+        *)
+        echo "Usage list|details|add-ca|add|del"
+        echo " \"details\" requires <nickname>"
+        echo " \"add-ca\" requires <trustargs> <nickname> <certificate filename>"
+        echo " \"add\" requires <filename>"
+        echo " \"del\" requires <nickname>"
+        ;;
     esac
 }
 
 flac2mp3() {
-        OUTF=$1.mp3
-        ARTIST=$(metaflac "$1" --show-tag=ARTIST | sed s/.\*=//g)
-        TITLE=$(metaflac "$1" --show-tag=TITLE | sed s/.\*=//g)
-        ALBUM=$(metaflac "$1" --show-tag=ALBUM | sed s/.\*=//g)
-        GENRE=$(metaflac "$1" --show-tag=GENRE | sed s/.\*=//g)
-        TRACKNUMBER=$(metaflac "$1" --show-tag=TRACKNUMBER | sed s/.\*=//g)
-        DATE=$(metaflac "$1" --show-tag=DATE | sed s/.\*=//g)
-        flac -c -d "$1" | lame -m j -q 0 --vbr-new -V 0 -s 44.1 - "$OUTF"
-        id3 -t "$TITLE" -T "${TRACKNUMBER:-0}" -a "$ARTIST" -A "$ALBUM" -y "$DATE" -g "${GENRE:-12}" "$OUTF"
+    OUTF=$1.mp3
+    ARTIST=$(metaflac "$1" --show-tag=ARTIST | sed s/.\*=//g)
+    TITLE=$(metaflac "$1" --show-tag=TITLE | sed s/.\*=//g)
+    ALBUM=$(metaflac "$1" --show-tag=ALBUM | sed s/.\*=//g)
+    GENRE=$(metaflac "$1" --show-tag=GENRE | sed s/.\*=//g)
+    TRACKNUMBER=$(metaflac "$1" --show-tag=TRACKNUMBER | sed s/.\*=//g)
+    DATE=$(metaflac "$1" --show-tag=DATE | sed s/.\*=//g)
+    flac -c -d "$1" | lame -m j -q 0 --vbr-new -V 0 -s 44.1 - "$OUTF"
+    id3 -t "$TITLE" -T "${TRACKNUMBER:-0}" -a "$ARTIST" -A "$ALBUM" -y "$DATE" -g "${GENRE:-12}" "$OUTF"
 }
