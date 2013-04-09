@@ -61,6 +61,7 @@
     clog = log --date=short --pretty=format:\"%Cred%ad %Cblue%h %Cgreen%an %Creset%s%C(yellow)%d\"
     lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --
     s = status -sb
+    wipe = reset --hard
 [user]
 	name = Lex Rivera
 	email = me@lex.io
