@@ -378,7 +378,7 @@ globalkeys = awful.util.table.join(
     awful.key({ modkey, "Control" }, "Right",  shifty.shift_next       ),
     awful.key({ modkey            }, "t",      function() shifty.add({ rel_index = 1 }) end),
     awful.key({ modkey, "Control" }, "t",      function() shifty.add({ rel_index = 1, nopopup = true }) end),
-    awful.key({ modkey            }, "i",      shifty.rename), -- //TODO: fix renaming
+    awful.key({ modkey            }, "i",      shifty.rename),
     awful.key({ modkey            }, "w",      shifty.del),
     awful.key({ modkey,           }, "u",      awful.client.urgent.jumpto),
     awful.key({ modkey,           }, "n",
