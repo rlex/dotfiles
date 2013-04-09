@@ -1,0 +1,110 @@
+#!/bin/bash
+#----------------------------------------------------
+# Version:      0.2.4.0
+# Author:       Florian "Bluewind" Pritz <f-p@gmx.at>
+#
+# Licensed under WTFPL v2
+#   (see COPYING for full license text)
+#---------------------------------------------------
+# Extract an archive based on the mime type 
+#----------------------------------------------------
+
+SCRIPTNAME=$(basename $0)
+ARGS=""
+
+EXIT_SUCCESS=0
+EXIT_FAILURE=1
+EXIT_ERROR=2
+EXIT_BUG=10
+
+# Colors for output
+red='\e[0;31m'
+RED='\e[1;31m'
+green='\e[0;32m'
+GREEN='\e[1;32m'
+blue='\e[0;34m'
+BLUE='\e[1;34m'
+cyan='\e[0;36m'
+CYAN='\e[1;36m'
+NC='\e[0m'
+
+function usage {
+  echo -e "${blue}Usage:${NC} ${SCRIPTNAME} [OPTIONS] <files>" >&2
+  echo -e "Options:" >&2
+  echo -e "-C <dir> Extract content of the archive(s) to <dir> (not yet fully supported for all archives)" >&2
+  echo -e "-R       Remove archive after extracting" >&2
+  echo -e "-v       Verbose" >&2
+  [[ $# -eq 1 ]] && exit $1 || exit $EXIT_FAILURE
+}
+
+function clean {
+  if [ "$REMOVE_AFTER" = "true" ]; then
+    rm $file
+  fi
+}
+
+while getopts ':C:vhR' OPTION ; do
+  case $OPTION in
+    v)
+      ARGS=${ARGS}" -v "
+      UNZIPARGS=$UNZIPARGS""
+    ;;
+    C)  
+      TARARGS=${ARGS}" -C $OPTARG"
+      UNZIPARGS=$UNZIPARGS" -d $OPTARG"
+    ;;
+    h)
+      usage $EXIT_SUCCESS
+    ;;
+    R)
+      REMOVE_AFTER=true
+    ;;
+    \?)
+      echo "Unknown option \"-$OPTARG\"." >&2
+      usage $EXIT_ERROR
+    ;;
+    :)
+      echo "Option \"-$OPTARG\" needs an argument" >&2
+      usage $EXIT_ERROR
+    ;;
+    *)
+      echo "This shouldn't happen, please file a bugreport.">&2
+      usage $EXIT_BUG
+    ;;
+  esac
+done
+
+
+shift $(( OPTIND - 1 ))
+
+if (( $# < 1 )) ; then
+  usage $EXIT_SUCCESS
+fi
+
+for file; do
+  if [ -f "${file}" ] ; then
+    case "${file}" in
+      *.tar.bz2)   tar ${ARGS} ${TARARGS} -xjf "${file}" && clean;;
+      *.tar.gz)    tar ${ARGS} ${TARARGS} -xzf "${file}" && clean;;
+      *.tar.xz)    tar ${ARGS} ${TARARGS} -xf "${file}" && clean;;
+      *.tbz2)      tar ${ARGS} ${TARARGS} -xjf "${file}" && clean;;
+      *.tgz)       tar ${ARGS} ${TARARGS} -xzf "${file}" && clean;;
+      *.7z)        7z x ${file} && clean;;
+      *)
+        case $(file -b --mime-type "${file}") in
+          application/x-bzip2)          bunzip2 "${file}" && clean;;
+          application/x-xz)             xz -d "${file}" && clean;;
+          application/x-rar)            unrar x "${file}" && clean;;
+          application/x-gzip)           gunzip "${file}" && clean;;
+          application/x-tar)            tar ${ARGS} ${TARARGS} -xf "${file}" && clean;;
+          application/zip)              unzip ${UNZIPARGS} "${file}" && clean;;
+          application/x-compressed)     uncompress "${file}" && clean;;
+          application/x-7z-compressed)  7z x "${file}" && clean;;
+          *) echo -e "${RED}Error:$NC No rule how to extract \"${file}\" ($(file -b --mime-type "${file}"))";;
+        esac
+      ;;
+    esac
+  else
+    echo -e "${RED}Error:$NC \"${file}\" doesn't exist"
+  fi
+done
