@@ -328,15 +328,6 @@ autocmd FileType rb,rake,ruby set noexpandtab
 
 " }}}
 
-" {{{ Vim tags
-for $f in split(glob("~/.vim/tags/*"), "\n")
-    set tags+=$f
-endfor
-
-" Regenerate tag
-source ~/.vim/bundle/AutoTag/plugin/autotag.vim
-"}}}
-
 " {{{ Various fixes
 if has("multi_lang")
     if has("unix")
