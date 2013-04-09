@@ -67,4 +67,4 @@
 	email = me@lex.io
     signingkey = 0FC7CF34
 [push]
-	default = simple
+	default = matching
