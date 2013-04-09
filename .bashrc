@@ -3,10 +3,11 @@ if [[ $- != *i* ]] ; then
          return
 fi
 
-# bash completion
-if [ -f /etc/bash_completion ]; then
-    . /etc/bash_completion
-fi
+#TODO: system-wide bash completion. If enabled,
+#TODO: this breaks completion completely.
+#if [ -f /etc/bash_completion ]; then
+#    . /etc/bash_completion
+#fi
 
 # user preferences
 # bash-settings
@@ -16,10 +17,10 @@ shopt -s checkwinsize
 shopt -s extglob
 shopt -s nocaseglob
 shopt -s nullglob dotglob
-shopt -s histappend 
+shopt -s histappend
 shopt -s cdspell
-shopt -s hostcomplete 
-shopt -s execfail       
+shopt -s hostcomplete
+shopt -s execfail
 set -o notify           
 complete -cf sudo
 shopt -s no_empty_cmd_completion 
