@@ -275,7 +275,7 @@ smap <silent><C-l>     <Plug>(neocomplcache_snippets_expand)
 " {{{ Colorscheme based on $TERM
 if $TERM =~ "xterm" || $TERM =~ "rxvt" || $TERM =~ "screen" || &term =~ "builtin_gui" || $TERM == "dumb"
     set t_Co=256
-    colorscheme xoria256
+    colorscheme darkburn
     let &t_SI = "\<Esc>]12;green\x7"
     let &t_EI = "\<Esc>]12;blue\x7"
 else
