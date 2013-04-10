@@ -9,18 +9,21 @@
 
 -- {{{ Load libraries
 -- Standard awesome library
-require("awful")
-require("awful.autofocus")
-require("awful.rules")
+awful = require("awful")
+--require("awful.autofocus")
+--require("awful.rules")
+-- Widget library
+wibox = require("wibox")
 -- Theme handling library
-require("beautiful")
+beautiful = require("beautiful")
 -- Notification library
-require("naughty")
-require("lib/shifty")
+naughty = require("naughty")
+-- Dynamic tiling library
+shifty = require("shifty")
 -- Menu library
-require("lib/freedesktop.utils")
-require("lib/freedesktop.menu")
-require("lib/freedesktop.desktop")
+require("freedesktop.utils")
+require("freedesktop.menu")
+require("freedesktop.desktop")
 -- This is needed for vicious from some version
 vicious = require("vicious")
 -- }}}
