@@ -173,33 +173,29 @@ mylauncher = awful.widget.launcher({ image = beautiful.awesome_icon,
 -- {{{ Widgets configuration
 
 -- {{{ Reusable separators
-spacer    = widget({ type = "textbox"  })
-separator = widget({ type = "imagebox" })
-spacer.text     = " "
-separator.image = image(beautiful.widget_sep)
+spacer    = wibox.widget.textbox(" ")
+separator = wibox.widget.imagebox(beautiful.widget_sep)
 -- }}}
 
 -- {{{ CPU usage
-cpuicon = widget({ type = "imagebox" })
-cpuicon.image = image(beautiful.widget_cpu)
+cpuicon = wibox.widget.imagebox(beautiful.widget_cpu)
 -- Initialize widgets
 cpugraph  = awful.widget.graph()
 -- Graph properties
 cpugraph:set_width(40)
 cpugraph:set_height(14)
 cpugraph:set_background_color(beautiful.fg_off_widget)
-cpugraph:set_gradient_angle(0)
-cpugraph:set_gradient_colors({ beautiful.fg_end_widget,
-   beautiful.fg_center_widget, beautiful.fg_widget
-}) -- Register widgets
+--cpugraph:set_gradient_angle(0)
+--cpugraph:set_gradient_colors({ beautiful.fg_end_widget,
+--   beautiful.fg_center_widget, beautiful.fg_widget
+--}) -- Register widgets
 vicious.register(cpugraph, vicious.widgets.cpu, "$1")
 -- }}}
 
 -- {{{ CPU Temperature
-tempicon = widget({ type = "imagebox" })
-tempicon.image = image(beautiful.widget_temp)
+tempicon = wibox.widget.imagebox(beautiful.widget_temp)
 -- Initialize widget
-tempwidget = widget({ type = "textbox" })
+tempwidget = wibox.widget.textbox()
 -- Register widget
     vicious.register(tempwidget, vicious.widgets.thermal,
     function (widget, args)
@@ -218,10 +214,9 @@ tempwidget = widget({ type = "textbox" })
 -- }}}
 
 -- {{{ Battery state
-baticon = widget({ type = "imagebox" })
-baticon.image = image(beautiful.widget_bat)
+baticon = wibox.widget.imagebox(beautiful.widget_bat)
 -- Initialize widget
-batwidget = widget({ type = "textbox" })
+batwidget = wibox.widget.textbox()
 -- Register widget
 vicious.register(batwidget, vicious.widgets.bat,
     function (widget, args)
@@ -244,8 +239,7 @@ vicious.register(batwidget, vicious.widgets.bat,
 -- }}}
 
 -- {{{ Memory usage
-memicon = widget({ type = "imagebox" })
-memicon.image = image(beautiful.widget_mem)
+memicon = wibox.widget.imagebox(beautiful.widget_mem)
 -- Initialize widget
 membar = awful.widget.progressbar()
 -- Pogressbar properties
@@ -254,15 +248,14 @@ membar:set_height(12)
 membar:set_vertical(true)
 membar:set_background_color(beautiful.fg_off_widget)
 membar:set_border_color(beautiful.border_widget)
-membar:set_gradient_colors({ beautiful.fg_widget,
-   beautiful.fg_center_widget, beautiful.fg_end_widget
-}) -- Register widget
+--membar:set_gradient_colors({ beautiful.fg_widget,
+--   beautiful.fg_center_widget, beautiful.fg_end_widget
+--}) -- Register widget
 vicious.register(membar, vicious.widgets.mem, "$1", 13)
 -- }}}
 
 -- {{{ Volume level
-volicon = widget({ type = "imagebox" })
-volicon.image = image(beautiful.widget_vol)
+volicon = wibox.widget.imagebox(beautiful.widget_vol)
 -- Initialize widgets
 volbar = awful.widget.progressbar()
 -- Progressbar properties
@@ -271,23 +264,23 @@ volbar:set_height(12)
 volbar:set_vertical(true)
 volbar:set_background_color(beautiful.fg_off_widget)
 volbar:set_border_color(beautiful.border_widget)
-volbar:set_gradient_colors({ beautiful.fg_widget,
-   beautiful.fg_center_widget, beautiful.fg_end_widget
-}) -- Enable caching
+--volbar:set_gradient_colors({ beautiful.fg_widget,
+--   beautiful.fg_center_widget, beautiful.fg_end_widget
+--}) -- Enable caching
 -- Register widgets
 vicious.register(volbar, vicious.widgets.volume, "$1",  2, "Master")
 -- }}}
 
 -- {{{ Date and time
-dateicon = widget({ type = "imagebox" })
+dateicon = wibox.widget.imagebox()
 -- Initialize widget
-datewidget = widget({ type = "textbox" })
+datewidget = wibox.widget.textbox()
 -- Register widget
 vicious.register(datewidget, vicious.widgets.date, "%R", 61)
 -- }}}
 
 -- {{{ System tray
-systray = widget({ type = "systray" })
+systray = wibox.widget.systray()
 -- }}}
 
 -- }}}
