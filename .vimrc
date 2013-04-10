@@ -65,11 +65,11 @@ Bundle "scrooloose/nerdcommenter"
 Bundle "scrooloose/syntastic"
 Bundle "Shougo/neocomplcache"
 Bundle "ervandew/supertab"
+Bundle "chrisbra/SudoEdit.vim"
 
 Bundle "TaskList.vim"
 Bundle "buftabs"
 Bundle "Rename"
-Bundle "sudo.vim"
 " }}}
 
 " {{{ Functions
