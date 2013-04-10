@@ -3,6 +3,11 @@ if [[ $- != *i* ]] ; then
          return
 fi
 
+# start zsh if it exists, tired of modifying chsh
+if [ -x `which zsh` ]; then
+    `which zsh`
+fi
+
 #TODO: system-wide bash completion. If enabled,
 #TODO: this breaks completion completely.
 #if [ -f /etc/bash_completion ]; then
