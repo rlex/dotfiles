@@ -1,8 +1,8 @@
 -- failsafe mode
 -- if the current config fail, load the default rc.lua
  
-require("awful")
-require("naughty")
+awful = require("awful")
+naughty = require("naughty")
  
 confdir = awful.util.getdir("config")
 local rc, err = loadfile(confdir .. "/awesome.lua");
