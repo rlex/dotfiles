@@ -1,7 +1,9 @@
 -- Grab environment
 
 local io = io
+local os = os
 local table = table
+local type = type
 local ipairs = ipairs
 local pairs = pairs
 
@@ -32,11 +34,20 @@ all_icon_types = {
     'status',
     'mimetypes'
 }
-all_icon_paths = { '/usr/share/icons/' }
+all_icon_paths = { os.getenv("HOME") .. '/.icons/', '/usr/share/icons/' }
 
 icon_sizes = {}
 
 local mime_types = {}
+
+function get_lines(...)
+    local f = io.popen(...)
+    return function () -- iterator
+        local data = f:read()
+        if data == nil then f:close() end
+        return data
+    end
+end
 
 function file_exists(filename)
     local file = io.open(filename, 'r')
@@ -53,10 +64,16 @@ function lookup_icon(arg)
         return arg.icon
     else
         local icon_path = {}
+        local icon_themes = {}
         local icon_theme_paths = {}
-        if icon_theme then
-            for i, path in ipairs(all_icon_paths) do
-                table.insert(icon_theme_paths, path .. icon_theme .. '/')
+        if icon_theme and type(icon_theme) == 'table' then
+            icon_themes = icon_theme
+        elseif icon_theme then
+            icon_themes = { icon_theme }
+        end
+        for i, theme in ipairs(icon_themes) do
+            for j, path in ipairs(all_icon_paths) do
+                table.insert(icon_theme_paths, path .. theme .. '/')
             end
             -- TODO also look in parent icon themes, as in freedesktop.org specification
         end
@@ -77,6 +94,7 @@ function lookup_icon(arg)
         -- lowest priority fallbacks
         table.insert(icon_path,  '/usr/share/pixmaps/')
         table.insert(icon_path,  '/usr/share/icons/')
+        table.insert(icon_path,  '/usr/share/app-install/icons/')
 
         for i, directory in ipairs(icon_path) do
             if (arg.icon:find('.+%.png') or arg.icon:find('.+%.xpm')) and file_exists(directory .. arg.icon) then
@@ -149,21 +167,25 @@ function parse_desktop_file(arg)
         end
     end
 
+    -- Don't show the program if NoDisplay is true
     -- Only show the program if there is not OnlyShowIn attribute
     -- or if it's equal to 'awesome'
-    if program.OnlyShowIn ~= nil and program.OnlyShowIn ~= "awesome" then
+    if program.NoDisplay == "true" or program.OnlyShowIn ~= nil and program.OnlyShowIn ~= "awesome" then
         program.show = false
     end
 
     -- Look up for a icon.
     if program.Icon then
         program.icon_path = lookup_icon({ icon = program.Icon, icon_sizes = (arg.icon_sizes or all_icon_sizes) })
+        if program.icon_path ~= nil and not file_exists(program.icon_path) then
+           program.icon_path = nil
+        end
     end
 
     -- Split categories into a table.
     if program.Categories then
         program.categories = {}
-        for category in program.Categories:gfind('[^;]+') do
+        for category in program.Categories:gmatch('[^;]+') do
             table.insert(program.categories, category)
         end
     end
@@ -192,7 +214,7 @@ end
 -- @return A table with all .desktop entries.
 function parse_desktop_files(arg)
     local programs = {}
-    local files = io.popen('find '.. arg.dir ..' -maxdepth 1 -name "*.desktop"'):lines()
+    local files = get_lines('find '.. arg.dir ..' -name "*.desktop" 2>/dev/null')
     for file in files do
         arg.file = file
         table.insert(programs, parse_desktop_file(arg))
@@ -206,7 +228,7 @@ end
 -- @return A table with all .desktop entries.
 function parse_dirs_and_files(arg)
     local files = {}
-    local paths = io.popen('find '..arg.dir..' -maxdepth 1 -type d'):lines()
+    local paths = get_lines('find '..arg.dir..' -maxdepth 1 -type d')
     for path in paths do
         if path:match("[^/]+$") then
             local file = {}
@@ -217,9 +239,9 @@ function parse_dirs_and_files(arg)
             table.insert(files, file)
         end
     end
-    local paths = io.popen('find '..arg.dir..' -maxdepth 1 -type f'):lines()
+    local paths = get_lines('find '..arg.dir..' -maxdepth 1 -type f')
     for path in paths do
-        if not path:find("\.desktop$") then
+        if not path:find("%.desktop$") then
             local file = {}
             file.filename = path:match("[^/]+$")
             file.path = path
