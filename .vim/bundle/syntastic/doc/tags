@@ -17,11 +17,13 @@
 :Errors	syntastic.txt	/*:Errors*
 :SyntasticCheck	syntastic.txt	/*:SyntasticCheck*
 :SyntasticErrors	syntastic.txt	/*:SyntasticErrors*
+:SyntasticInfo	syntastic.txt	/*:SyntasticInfo*
 :SyntasticToggleMode	syntastic.txt	/*:SyntasticToggleMode*
 syntastic	syntastic.txt	/*syntastic*
 syntastic-about	syntastic.txt	/*syntastic-about*
 syntastic-checker-options	syntastic.txt	/*syntastic-checker-options*
 syntastic-commands	syntastic.txt	/*syntastic-commands*
+syntastic-config-makeprg	syntastic.txt	/*syntastic-config-makeprg*
 syntastic-contents	syntastic.txt	/*syntastic-contents*
 syntastic-error-signs	syntastic.txt	/*syntastic-error-signs*
 syntastic-error-window	syntastic.txt	/*syntastic-error-window*
