@@ -61,12 +61,18 @@ call vundle#rc()
 Bundle 'gmarik/vundle'
 
 Bundle "scrooloose/nerdtree"
-Bundle "scrooloose/nerdcommenter"
 Bundle "scrooloose/syntastic"
 Bundle "Shougo/neocomplcache"
-Bundle "ervandew/supertab"
 Bundle "chrisbra/SudoEdit.vim"
+Bundle "rodjek/vim-puppet"
+Bundle "garbas/vim-snipmate"
+Bundle "godlygeek/tabular"
+Bundle "MarcWeber/vim-addon-mw-utils"
+Bundle "tomtom/tlib_vim"
+Bundle "honza/vim-snippets"
+Bundle "ghewgill/vim-scmdiff"
 
+Bundle "Gundo"
 Bundle "TaskList.vim"
 Bundle "buftabs"
 Bundle "Rename"

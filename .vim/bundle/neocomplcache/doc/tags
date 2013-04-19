@@ -120,6 +120,10 @@ neocomplcache-install	neocomplcache.txt	/*neocomplcache-install*
 neocomplcache-interface	neocomplcache.txt	/*neocomplcache-interface*
 neocomplcache-introduction	neocomplcache.txt	/*neocomplcache-introduction*
 neocomplcache-key-mappings	neocomplcache.txt	/*neocomplcache-key-mappings*
+neocomplcache-source-attribute-filetypes	neocomplcache.txt	/*neocomplcache-source-attribute-filetypes*
+neocomplcache-source-attribute-kind	neocomplcache.txt	/*neocomplcache-source-attribute-kind*
+neocomplcache-source-attribute-name	neocomplcache.txt	/*neocomplcache-source-attribute-name*
+neocomplcache-source-attributes	neocomplcache.txt	/*neocomplcache-source-attributes*
 neocomplcache-sources	neocomplcache.txt	/*neocomplcache-sources*
 neocomplcache-sources-neco-ghc	neocomplcache.txt	/*neocomplcache-sources-neco-ghc*
 neocomplcache-sources-neosnippet	neocomplcache.txt	/*neocomplcache-sources-neosnippet*

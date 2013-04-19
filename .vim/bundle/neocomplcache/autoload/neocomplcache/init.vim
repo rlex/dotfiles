@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: init.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 15 Apr 2013.
+" Last Modified: 19 Apr 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -26,6 +26,78 @@
 
 let s:save_cpo = &cpo
 set cpo&vim
+
+if !exists('s:is_enabled')
+  let s:is_enabled = 0
+endif
+
+function! neocomplcache#init#lazy() "{{{
+  if !exists('s:lazy_progress')
+    let s:lazy_progress = 0
+  endif
+
+  if s:lazy_progress == 0
+    call neocomplcache#init#_others()
+    let s:is_enabled = 0
+  elseif s:lazy_progress == 1
+    call neocomplcache#init#_sources(get(g:neocomplcache_sources_list,
+          \ neocomplcache#get_context_filetype(), ['_']))
+  else
+    call neocomplcache#init#_autocmds()
+    let s:is_enabled = 1
+  endif
+
+  let s:lazy_progress += 1
+endfunction"}}}
+
+function! neocomplcache#init#enable() "{{{
+  if neocomplcache#is_enabled()
+    return
+  endif
+
+  call neocomplcache#init#_autocmds()
+  call neocomplcache#init#_others()
+
+  call neocomplcache#init#_sources(get(g:neocomplcache_sources_list,
+        \ neocomplcache#get_context_filetype(), ['_']))
+endfunction"}}}
+
+function! neocomplcache#init#disable() "{{{
+  if !neocomplcache#is_enabled()
+    call neocomplcache#print_warning(
+          \ 'neocomplcache is disabled! This command is ignored.')
+    return
+  endif
+
+  let s:is_enabled = 0
+
+  augroup neocomplcache
+    autocmd!
+  augroup END
+
+  delcommand NeoComplCacheDisable
+
+  for source in values(neocomplcache#available_sources())
+    if !has_key(source, 'finalize') || !source.loaded
+      continue
+    endif
+
+    try
+      call source.finalize()
+    catch
+      call neocomplcache#print_error(v:throwpoint)
+      call neocomplcache#print_error(v:exception)
+      call neocomplcache#print_error(
+            \ 'Error occured in source''s finalize()!')
+      call neocomplcache#print_error(
+            \ 'Source name is ' . source.name)
+    endtry
+  endfor
+endfunction"}}}
+
+function! neocomplcache#init#is_enabled() "{{{
+  return s:is_enabled
+endfunction"}}}
 
 function! neocomplcache#init#_autocmds() "{{{
   augroup neocomplcache
@@ -77,7 +149,6 @@ function! neocomplcache#init#_others() "{{{
 
   " Set completefunc.
   let &completefunc = 'neocomplcache#complete#manual_complete'
-  let &l:completefunc = 'neocomplcache#complete#manual_complete'
 
   " For auto complete keymappings.
   call neocomplcache#mappings#define_default_mappings()
@@ -91,6 +162,9 @@ function! neocomplcache#init#_others() "{{{
     call neocomplcache#print_error(
           \ 'Detected set paste! Disabled neocomplcache.')
   endif
+
+  command! -nargs=0 -bar NeoComplCacheDisable
+        \ call neocomplcache#init#disable()
 endfunction"}}}
 
 function! neocomplcache#init#_variables() "{{{
@@ -589,6 +663,103 @@ function! neocomplcache#init#_current_neocomplcache() "{{{
         \ 'complete_results' : {},
         \ 'start_time' : reltime(),
         \}
+endfunction"}}}
+
+function! neocomplcache#init#_sources(source_names) "{{{
+  if !exists('s:loaded_source_files')
+    " Initialize.
+    let s:loaded_source_files = {}
+    let s:loaded_all_sources = 0
+    let s:runtimepath_save = ''
+  endif
+
+  " Initialize sources table.
+  if s:loaded_all_sources && &runtimepath ==# s:runtimepath_save
+    return
+  endif
+
+  let runtimepath_save = neocomplcache#util#split_rtp(s:runtimepath_save)
+  let runtimepath = neocomplcache#util#join_rtp(
+        \ filter(neocomplcache#util#split_rtp(),
+        \ 'index(runtimepath_save, v:val) < 0'))
+  let sources = neocomplcache#variables#get_sources()
+
+  for name in a:source_names
+    if has_key(sources, name)
+      continue
+    endif
+
+    " Search autoload.
+    for source_name in map(split(globpath(runtimepath,
+          \ 'autoload/neocomplcache/sources/*.vim'), '\n'),
+          \ "fnamemodify(v:val, ':t:r')")
+      if has_key(s:loaded_source_files, source_name)
+        continue
+      endif
+
+      let s:loaded_source_files[source_name] = 1
+
+      let source = neocomplcache#sources#{source_name}#define()
+      if empty(source)
+        " Ignore.
+        continue
+      endif
+
+      call neocomplcache#define_source(source)
+    endfor
+
+    if name == '_'
+      let s:loaded_all_sources = 1
+      let s:runtimepath_save = &runtimepath
+    endif
+  endfor
+endfunction"}}}
+
+function! neocomplcache#init#_source(source) "{{{
+  let default_source = {
+        \ 'filetypes' : {},
+        \ 'hooks' : {},
+        \ }
+
+  let source = extend(default_source, a:source)
+
+  let source.loaded = 0
+  " Source kind convertion.
+  if source.kind ==# 'plugin'
+    let source.kind = 'keyword'
+  elseif source.kind ==# 'ftplugin' || source.kind ==# 'complfunc'
+    let source.kind = 'manual'
+  endif
+
+  if !has_key(source, 'rank')
+    " Set default rank.
+    let source.rank = (source.kind ==# 'keyword') ? 5 :
+          \ empty(source.filetypes) ? 10 : 100
+  endif
+
+  if !has_key(source, 'required_pattern_length')
+    " Set required_pattern_length.
+    let source.required_pattern_length = (source.kind ==# 'keyword') ?
+          \ g:neocomplcache_auto_completion_start_length : 0
+  endif
+
+  " Initialize sources.
+  if empty(source.filetypes) && has_key(source, 'initialize')
+    try
+      call source.initialize()
+    catch
+      call neocomplcache#print_error(v:throwpoint)
+      call neocomplcache#print_error(v:exception)
+      call neocomplcache#print_error(
+            \ 'Error occured in source''s initialize()!')
+      call neocomplcache#print_error(
+            \ 'Source name is ' . source.name)
+    endtry
+
+    let source.loaded = 1
+  endif
+
+  return source
 endfunction"}}}
 
 let &cpo = s:save_cpo
