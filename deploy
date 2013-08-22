@@ -23,9 +23,9 @@ cd ~/.rc
 echo "Deploying dotfiles from `pwd` to ${HOME}"
 
 # Standart dotfiles
-if [ -f ~/.config ]; 
+if [ -d ~/.config ];
     then
-        echo "skipping folder creation"
+        echo "skipping config folder creation"
     else
         mkdir ~/.config
 fi
