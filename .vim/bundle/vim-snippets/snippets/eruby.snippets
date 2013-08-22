@@ -50,15 +50,17 @@ snippet cs
 snippet ct
 	<%= content_tag '${1:DIV}', ${2:content}${3:,options} %>
 snippet ff
-	<% form_for @${1:model} do |f| %>
+	<%= form_for @${1:model} do |f| %>
 		${2}
 	<% end %>
+snippet ffi
+	<%= ${1:f}.input :${2:attribute} %>
 snippet ffcb
 	<%= ${1:f}.check_box :${2:attribute} %>
 snippet ffe
 	<% error_messages_for :${1:model} %>
-	
-	<% form_for @${2:model} do |f| %>
+
+	<%= form_for @${2:model} do |f| %>
 		${3}
 	<% end %>
 snippet ffff
@@ -78,7 +80,7 @@ snippet ffta
 snippet fftf
 	<%= ${1:f}.text_field :${2:attribute} %>
 snippet fields
-	<% fields_for :${1:model}, @$1 do |${2:f}| %>
+	<%= fields_for :${1:model}, @$1 do |${2:f}| %>
 		${3}
 	<% end %>
 snippet i18
@@ -101,6 +103,8 @@ snippet lipp
 	<%= link_to "${1:Link text...}", ${2:model}s_path %>
 snippet lt
 	<%= link_to "${1:name}", ${2:dest} %>
+snippet ntc
+	<%= number_to_currency(${1}) %>
 snippet ofcfs
 	<%= options_from_collection_for_select ${1:collection}, ${2:value_method}, ${3:text_method}, ${4:selected_value} %>
 snippet rf
@@ -111,3 +115,13 @@ snippet slt
 	<%= stylesheet_link_tag ${1::all}, :cache => ${2:true} %>
 snippet sslt
 	<%= stylesheet_link_tag "${1}" %>
+snippet if
+	<% if ${1} %>
+		${2}
+	<% end %>
+snippet ife
+	<% if ${1} %>
+		${2}
+	<% else %>
+		${3}
+	<% end %>

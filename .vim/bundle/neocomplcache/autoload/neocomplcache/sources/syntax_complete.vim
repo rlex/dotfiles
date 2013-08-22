@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: syntax_complete.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 16 Apr 2013.
+" Last Modified: 05 Jun 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -34,15 +34,12 @@ endif
 
 let s:source = {
       \ 'name' : 'syntax_complete',
-      \ 'kind' : 'plugin',
+      \ 'kind' : 'keyword',
       \ 'mark' : '[S]',
+      \ 'rank' : 4,
       \}
 
 function! s:source.initialize() "{{{
-  " Set rank.
-  call neocomplcache#util#set_default_dictionary(
-        \ 'g:neocomplcache_source_rank', 'syntax_complete', 7)
-
   " Set caching event.
   autocmd neocomplcache Syntax * call s:caching()
 
@@ -59,11 +56,7 @@ function! s:source.finalize() "{{{
   delcommand NeoComplCacheCachingSyntax
 endfunction"}}}
 
-function! s:source.get_keyword_list(cur_keyword_str) "{{{
-  if neocomplcache#within_comment()
-    return []
-  endif
-
+function! s:source.get_keyword_list(complete_str) "{{{
   let list = []
 
   let filetype = neocomplcache#get_context_filetype()
@@ -73,7 +66,7 @@ function! s:source.get_keyword_list(cur_keyword_str) "{{{
 
   for syntax in neocomplcache#get_sources_list(
         \ s:syntax_list, filetype)
-    let list += neocomplcache#dictionary_filter(syntax, a:cur_keyword_str)
+    let list += neocomplcache#dictionary_filter(syntax, a:complete_str)
   endfor
 
   return list
@@ -137,19 +130,19 @@ function! s:caching_from_syn(filetype) "{{{
 
   let dup_check = {}
 
-  let filetype_pattern = substitute(a:filetype, '\W', '\\A', 'g') . '\u'
+  let filetype_pattern = tolower(a:filetype)
 
   let keyword_lists = {}
   for line in split(syntax_list, '\n')
     if line =~ '^\h\w\+'
       " Change syntax group name.
       let group_name = matchstr(line, '^\S\+')
-      let line = substitute(line, '^\S\s*xxx', '', '')
+      let line = substitute(line, '^\S\+\s*xxx', '', '')
     endif
 
     if line =~ 'Syntax items' || line =~ '^\s*links to' ||
           \ line =~ '^\s*nextgroup=' ||
-          \ group_name !~# filetype_pattern
+          \ strridx(tolower(group_name), filetype_pattern) != 0
       " Next line.
       continue
     endif

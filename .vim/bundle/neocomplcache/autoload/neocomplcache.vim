@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: neocomplcache.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 17 Apr 2013.
+" Last Modified: 09 Jun 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -44,17 +44,38 @@ function! neocomplcache#get_current_neocomplcache() "{{{
 
   return b:neocomplcache
 endfunction"}}}
+function! neocomplcache#get_context() "{{{
+  return neocomplcache#get_current_neocomplcache().context
+endfunction"}}}
 
 " Source helper. "{{{
 function! neocomplcache#define_source(source) "{{{
+  let sources = neocomplcache#variables#get_sources()
   for source in neocomplcache#util#convert2list(a:source)
-    let sources = neocomplcache#variables#get_sources()
     let sources[source.name] = neocomplcache#init#_source(source)
+  endfor
+endfunction"}}}
+function! neocomplcache#define_filter(filter) "{{{
+  let filters = neocomplcache#variables#get_filters()
+  for filter in neocomplcache#util#convert2list(a:filter)
+    let filters[filter.name] = neocomplcache#init#_filter(filter)
   endfor
 endfunction"}}}
 function! neocomplcache#available_sources() "{{{
   return copy(neocomplcache#variables#get_sources())
 endfunction"}}}
+function! neocomplcache#custom_source(source_name, option_name, value) "{{{
+  let custom_sources = neocomplcache#variables#get_custom().sources
+
+  for key in split(a:source_name, '\s*,\s*')
+    if !has_key(custom_sources, key)
+      let custom_sources[key] = {}
+    endif
+
+    let custom_sources[key][a:option_name] = a:value
+  endfor
+endfunction"}}}
+
 function! neocomplcache#is_enabled_source(source_name) "{{{
   return neocomplcache#helper#is_enabled_source(a:source_name)
 endfunction"}}}
@@ -66,25 +87,25 @@ function! neocomplcache#is_disabled_source(source_name) "{{{
         \   get(g:neocomplcache_disabled_sources_list, '_', []))
   return index(disabled_sources, a:source_name) >= 0
 endfunction"}}}
-function! neocomplcache#keyword_escape(cur_keyword_str) "{{{
-  return neocomplcache#helper#keyword_escape(a:cur_keyword_str)
+function! neocomplcache#keyword_escape(complete_str) "{{{
+  return neocomplcache#helper#keyword_escape(a:complete_str)
 endfunction"}}}
-function! neocomplcache#keyword_filter(list, cur_keyword_str) "{{{
-  return neocomplcache#filters#keyword_filter(a:list, a:cur_keyword_str)
+function! neocomplcache#keyword_filter(list, complete_str) "{{{
+  return neocomplcache#filters#keyword_filter(a:list, a:complete_str)
 endfunction"}}}
 function! neocomplcache#dup_filter(list) "{{{
   return neocomplcache#util#dup_filter(a:list)
 endfunction"}}}
-function! neocomplcache#check_match_filter(cur_keyword_str) "{{{
-  return neocomplcache#keyword_escape(a:cur_keyword_str) =~ '[^\\]\*\|\\+'
+function! neocomplcache#check_match_filter(complete_str) "{{{
+  return neocomplcache#keyword_escape(a:complete_str) =~ '[^\\]\*\|\\+'
 endfunction"}}}
-function! neocomplcache#check_completion_length_match(cur_keyword_str, completion_length) "{{{
+function! neocomplcache#check_completion_length_match(complete_str, completion_length) "{{{
   return neocomplcache#keyword_escape(
-        \ a:cur_keyword_str[: a:completion_length-1]) =~
+        \ a:complete_str[: a:completion_length-1]) =~
         \'[^\\]\*\|\\+\|\\%(\|\\|'
 endfunction"}}}
-function! neocomplcache#dictionary_filter(dictionary, cur_keyword_str) "{{{
-  return neocomplcache#filters#dictionary_filter(a:dictionary, a:cur_keyword_str)
+function! neocomplcache#dictionary_filter(dictionary, complete_str) "{{{
+  return neocomplcache#filters#dictionary_filter(a:dictionary, a:complete_str)
 endfunction"}}}
 function! neocomplcache#unpack_dictionary(dict) "{{{
   let ret = []
@@ -129,39 +150,6 @@ function! neocomplcache#add_dictionaries(dictionaries) "{{{
   return ret
 endfunction"}}}
 
-" Rank order. "{{{
-function! neocomplcache#compare_rank(i1, i2)
-  let diff = (get(a:i2, 'rank', 0) - get(a:i1, 'rank', 0))
-  return (diff != 0) ? diff : (a:i1.word ># a:i2.word) ? 1 : -1
-endfunction"}}}
-" Word order. "{{{
-function! neocomplcache#compare_word(i1, i2)
-  return (a:i1.word ># a:i2.word) ? 1 : -1
-endfunction"}}}
-" Nothing order. "{{{
-function! neocomplcache#compare_nothing(i1, i2)
-  return 0
-endfunction"}}}
-" Human order. "{{{
-function! neocomplcache#compare_human(i1, i2)
-  let words_1 = map(split(a:i1.word, '\D\zs\ze\d'),
-        \ "v:val =~ '^\\d' ? str2nr(v:val) : v:val")
-  let words_2 = map(split(a:i2.word, '\D\zs\ze\d'),
-        \ "v:val =~ '^\\d' ? str2nr(v:val) : v:val")
-  let words_1_len = len(words_1)
-  let words_2_len = len(words_2)
-
-  for i in range(0, min([words_1_len, words_2_len])-1)
-    if words_1[i] ># words_2[i]
-      return 1
-    elseif words_1[i] <# words_2[i]
-      return -1
-    endif
-  endfor
-
-  return words_1_len - words_2_len
-endfunction"}}}
-
 function! neocomplcache#system(...) "{{{
   let V = vital#of('neocomplcache')
   return call(V.system, a:000)
@@ -193,25 +181,18 @@ function! neocomplcache#get_completion_length(source_name) "{{{
   if neocomplcache#is_auto_complete()
         \ && neocomplcache#get_current_neocomplcache().completion_length >= 0
     return neocomplcache#get_current_neocomplcache().completion_length
-  elseif has_key(g:neocomplcache_source_completion_length,
-        \ a:source_name)
-    return g:neocomplcache_source_completion_length[a:source_name]
   else
-    return sources[a:source_name].required_pattern_length
+    return sources[a:source_name].min_pattern_length
   endif
 endfunction"}}}
 function! neocomplcache#set_completion_length(source_name, length) "{{{
-  if !has_key(g:neocomplcache_source_completion_length, a:source_name)
-    let g:neocomplcache_source_completion_length[a:source_name] = a:length
+  let custom = neocomplcache#variables#get_custom().sources
+  if !has_key(custom, a:source_name)
+    let custom[a:source_name] = {}
   endif
-endfunction"}}}
-function! neocomplcache#get_auto_completion_length(source_name) "{{{
-  if has_key(g:neocomplcache_source_completion_length, a:source_name)
-    return g:neocomplcache_source_completion_length[a:source_name]
-  elseif g:neocomplcache_enable_fuzzy_completion
-    return 1
-  else
-    return g:neocomplcache_auto_completion_start_length
+
+  if !has_key(custom[a:source_name], 'min_pattern_length')
+    let custom[a:source_name].min_pattern_length = a:length
   endif
 endfunction"}}}
 function! neocomplcache#get_keyword_pattern(...) "{{{
@@ -243,6 +224,7 @@ function! neocomplcache#is_locked(...) "{{{
   let bufnr = a:0 > 0 ? a:1 : bufnr('%')
   return !neocomplcache#is_enabled() || &paste
         \ || g:neocomplcache_disable_auto_complete
+        \ || &l:completefunc == ''
         \ || neocomplcache#get_current_neocomplcache().lock
         \ || (g:neocomplcache_lock_buffer_name_pattern != '' &&
         \   bufname(bufnr) =~ g:neocomplcache_lock_buffer_name_pattern)
@@ -359,18 +341,6 @@ function! neocomplcache#get_context_filetype_range(...) "{{{
 
   return neocomplcache.context_filetype_range
 endfunction"}}}
-function! neocomplcache#get_source_rank(name) "{{{
-  let sources = neocomplcache#variables#get_sources()
-  if has_key(g:neocomplcache_source_rank, a:name)
-    return g:neocomplcache_source_rank[a:name]
-  elseif !has_key(sources, a:name)
-    " unknown.
-    return 1
-  endif
-
-  " Used default rank.
-  return sources[a:name].rank
-endfunction"}}}
 function! neocomplcache#print_debug(expr) "{{{
   if g:neocomplcache_enable_debug
     echomsg string(a:expr)
@@ -390,6 +360,10 @@ function! neocomplcache#complete_check() "{{{
 endfunction"}}}
 function! neocomplcache#check_invalid_omnifunc(omnifunc) "{{{
   return a:omnifunc == '' || (a:omnifunc !~ '#' && !exists('*' . a:omnifunc))
+endfunction"}}}
+function! neocomplcache#skip_next_complete() "{{{
+  let neocomplcache = neocomplcache#get_current_neocomplcache()
+  let neocomplcache.skip_next_complete = 1
 endfunction"}}}
 
 function! neocomplcache#set_dictionary_helper(variable, keys, value) "{{{
