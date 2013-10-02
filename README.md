@@ -100,4 +100,3 @@ It's constantly changing. Things i will do soon:
 
 1. Cleanup. There is a lot of stuff i do not use anymore.
 2. Some way to share .ssh folder and encrypted passwords database
-3. Fix bug with bash autocompletion sometimes do not work.

@@ -3,16 +3,11 @@ if [[ $- != *i* ]] ; then
          return
 fi
 
-# start zsh if it exists, tired of modifying chsh
-if [ -x `which zsh` ]; then
-    `which zsh`
-fi
-
 #TODO: system-wide bash completion. If enabled,
 #TODO: this breaks completion completely.
-#if [ -f /etc/bash_completion ]; then
-#    . /etc/bash_completion
-#fi
+if [ -f /etc/bash_completion ]; then
+    . /etc/bash_completion
+fi
 
 # user preferences
 # bash-settings
@@ -21,7 +16,6 @@ export CLICOLOR=1
 shopt -s checkwinsize
 shopt -s extglob
 shopt -s nocaseglob
-shopt -s nullglob dotglob
 shopt -s histappend
 shopt -s cdspell
 shopt -s hostcomplete
@@ -62,4 +56,3 @@ PROMPT_COMMAND=prompt_command
 for envfile in ~/.rc/sh.d/S[0-9][0-9]*[^~] ; do
     source $envfile
 done
-
