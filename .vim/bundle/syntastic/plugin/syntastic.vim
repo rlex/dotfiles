@@ -20,6 +20,15 @@ runtime! plugin/syntastic/*.vim
 
 let s:running_windows = has("win16") || has("win32")
 
+if !s:running_windows && executable('uname')
+    try
+        let s:uname = system('uname')
+    catch /^Vim\%((\a\+)\)\=:E484/
+        call syntastic#util#error("your shell " . &shell . " doesn't use traditional UNIX syntax for redirections")
+        finish
+    endtry
+endif
+
 if !exists("g:syntastic_always_populate_loc_list")
     let g:syntastic_always_populate_loc_list = 0
 endif
@@ -147,7 +156,7 @@ function! s:UpdateErrors(auto_invoked, ...)
         else
             call s:CacheErrors()
         endif
-    end
+    endif
 
     let loclist = g:SyntasticLoclist.current()
 
@@ -366,6 +375,7 @@ function! SyntasticMake(options)
 
     let old_shell = &shell
     let old_shellredir = &shellredir
+    let old_local_errorformat = &l:errorformat
     let old_errorformat = &errorformat
     let old_cwd = getcwd()
     let old_lc_messages = $LC_MESSAGES
@@ -405,6 +415,7 @@ function! SyntasticMake(options)
 
     silent! lolder
     let &errorformat = old_errorformat
+    let &l:errorformat = old_local_errorformat
     let &shellredir = old_shellredir
     let &shell=old_shell
 

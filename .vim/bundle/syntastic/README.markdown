@@ -27,12 +27,12 @@ execute their script to find them.
 
 At the time of this writing, syntax checking plugins exist for Ada,
 AppleScript, AsciiDoc, Bourne shell, C, C++, C#, CoffeeScript, Coco, Coq,
-CSS, Cucumber, CUDA, D, Dart, DocBook, Elixir, Erlang, eRuby, Fortran,
+CSS, Cucumber, CUDA, D, Dart, DocBook, Dust, Elixir, Erlang, eRuby, Fortran,
 Gentoo metadata, Go, Haml, Haskell, Haxe, HSS, HTML, Java, JavaScript, JSON,
 LESS, LISP, LLVM intermediate language, Lua, MATLAB, NASM, Objective-C,
 Objective-C++, OCaml, Perl, Perl POD, PHP, Puppet, Python, reStructuredText,
-Ruby, Rust, SASS/SCSS, Scala, Slim, Tcl, TeX, Twig, TypeScript, Vala, VHDL,
-xHtml, XML, XSLT, YAML, z80, Zope page templates, zsh.
+Ruby, Rust, SASS/SCSS, Scala, Slim, Tcl, TeX, Twig, TypeScript, Vala, Verilog,
+VHDL, xHtml, XML, XSLT, YAML, z80, Zope page templates, zsh.
 
 ## Screenshot
 
@@ -106,7 +106,7 @@ __Q. Recently some of my syntax checker options have stopped working...__
 
 A. The options are still there, they have just been renamed. Recently, almost all syntax checkers were refactored to use the new `syntastic#makeprg#build()` function. This made a lot of the old explicit options redundant - as they are now implied. The new implied options usually have slightly different names to the old options.
 
-e.g. Previously there was `g:syntastic_phpcs_conf`, now you must use `g:syntastic_php_phpcs_args`.
+e.g. Previously there was `g:syntastic_phpcs_conf`, now you must use `g:syntastic_php_phpcs_args`. This completely overrides the arguments of the checker, including any defaults, so you may need to look up the default arguments of the checker and add these in.
 
 See `:help syntastic-checker-options` for more information.
 

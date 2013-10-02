@@ -19,6 +19,11 @@ function! syntastic#util#DevNull()
     return '/dev/null'
 endfunction
 
+" Get directory separator
+function! syntastic#util#Slash() abort
+    return !exists("+shellslash") || &shellslash ? '/' : '\'
+endfunction
+
 "search the first 5 lines of the file for a magic number and return a map
 "containing the args and the executable
 "
@@ -43,10 +48,15 @@ function! syntastic#util#parseShebang()
     return {'exe': '', 'args': []}
 endfunction
 
+" Parse a version string.  Return an array of version components.
+function! syntastic#util#parseVersion(version)
+    return split(matchstr( a:version, '\v^\D*\zs\d+(\.\d+)+\ze' ), '\.')
+endfunction
+
 " Run 'command' in a shell and parse output as a version string.
 " Returns an array of version components.
-function! syntastic#util#parseVersion(command)
-    return split(matchstr( system(a:command), '\v^\D*\zs\d+(\.\d+)+\ze' ), '\.')
+function! syntastic#util#getVersion(command)
+    return syntastic#util#parseVersion(system(a:command))
 endfunction
 
 " Verify that the 'installed' version is at least the 'required' version.

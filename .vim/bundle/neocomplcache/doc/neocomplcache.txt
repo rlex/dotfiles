@@ -337,7 +337,7 @@ g:neocomplcache_enable_camel_case_completion
 g:neocomplcache_enable_underbar_completion
 		When you input _, this variable controls whether
 		neocomplcache takes an ambiguous searching as an end of the
-		words in it.  For example, neocomplcache come to match it
+		words in it.  For example, neocomplcache comes to match it
 		with "public_html" when you input it with "p_h".
 
 		Note: This feature may be too slow.
@@ -1636,12 +1636,12 @@ you can check 'path' option or change |g:neocomplcache_include_paths|.
 http://github.com/Shougo/vimproc
 
 
-Q: An error occurred in "sudo vim":
+Q: neocomplcache cannot create cache files in "sudo vim":
 
-A: neocomplcache does not support "sudo vim".  Because neocomplcache (and other
-plugins) creates temporary files in super user permission by sudo command.  You
-must use sudo.vim or set "Defaults always_set_home" in "/etc/sudoers", or must
-use "sudoedit" command.
+A: Because neocomplcache (and other plugins) creates temporary files in super
+user permission by sudo command.  You must use sudo.vim or set "Defaults
+always_set_home" in "/etc/sudoers", or must use "sudoedit" command.
+
 
 Ubuntu has a command "sudoedit" which can work well with neocomplcache.
 I'm not sure if other distros has this command...
@@ -1891,6 +1891,13 @@ But you can configure it by below settings.
 	autocmd VimEnter *
 	\ highlight ModeMsg guifg=bg guibg=bg | highlight WarningMsg guifg=bg
 <
+
+Q: neocomplcache will change external completeopt vaule(longest).
+https://github.com/Shougo/neocomplcache.vim/issues/453
+
+A: It is feature. Because "longest" completeopt conflicts with auto
+completion.  To use "longest" option, you must disable auto completion.
+"longest" is good feature. But it is for manual completion only.
 
 ==============================================================================
 TODO						*neocomplcache-todo*
