@@ -5,8 +5,13 @@
 #
 # Requirements:
 # * bash (tested on 4.20, should work on older versions too)
-# * awk (works with GNU awk, nawk, busybox awk)
+# * awk (works with GNU awk, nawk, busybox awk, mawk)
 # * ping (from iputils)
+#
+# More information:
+# http://my.opera.com/CrazyTerabyte/blog/2013/10/18/prettyping-sh-a-better-ui-for-watching-ping-responses
+# http://www.reddit.com/r/linux/comments/1op98a/prettypingsh_a_better_ui_for_watching_ping/
+# https://bitbucket.org/denilsonsa/small_scripts/
 
 # TODO: Detect the following kinds of message and avoid printing it repeatedly.
 # From 192.168.1.11: icmp_seq=4 Destination Host Unreachable
@@ -44,6 +49,9 @@ prettyping parameters:
   --lines <n>      Override auto-detection of terminal dimensions.
   --rttmin <n>     Minimum RTT represented in the unicode graph. (default: auto)
   --rttmax <n>     Maximum RTT represented in the unicode graph. (default: auto)
+  --awkbin <exec>  Override the awk interpreter. (default: awk)
+  --pingbin <exec> Override the ping tool. (default: ping)
+  -6               Shortcut for: --pingbin ping6
 
 ping parameters handled by prettyping:
   -a  Audible ping is not implemented yet.
@@ -52,8 +60,7 @@ ping parameters handled by prettyping:
   -R  Record route mode is not allowed in prettyping.
   -v  Verbose output seems to be the default mode in ping.
 
-Tested with Linux ping tool from "iputils" package:
-http://www.linuxfoundation.org/collaborate/workgroups/networking/iputils
+All other parameters are passed directly to ping.
 EOF
 }
 
@@ -77,9 +84,12 @@ parse_arguments() {
 	RTT_MIN=auto
 	RTT_MAX=auto
 
-	PING_EXEC="ping"
-	#PING_EXEC="./mockping.awk"
+	PING_BIN="ping"
+	#PING_BIN="./mockping.awk"
 	PING_PARAMS=( )
+
+	AWK_BIN="awk"
+	AWK_PARAMS=( )
 
 	while [[ $# != 0 ]] ; do
 		case "$1" in
@@ -127,6 +137,10 @@ parse_arguments() {
 			-terminal     | --terminal     ) IS_TERMINAL=1 ;;
 			-noterminal   | --noterminal   ) IS_TERMINAL=0 ;;
 
+			-awkbin  | --awkbin  ) AWK_BIN="$2"  ; shift ;;
+			-pingbin | --pingbin ) PING_BIN="$2" ; shift ;;
+			-6 ) PING_BIN="ping6" ;;
+
 			#TODO: Check if these parameters are numbers.
 			-last    | --last    ) LAST_N="$2"           ; shift ;;
 			-columns | --columns ) OVERRIDE_COLUMNS="$2" ; shift ;;
@@ -149,6 +163,13 @@ parse_arguments() {
 	if [[ "${#PING_PARAMS[@]}" = 0 ]] ; then
 		echo "${MYNAME}: Missing parameters, use --help for instructions."
 		exit 1
+	fi
+
+	# Workaround for mawk:
+	# http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=593504
+	local version="$(echo | "${AWK_BIN}" -W version 2>&1)"
+	if [[ "${version}" == mawk* ]] ; then
+		AWK_PARAMS+=(-W interactive)
 	fi
 }
 
@@ -185,11 +206,11 @@ trap '' 2
 
 # Now the ugly code.
 (
-	"${PING_EXEC}" "${PING_PARAMS[@]}" &
+	"${PING_BIN}" "${PING_PARAMS[@]}" &
 	# Commented out, because it looks like this line is not needed
 	#trap "kill -2 $! ; exit 1" 2  # Catch Ctrl+C here
 	wait
-) 2>&1 | awk '
+) 2>&1 | "${AWK_BIN}" "${AWK_PARAMS[@]}" '
 # Weird that awk does not come with abs(), so I need to implement it.
 function abs(x) {
 	return ( (x < 0) ? -x : x )
@@ -343,8 +364,8 @@ function process_rtt(rtt) {
 ############################################################
 # Functions related to printing the fancy ping response
 
-# block_index, n, w are just local variables.
-function print_response_legend(i, n, w) {
+# block_index, n, w, oddeven are just local variables.
+function print_response_legend(i, n, w, oddeven) {
 	if( ! '"${USE_LEGEND}"' ) {
 		return
 	}
@@ -365,6 +386,11 @@ function print_response_legend(i, n, w) {
 			if( '"${IS_TERMINAL}"' && w == COLUMNS ) {
 				printf( "\n" )
 				w = 0
+				oddeven = ! oddeven
+				if ( oddeven ) {
+					printf( " " )
+					w++
+				}
 			}
 			n = sprintf( "%4d ", BLOCK_RTT_MIN + ceil((i-1) * BLOCK_RTT_RANGE / (BLOCK_LEN - 2)) )
 			w += 1 + length(n)
@@ -372,7 +398,12 @@ function print_response_legend(i, n, w) {
 			# Avoid breaking the legend at the end of the line.
 			if( '"${IS_TERMINAL}"' && w > COLUMNS ) {
 				printf( "\n" )
-				w = 0
+				w = 1 + length(n)
+				oddeven = ! oddeven
+				if ( oddeven ) {
+					printf( " " )
+					w++
+				}
 			}
 
 			printf( BLOCK[i] ESC_DEFAULT n )
@@ -527,7 +558,7 @@ BEGIN {
 
 	# Auto-detecting the terminal size
 	HAS_STTY = 1
-	STTY_CMD = "stty size --file=/dev/tty 2> /dev/null"
+	STTY_CMD = "stty --file=/dev/tty size 2> /dev/null"
 	get_terminal_size()
 	if( '"${IS_TERMINAL}"' && COLUMNS <= 50 ) {
 		print "Warning: terminal width is too small."
@@ -672,7 +703,10 @@ BEGIN {
 		print_newlines_if_needed()
 		print_received_response(rtt)
 
-		last_seq++
+		# In case of receiving multiple responses with the same seq number, it
+		# is better to use "last_seq = seq" than to increment last_seq.
+		last_seq = seq
+
 		received++
 		store(lastn_lost, 0)
 
