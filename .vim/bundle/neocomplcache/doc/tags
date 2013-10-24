@@ -159,7 +159,6 @@ neocomplcache-source-attributes	neocomplcache.txt	/*neocomplcache-source-attribu
 neocomplcache-sources	neocomplcache.txt	/*neocomplcache-sources*
 neocomplcache-sources-neco-ghc	neocomplcache.txt	/*neocomplcache-sources-neco-ghc*
 neocomplcache-sources-neosnippet	neocomplcache.txt	/*neocomplcache-sources-neosnippet*
-neocomplcache-todo	neocomplcache.txt	/*neocomplcache-todo*
 neocomplcache-unite-source-neocomplcache	neocomplcache.txt	/*neocomplcache-unite-source-neocomplcache*
 neocomplcache-unite-sources	neocomplcache.txt	/*neocomplcache-unite-sources*
 neocomplcache-user-sources	neocomplcache.txt	/*neocomplcache-user-sources*

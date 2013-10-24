@@ -33,6 +33,7 @@ g:tlib#input#numeric_chars	tlib.txt	/*g:tlib#input#numeric_chars*
 g:tlib#input#or	tlib.txt	/*g:tlib#input#or*
 g:tlib#input#sortprefs_threshold	tlib.txt	/*g:tlib#input#sortprefs_threshold*
 g:tlib#input#use_popup	tlib.txt	/*g:tlib#input#use_popup*
+g:tlib#scratch#hidden	tlib.txt	/*g:tlib#scratch#hidden*
 g:tlib#vcs#check	tlib.txt	/*g:tlib#vcs#check*
 g:tlib#vcs#def	tlib.txt	/*g:tlib#vcs#def*
 g:tlib#vcs#executables	tlib.txt	/*g:tlib#vcs#executables*
@@ -181,6 +182,10 @@ tlib#file#Relative()	tlib.txt	/*tlib#file#Relative()*
 tlib#file#Split()	tlib.txt	/*tlib#file#Split()*
 tlib#file#With()	tlib.txt	/*tlib#file#With()*
 tlib#fixes#Winpos()	tlib.txt	/*tlib#fixes#Winpos()*
+tlib#grep#Do()	tlib.txt	/*tlib#grep#Do()*
+tlib#grep#List()	tlib.txt	/*tlib#grep#List()*
+tlib#grep#LocList()	tlib.txt	/*tlib#grep#LocList()*
+tlib#grep#QuickFixList()	tlib.txt	/*tlib#grep#QuickFixList()*
 tlib#hash#Adler32()	tlib.txt	/*tlib#hash#Adler32()*
 tlib#hash#Adler32_tlib()	tlib.txt	/*tlib#hash#Adler32_tlib()*
 tlib#hash#Adler32_vim()	tlib.txt	/*tlib#hash#Adler32_vim()*
