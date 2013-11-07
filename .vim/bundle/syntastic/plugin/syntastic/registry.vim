@@ -116,8 +116,8 @@ function! g:SyntasticRegistry.echoInfoFor(ftalias_list)
         call extend(active, self.getActiveCheckers(ftalias))
     endfor
 
-    echomsg "Available checkers: " . join(syntastic#util#unique(map(available, "v:val.getName()")))
-    echomsg "Currently active checker(s): " . join(syntastic#util#unique(map(active, "v:val.getName()")))
+    echomsg "Available checker(s): " . join(syntastic#util#unique(map(available, "v:val.getName()")))
+    echomsg "Currently enabled checker(s): " . join(syntastic#util#unique(map(active, "v:val.getName()")))
 endfunction
 
 " Private methods {{{1
@@ -173,7 +173,7 @@ function! g:SyntasticRegistry._loadCheckers(filetype)
         return
     endif
 
-    exec "runtime! syntax_checkers/" . a:filetype . "/*.vim"
+    execute "runtime! syntax_checkers/" . a:filetype . "/*.vim"
 
     if !has_key(self._checkerMap, a:filetype)
         let self._checkerMap[a:filetype] = []
@@ -207,7 +207,7 @@ endfunction
 function! s:SyntasticRegistryNormaliseFiletype(ftalias)
     let ft = get(s:defaultFiletypeMap, a:ftalias, a:ftalias)
     let ft = get(g:syntastic_filetype_map, ft, ft)
-    let ft = substitute(ft, '-', '_', 'g')
+    let ft = substitute(ft, '\m-', '_', 'g')
     return ft
 endfunction
 

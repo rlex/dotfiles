@@ -20,19 +20,20 @@ endfunction
 function! SyntaxCheckers_handlebars_handlebars_GetLocList()
     let makeprg = syntastic#makeprg#build({
         \ 'exe': 'handlebars',
+        \ 'args': '-f ' . syntastic#util#DevNull(),
         \ 'filetype': 'handlebars',
         \ 'subchecker': 'handlebars' })
 
     let errorformat =
-        \ 'Error: %m on line %l:,'.
-        \ '%-Z%p^,' .
-        \ "Error: %m,".
-        \ '%-Z%p^,' .
-        \ '%-G'
+        \ '%EError: %m on line %l:,'.
+        \ "%EError: %m,".
+        \ '%Z%p^,' .
+        \ '%-G%.%#'
 
     return SyntasticMake({
         \ 'makeprg': makeprg,
-        \ 'errorformat': errorformat })
+        \ 'errorformat': errorformat,
+        \ 'defaults': {'bufnr': bufnr("")} })
 endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({

@@ -10,7 +10,26 @@ if !exists("g:syntastic_debug")
     let g:syntastic_debug = 0
 endif
 
+if !exists("g:syntastic_delayed_redraws")
+    let g:syntastic_delayed_redraws = 0
+endif
+
 let s:deprecationNoticesIssued = []
+let s:redraw_delayed = 0
+let s:redraw_full = 0
+
+if g:syntastic_delayed_redraws
+    " CursorHold / CursorHoldI events are triggered if user doesn't press a
+    " key for &updatetime ms.  We change it only if current value is the default
+    " value, that is 4000 ms.
+    if &updatetime == 4000
+        let &updatetime = 500
+    endif
+
+    augroup syntastic
+        autocmd CursorHold,CursorHoldI * call syntastic#util#redrawHandler()
+    augroup END
+endif
 
 function! syntastic#util#DevNull()
     if has('win32')
@@ -39,8 +58,8 @@ function! syntastic#util#parseShebang()
         let line = getline(lnum)
 
         if line =~ '^#!'
-            let exe = matchstr(line, '^#!\s*\zs[^ \t]*')
-            let args = split(matchstr(line, '^#!\s*[^ \t]*\zs.*'))
+            let exe = matchstr(line, '\m^#!\s*\zs[^ \t]*')
+            let args = split(matchstr(line, '\m^#!\s*[^ \t]*\zs.*'))
             return {'exe': exe, 'args': args}
         endif
     endfor
@@ -50,7 +69,7 @@ endfunction
 
 " Parse a version string.  Return an array of version components.
 function! syntastic#util#parseVersion(version)
-    return split(matchstr( a:version, '\v^\D*\zs\d+(\.\d+)+\ze' ), '\.')
+    return split(matchstr( a:version, '\v^\D*\zs\d+(\.\d+)+\ze' ), '\m\.')
 endfunction
 
 " Run 'command' in a shell and parse output as a version string.
@@ -102,7 +121,7 @@ function! syntastic#util#wideMsg(msg)
     let msg = substitute(msg, "\n", "", "g")
 
     set noruler noshowcmd
-    redraw
+    call syntastic#util#redraw(0)
 
     echo msg
 
@@ -177,12 +196,33 @@ endfunction
 " decode XML entities
 function! syntastic#util#decodeXMLEntities(string)
     let str = a:string
-    let str = substitute(str, '&lt;', '<', 'g')
-    let str = substitute(str, '&gt;', '>', 'g')
-    let str = substitute(str, '&quot;', '"', 'g')
-    let str = substitute(str, '&apos;', "'", 'g')
-    let str = substitute(str, '&amp;', '\&', 'g')
+    let str = substitute(str, '\m&lt;', '<', 'g')
+    let str = substitute(str, '\m&gt;', '>', 'g')
+    let str = substitute(str, '\m&quot;', '"', 'g')
+    let str = substitute(str, '\m&apos;', "'", 'g')
+    let str = substitute(str, '\m&amp;', '\&', 'g')
     return str
+endfunction
+
+" On older Vim versions calling redraw while a popup is visible can make
+" Vim segfault, so move redraws to a CursorHold / CursorHoldI handler.
+function! syntastic#util#redraw(full)
+    if !g:syntastic_delayed_redraws || !pumvisible()
+        call s:Redraw(a:full)
+        let s:redraw_delayed = 0
+        let s:redraw_full = 0
+    else
+        let s:redraw_delayed = 1
+        let s:redraw_full = s:redraw_full || a:full
+    endif
+endfunction
+
+function! syntastic#util#redrawHandler()
+    if s:redraw_delayed && !pumvisible()
+        call s:Redraw(s:redraw_full)
+        let s:redraw_delayed = 0
+        let s:redraw_full = 0
+    endif
 endfunction
 
 function! syntastic#util#debug(msg)
@@ -215,6 +255,21 @@ function! syntastic#util#deprecationWarn(msg)
 
     call add(s:deprecationNoticesIssued, a:msg)
     call syntastic#util#warn(a:msg)
+endfunction
+
+"Redraw in a way that doesnt make the screen flicker or leave anomalies behind.
+"
+"Some terminal versions of vim require `redraw!` - otherwise there can be
+"random anomalies left behind.
+"
+"However, on some versions of gvim using `redraw!` causes the screen to
+"flicker - so use redraw.
+function! s:Redraw(full)
+    if a:full
+        redraw!
+    else
+        redraw
+    endif
 endfunction
 
 let &cpo = s:save_cpo
