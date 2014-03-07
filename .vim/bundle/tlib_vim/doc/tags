@@ -6,7 +6,15 @@
 :TScratch	tlib.txt	/*:TScratch*
 :TTimeCommand	tlib.txt	/*:TTimeCommand*
 :TVarArg	tlib.txt	/*:TVarArg*
-g:tlib#Filter_cnfx#expander	tlib.txt	/*g:tlib#Filter_cnfx#expander*
+Add()	tlib.txt	/*Add()*
+TestArgs()	tlib.txt	/*TestArgs()*
+TestArgs1()	tlib.txt	/*TestArgs1()*
+TestArgs2()	tlib.txt	/*TestArgs2()*
+TestArgs3()	tlib.txt	/*TestArgs3()*
+TestGetArg()	tlib.txt	/*TestGetArg()*
+TestGetArg1()	tlib.txt	/*TestGetArg1()*
+g:tlib#Filter_glob#char	tlib.txt	/*g:tlib#Filter_glob#char*
+g:tlib#Filter_glob#seq	tlib.txt	/*g:tlib#Filter_glob#seq*
 g:tlib#cache#dont_purge	tlib.txt	/*g:tlib#cache#dont_purge*
 g:tlib#cache#max_filename	tlib.txt	/*g:tlib#cache#max_filename*
 g:tlib#cache#purge_days	tlib.txt	/*g:tlib#cache#purge_days*
@@ -57,8 +65,8 @@ o_sp	tlib.txt	/*o_sp*
 standard-paragraph	tlib.txt	/*standard-paragraph*
 tlib#Filter_cnf#New()	tlib.txt	/*tlib#Filter_cnf#New()*
 tlib#Filter_cnfd#New()	tlib.txt	/*tlib#Filter_cnfd#New()*
-tlib#Filter_cnfx#New()	tlib.txt	/*tlib#Filter_cnfx#New()*
 tlib#Filter_fuzzy#New()	tlib.txt	/*tlib#Filter_fuzzy#New()*
+tlib#Filter_glob#New()	tlib.txt	/*tlib#Filter_glob#New()*
 tlib#Object#Methods()	tlib.txt	/*tlib#Object#Methods()*
 tlib#Object#New()	tlib.txt	/*tlib#Object#New()*
 tlib#World#New()	tlib.txt	/*tlib#World#New()*
@@ -78,10 +86,12 @@ tlib#agent#EditFileInTab()	tlib.txt	/*tlib#agent#EditFileInTab()*
 tlib#agent#EditFileInVSplit()	tlib.txt	/*tlib#agent#EditFileInVSplit()*
 tlib#agent#EditItem()	tlib.txt	/*tlib#agent#EditItem()*
 tlib#agent#EditReturnValue()	tlib.txt	/*tlib#agent#EditReturnValue()*
+tlib#agent#End()	tlib.txt	/*tlib#agent#End()*
 tlib#agent#ExecAgentByName()	tlib.txt	/*tlib#agent#ExecAgentByName()*
 tlib#agent#Exit()	tlib.txt	/*tlib#agent#Exit()*
 tlib#agent#GotoLine()	tlib.txt	/*tlib#agent#GotoLine()*
 tlib#agent#Help()	tlib.txt	/*tlib#agent#Help()*
+tlib#agent#Home()	tlib.txt	/*tlib#agent#Home()*
 tlib#agent#Input()	tlib.txt	/*tlib#agent#Input()*
 tlib#agent#NewItem()	tlib.txt	/*tlib#agent#NewItem()*
 tlib#agent#Null()	tlib.txt	/*tlib#agent#Null()*
@@ -272,6 +282,7 @@ tlib#var#List()	tlib.txt	/*tlib#var#List()*
 tlib#vcs#Diff()	tlib.txt	/*tlib#vcs#Diff()*
 tlib#vcs#FindVCS()	tlib.txt	/*tlib#vcs#FindVCS()*
 tlib#vcs#Ls()	tlib.txt	/*tlib#vcs#Ls()*
+tlib#vim#CopyFunction()	tlib.txt	/*tlib#vim#CopyFunction()*
 tlib#vim#Maximize()	tlib.txt	/*tlib#vim#Maximize()*
 tlib#vim#RestoreWindow()	tlib.txt	/*tlib#vim#RestoreWindow()*
 tlib#win#GetLayout()	tlib.txt	/*tlib#win#GetLayout()*

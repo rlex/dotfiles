@@ -361,15 +361,15 @@ snippet footer#
 		${0}
 	</footer>
 snippet form
-	<form action="${1}" method="${2:get}" accept-charset="utf-8">
+	<form action="${1}" method="${2:post}">
 		${0}
 	</form>
 snippet form.
-	<form class="${1}" action="${2}" method="${3:get}" accept-charset="utf-8">
+	<form class="${1}" action="${2}" method="${3:post}">
 		${0}
 	</form>
 snippet form#
-	<form id="${1}" action="${2}" method="${3:get}" accept-charset="utf-8">
+	<form id="${1}" action="${2}" method="${3:post}">
 		${0}
 	</form>
 snippet h1
@@ -749,15 +749,15 @@ snippet summary
 snippet sup
 	<sup>${0}</sup>
 snippet table
-	<table border="${1:0}">
+	<table>
 		${0}
 	</table>
 snippet table.
-	<table class="${1}" border="${2:0}">
+	<table class="${1}">
 		${0}
 	</table>
 snippet table#
-	<table id="${1}" border="${2:0}">
+	<table id="${1}">
 		${0}
 	</table>
 snippet tbody

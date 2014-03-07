@@ -148,6 +148,12 @@ The list of possible <Plug> mappings is as follows:
                                 try to expand a snippet. Use in both insert
                                 and select modes.
 
+<Plug>snipMateTrigger           Default: unmapped       Mode: Insert
+                                Try to expand a snippet regardless of any
+                                existing snippet expansion. If done within an
+                                expanded snippet, the outer snippet's tab
+                                stops are lost, unless expansion failed.
+
 <Plug>snipMateBack              Default: <S-Tab>        Mode: Insert, Select
                                 Jump to the previous tab stop, if it exists.
                                 Use in both insert and select modes.
@@ -188,7 +194,6 @@ Multiple snippets can be defined in *.snippets files. Each snippet definition
 looks something like: >
 
     snippet trigger optional description
-    guard left_from_cursor='^\s*'
         expanded text
         more expanded text
 
@@ -196,9 +201,6 @@ looks something like: >
 The description is optional. If it is left out and a second snippet inside the
 same .snippets file uses the same trigger, the second one will overwrite the
 first. Otherwise multisnip is used.
-
-The guard condition line is also optional. It can be used to make a snippet
-available only in some cases. The value should be a VimL expression.
 
 Note: Hard tabs in the expansion text are required. When the snippet is
 expanded in the text and 'expandtab' is set, each tab will be replaced with
@@ -248,7 +250,7 @@ the tab stop. This text then can be copied throughout the snippet using "$#",
 given # is the same number as used before. So, to make a C for loop: >
 
     snippet for
-        for (${2:i}; $2 < ${1:count}; $1++) {
+        for (${2:i}=0; $2 < ${1:count}; $2++) {
             ${4}
         }
 
@@ -397,6 +399,28 @@ Perhaps some of these features will be added in a later release.
 
 ==============================================================================
 CHANGELOG                                                 *SnipMate-changelog*
+
+0.87 - 2014-01-04
+-----------------
+
+* Stop indenting empty lines when expanding snippets
+* Support extends keyword in .snippets files
+* Fix visual placeholder support
+* Add zero tabstop support
+* Support negative 'softtabstop'
+* Add g:snipMate_no_default_aliases option
+* Add <Plug>snipMateTrigger for triggering an expansion inside a snippet
+* Add snipMate#CanBeTriggered() function
+
+0.86 - 2013-06-15
+-----------------
+* Use more idiomatic <Plug> maps
+* Remove most select mode mappings
+
+* Fix disappearing variables bug (hpesoj)
+* Fix cursor position bug when a variable is on the same line as the stop
+* Fix undo point creation causing problems with Supertab
+* Fix bug where SnipMate would use a typed trigger as a regular expression
 
 0.85 - 2013-04-03
 -----------------
