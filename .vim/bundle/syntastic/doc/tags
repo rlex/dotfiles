@@ -46,6 +46,7 @@ syntastic-composite	syntastic.txt	/*syntastic-composite*
 syntastic-config-exec	syntastic.txt	/*syntastic-config-exec*
 syntastic-config-makeprg	syntastic.txt	/*syntastic-config-makeprg*
 syntastic-contents	syntastic.txt	/*syntastic-contents*
+syntastic-eclim	syntastic.txt	/*syntastic-eclim*
 syntastic-error-signs	syntastic.txt	/*syntastic-error-signs*
 syntastic-error-window	syntastic.txt	/*syntastic-error-window*
 syntastic-filetype-checkers	syntastic.txt	/*syntastic-filetype-checkers*

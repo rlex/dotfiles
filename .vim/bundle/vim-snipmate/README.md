@@ -44,6 +44,29 @@ looking at the [vim-snippets][vim-snippets] repository.
         " Optional:
         Bundle "honza/vim-snippets"
 
+## selecting snippets / customization
+Snipmate is powerful, you can hook into almost everything and replace the
+default implementation.
+
+Eg the get_snippets, snippet_dirs, get_scopes option determine which
+directories to look for snippet files, which snippet files to select and so on.
+
+Most likely you're happy by overridding patching scope_aliases which tells
+snipmate which snippet files to read for a given file type. Example
+configuration for your .vimrc:
+
+  let g:snipMate = {}
+  let g:snipMate.scope_aliases = {}
+  let g:snipMate.scope_aliases['ruby']
+              \ = 'ruby,ruby-rails'
+
+which will make vim load ruby.snippets and ruby-rails.snippets if you open ruby
+files. Because this is that easy vim-snippets even recommends creating multiple
+files so that users can opt-in for sets of snippets easily according to their
+liking.
+
+The SnippetsWithFolding example shows how to patch / add snippets on the fly.
+
 ## Release Notes ##
 
 ### Master ###
