@@ -159,6 +159,7 @@ tlib#cache#Dir()	tlib.txt	/*tlib#cache#Dir()*
 tlib#cache#Filename()	tlib.txt	/*tlib#cache#Filename()*
 tlib#cache#Get()	tlib.txt	/*tlib#cache#Get()*
 tlib#cache#ListFilesInCache()	tlib.txt	/*tlib#cache#ListFilesInCache()*
+tlib#cache#MTime()	tlib.txt	/*tlib#cache#MTime()*
 tlib#cache#MaybePurge()	tlib.txt	/*tlib#cache#MaybePurge()*
 tlib#cache#Purge()	tlib.txt	/*tlib#cache#Purge()*
 tlib#cache#Save()	tlib.txt	/*tlib#cache#Save()*
@@ -232,6 +233,7 @@ tlib#paragraph#Move()	tlib.txt	/*tlib#paragraph#Move()*
 tlib#persistent#Dir()	tlib.txt	/*tlib#persistent#Dir()*
 tlib#persistent#Filename()	tlib.txt	/*tlib#persistent#Filename()*
 tlib#persistent#Get()	tlib.txt	/*tlib#persistent#Get()*
+tlib#persistent#MTime()	tlib.txt	/*tlib#persistent#MTime()*
 tlib#persistent#Save()	tlib.txt	/*tlib#persistent#Save()*
 tlib#persistent#Value()	tlib.txt	/*tlib#persistent#Value()*
 tlib#progressbar#Display()	tlib.txt	/*tlib#progressbar#Display()*

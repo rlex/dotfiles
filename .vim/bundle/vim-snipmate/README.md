@@ -44,28 +44,29 @@ looking at the [vim-snippets][vim-snippets] repository.
         " Optional:
         Bundle "honza/vim-snippets"
 
-## selecting snippets / customization
-Snipmate is powerful, you can hook into almost everything and replace the
-default implementation.
+## FAQ ##
 
-Eg the get_snippets, snippet_dirs, get_scopes option determine which
-directories to look for snippet files, which snippet files to select and so on.
+> How does SnipMate determine which snippets to load? How can I separate, for
+> example, my Rails snippets from my Ruby snippets?
 
-Most likely you're happy by overridding patching scope_aliases which tells
-snipmate which snippet files to read for a given file type. Example
-configuration for your .vimrc:
+Primarily SnipMate looks at the `'filetype'` and `'syntax'` settings. Taking
+"scopes" from these options, it looks in each `snippets/` directory in
+`'runtimepath'` for files named `scope.snippets`, `scope/*.snippets`, or
+`scope_*.snippets`.
 
-  let g:snipMate = {}
-  let g:snipMate.scope_aliases = {}
-  let g:snipMate.scope_aliases['ruby']
-              \ = 'ruby,ruby-rails'
+However we understand this may not allow for the flexibility desired by some
+languages. For this we provide two options: scope aliases and the
+`:SnipMateLoadScope` command. Scope aliases simply say "whenever this scope is
+loaded, also load this other scope:
 
-which will make vim load ruby.snippets and ruby-rails.snippets if you open ruby
-files. Because this is that easy vim-snippets even recommends creating multiple
-files so that users can opt-in for sets of snippets easily according to their
-liking.
+    let g:snipMate = {}
+    let g:snipMate.scope_aliases = {}
+    let g:snipMate.scope_aliases['ruby'] = 'ruby,rails'
 
-The SnippetsWithFolding example shows how to patch / add snippets on the fly.
+will load the `ruby-rails` scope whenever the `ruby` scope is active. The
+`:SnipMateLoadScope foo` command will always load the foo scope in the current
+buffer. The [vim-rails](https://github.com/tpope/vim-rails) plugin automatically
+does `:SnipMateLoadScope rails` when editing a Rails project for example.
 
 ## Release Notes ##
 
@@ -76,6 +77,10 @@ The SnippetsWithFolding example shows how to patch / add snippets on the fly.
 * Fix bug with mirrors in the first column
 * Fix bug with tabs in indents ([#143][143])
 * Fix bug with mirrors in placeholders
+* Fix reading single snippet files
+* Fix the use of the visual map at the end of a line
+* Add `:SnipMateLoadScope` command and buffer-local scope aliases
+* Load `<scope>_*.snippets` files
 
 ### 0.87 - 2014-01-04 ###
 

@@ -188,6 +188,7 @@ settings (taking into account the dotted syntax), the following files are read
 for snippets: >
 
     .../snippets/<scope>.snippets
+    .../snippets/<scope>_<name>.snippets
     .../snippets/<scope>/<name>.snippets
     .../snippets/<scope>/<trigger>.snippet
     .../snippets/<scope>/<trigger>/<description>.snippet
