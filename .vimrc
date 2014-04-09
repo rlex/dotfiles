@@ -71,6 +71,7 @@ Bundle "MarcWeber/vim-addon-mw-utils"
 Bundle "tomtom/tlib_vim"
 Bundle "honza/vim-snippets"
 Bundle "ghewgill/vim-scmdiff"
+Bundle "0rca/vim-mikrotik"
 
 Bundle "Gundo"
 Bundle "TaskList.vim"
