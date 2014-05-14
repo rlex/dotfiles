@@ -18,13 +18,8 @@ setopt no_hist_beep
 setopt hist_save_no_dups
 
 ## autoloads ##
-autoload -U compinit
-autoload -U promptinit
-autoload -U colors
-## inits ##
-colors
-compinit
-promptinit
+autoload -U promptinit; promptinit
+autoload -U colors; colors
 
 ## dircolors ##
 if [ -x /usr/bin/dircolors ]; then
@@ -73,6 +68,7 @@ function preexec() {
 ## Zsh completion ##
 # New style completion system
 autoload -U compinit; compinit
+autoload -U bashcompinit; bashcompinit
 #  * List of completers to use
 zstyle ":completion:*" completer _complete _match _approximate
 #  * Allow approximate
@@ -89,11 +85,22 @@ zstyle ":completion:*:*:kill:*:processes" list-colors "=(#b) #([0-9]#)*=0=01;32"
 zstyle ":completion:*:cd:*" ignore-parents parent pwd
 #  * Complete with colors
 zstyle ":completion:*" list-colors ""
+
+#system-wide bash completion
+if [ -f /etc/bash_completion.d ]; then
+    . /etc/bash_completion.d
+fi
+
+#homebrew bash completion
+if [ -f /usr/local/etc/bash_completion.d ]; then
+    . /usr/local/etc/bash_completion.d
+fi
+
+
 #Homebrew zsh-only completion
 if [ -f /usr/local/share/zsh/site-functions ]; then
     . /usr/local/share/zsh/site-functions
 fi
-
 
 ## Keybindings ##
 #bindkey -e

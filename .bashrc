@@ -4,8 +4,8 @@ if [[ $- != *i* ]] ; then
 fi
 
 #system-wide bash completion
-if [ -f /etc/bash_completion ]; then
-    . /etc/bash_completion
+if [ -f /etc/bash_completion.d ]; then
+    . /etc/bash_completion.d
 fi
 
 #homebrew bash completion
