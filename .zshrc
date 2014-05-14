@@ -21,9 +21,11 @@ setopt hist_save_no_dups
 autoload -U promptinit; promptinit
 autoload -U colors; colors
 
-## dircolors ##
-if [ -x /usr/bin/dircolors ]; then
+## ls colors ##
+if whence dircolors >/dev/null; then    
     eval `dircolors ~/.dircolors -b`
+else
+    export CLICOLOR=1
 fi
 
 # Prompt!
