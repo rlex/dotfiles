@@ -3,10 +3,14 @@ if [[ $- != *i* ]] ; then
          return
 fi
 
-#TODO: system-wide bash completion. If enabled,
-#TODO: this breaks completion completely.
+#system-wide bash completion
 if [ -f /etc/bash_completion ]; then
     . /etc/bash_completion
+fi
+
+#homebrew bash completion
+if [ -f /usr/local/etc/bash_completion.d ]; then
+    . /usr/local/etc/bash_completion.d
 fi
 
 # user preferences
