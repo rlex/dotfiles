@@ -89,6 +89,11 @@ zstyle ":completion:*:*:kill:*:processes" list-colors "=(#b) #([0-9]#)*=0=01;32"
 zstyle ":completion:*:cd:*" ignore-parents parent pwd
 #  * Complete with colors
 zstyle ":completion:*" list-colors ""
+#Homebrew zsh-only completion
+if [ -f /usr/local/share/zsh/site-functions ]; then
+    . /usr/local/share/zsh/site-functions
+fi
+
 
 ## Keybindings ##
 #bindkey -e
