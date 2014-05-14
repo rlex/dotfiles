@@ -1,9 +1,9 @@
 'b:syntastic_checkers'	syntastic.txt	/*'b:syntastic_checkers'*
 'g:syntastic_<filetype>_checkers'	syntastic.txt	/*'g:syntastic_<filetype>_checkers'*
+'syntastic_<filetype>_<checker>_<option>'	syntastic.txt	/*'syntastic_<filetype>_<checker>_<option>'*
+'syntastic_<filetype>_<checker>_exe'	syntastic.txt	/*'syntastic_<filetype>_<checker>_exe'*
+'syntastic_<filetype>_<checker>_exec'	syntastic.txt	/*'syntastic_<filetype>_<checker>_exec'*
 'syntastic_<filetype>_<checker>_quiet_messages'	syntastic.txt	/*'syntastic_<filetype>_<checker>_quiet_messages'*
-'syntastic_<filetype>_<subchecker>_<option>'	syntastic.txt	/*'syntastic_<filetype>_<subchecker>_<option>'*
-'syntastic_<filetype>_<subchecker>_exe'	syntastic.txt	/*'syntastic_<filetype>_<subchecker>_exe'*
-'syntastic_<filetype>_<subchecker>_exec'	syntastic.txt	/*'syntastic_<filetype>_<subchecker>_exec'*
 'syntastic_aggregate_errors'	syntastic.txt	/*'syntastic_aggregate_errors'*
 'syntastic_always_populate_loc_list'	syntastic.txt	/*'syntastic_always_populate_loc_list'*
 'syntastic_auto_jump'	syntastic.txt	/*'syntastic_auto_jump'*
@@ -25,6 +25,7 @@
 'syntastic_loc_list_height'	syntastic.txt	/*'syntastic_loc_list_height'*
 'syntastic_mode_map'	syntastic.txt	/*'syntastic_mode_map'*
 'syntastic_quiet_messages'	syntastic.txt	/*'syntastic_quiet_messages'*
+'syntastic_sort_aggregated_errors'	syntastic.txt	/*'syntastic_sort_aggregated_errors'*
 'syntastic_stl_format'	syntastic.txt	/*'syntastic_stl_format'*
 'syntastic_style_error_symbol'	syntastic.txt	/*'syntastic_style_error_symbol'*
 'syntastic_style_warning_symbol'	syntastic.txt	/*'syntastic_style_warning_symbol'*
@@ -59,7 +60,9 @@ syntastic-highlighting	syntastic.txt	/*syntastic-highlighting*
 syntastic-intro	syntastic.txt	/*syntastic-intro*
 syntastic-license	syntastic.txt	/*syntastic-license*
 syntastic-notes	syntastic.txt	/*syntastic-notes*
+syntastic-powershell	syntastic.txt	/*syntastic-powershell*
 syntastic-pymode	syntastic.txt	/*syntastic-pymode*
 syntastic-quickstart	syntastic.txt	/*syntastic-quickstart*
 syntastic-statusline-flag	syntastic.txt	/*syntastic-statusline-flag*
+syntastic-vim-virtualenv	syntastic.txt	/*syntastic-vim-virtualenv*
 syntastic.txt	syntastic.txt	/*syntastic.txt*

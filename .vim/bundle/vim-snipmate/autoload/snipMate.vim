@@ -336,6 +336,7 @@ function! s:state_proto.update_vars(change)
 	let newWord = strpart(getline('.'), self.start_col - 1, newWordLen)
 	let changeLen = a:change
 	let curLine = line('.')
+	let curCol = col('.')
 	let oldStartSnip = self.start_col
 	let updateTabStops = changeLen != 0
 	let i = 0
@@ -374,7 +375,7 @@ function! s:state_proto.update_vars(change)
 	" Reposition the cursor in case a var updates on the same line but before
 	" the current tabstop
 	if oldStartSnip != self.start_col || mode() == 'i'
-		call cursor(0, col('.') + self.start_col - oldStartSnip)
+		call cursor(0, curCol + self.start_col - oldStartSnip)
 	endif
 endfunction
 
