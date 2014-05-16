@@ -61,8 +61,8 @@
     s = status -sb
     wipe = reset --hard
 [user]
-	name = Lex Rivera
-	email = me@lex.io
+    name = Lex Rivera
+    email = me@lex.io
     signingkey = 0FC7CF34
 [push]
-	default = matching
+    default = matching
