@@ -216,6 +216,10 @@ call SMap("<PageUp>", "<C-U><C-U>")
 call SMap("<PageDown>", "<C-D><C-D>")
 " }}}
 
+"{{{ Custom commands
+cmap w!! %!sudo tee > /dev/null %
+"}}}
+
 " {{{ Smart mapper for tab completion
 function InsertTabWrapper()
  let col = col('.') - 1
