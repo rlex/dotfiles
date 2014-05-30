@@ -87,6 +87,12 @@ zstyle ":completion:*:*:kill:*:processes" list-colors "=(#b) #([0-9]#)*=0=01;32"
 zstyle ":completion:*:cd:*" ignore-parents parent pwd
 #  * Complete with colors
 zstyle ":completion:*" list-colors ""
+#  * SSH completion. Need clean known_hosts, thought.
+[ -f ~/.ssh/config ] && : ${(A)ssh_config_hosts:=${${${${(@M)${(f)"$(<~/.ssh/config)"}:#Host *}#Host }:#*\**}:#*\?*}}
+[ -f ~/.ssh/known_hosts ] && : ${(A)ssh_known_hosts:=${${${(f)"$(<$HOME/.ssh/known_hosts)"}%%\ *}%%,*}}
+[ -f ~/.ssh/known_hosts.work ] && : ${(A)ssh_known_hosts_debian:=${${${(f)"$(<$HOME/.ssh/known_hosts.work)"}%%\ *}%%,*}}
+
+zstyle ':completion:*:hosts' hosts $ssh_config_hosts $ssh_known_hosts $ssh_known_hosts_work
 
 #system-wide bash completion
 if [ -f /etc/bash_completion.d ]; then
