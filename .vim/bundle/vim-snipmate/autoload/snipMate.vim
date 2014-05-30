@@ -262,7 +262,7 @@ function! s:state_proto.update_stops()
 
 		for pos in self.stops
 			if pos == self.cur_stop | continue | endif
-			let changed = pos[0] == curLine && pos[1] > self.start_col
+			let changed = pos[0] == curLine && pos[1] > self.cur_stop[1]
 			let changedVars = 0
 			let endPlaceholder = pos[2] - 1 + pos[1]
 			" Subtract changeLen from each tab stop that was after any of
