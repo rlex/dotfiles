@@ -60,6 +60,7 @@
     lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --
     s = status -sb
     wipe = reset --hard
+    today = !git log --since=midnight --author=\"$(git config user.name)\" --oneline
 [user]
     name = Lex Rivera
     email = me@lex.io
