@@ -1,11 +1,11 @@
 " SudoEdit.vim - Use sudo/su for writing/reading files with Vim
 " ---------------------------------------------------------------
-" Version:  0.19
+" Version:  0.20
 " Authors:  Christian Brabandt <cb@256bit.org>
-" Last Change: Wed, 14 Aug 2013 22:29:27 +0200
-" Script:  http://www.vim.org/scripts/script.php?script_id=2709 
+" Last Change: Thu, 27 Mar 2014 23:19:50 +0100
+" Script:  http://www.vim.org/scripts/script.php?script_id=2709
 " License: VIM License
-" GetLatestVimScripts: 2709 19 :AutoInstall: SudoEdit.vim
+" GetLatestVimScripts: 2709 20 :AutoInstall: SudoEdit.vim
 
 " Functions: "{{{1
 
@@ -20,7 +20,7 @@ fu! <sid>Init() "{{{2
 
 "    each time check, whether the authentication
 "    method changed (e.g. the User set a variable)
-"    if !exists("s:AuthTool") 
+"    if !exists("s:AuthTool")
         let s:sudoAuth=" sudo su "
         if <sid>Is("mac")
             let s:sudoAuth = "security ". s:sudoAuth
@@ -28,14 +28,14 @@ fu! <sid>Init() "{{{2
             let s:sudoAuth = "runas elevate ". s:sudoAuth
         endif
         if exists("g:sudoAuth")
-            let s:sudoAuth = g:sudoAuth .' '. s:sudoAuth 
+            let s:sudoAuth = g:sudoAuth .' '. s:sudoAuth
         endif
 
         " Specify the parameter to use for the auth tool e.g. su uses "-c", but
-        " for su, it will be autodetected, sudo does not need one, for ssh use 
+        " for su, it will be autodetected, sudo does not need one, for ssh use
         " "root@localhost"
         "
-        " You can also use this parameter if you do not want to become root 
+        " You can also use this parameter if you do not want to become root
         " but any other user
         "
         " You can specify this parameter in your .vimrc using the
@@ -62,13 +62,14 @@ fu! <sid>Init() "{{{2
             if !exists("s:writable_file")
                 " Write into public directory so everybody can access it
                 " easily
-                let s:writable_file = (empty(expand("$PUBLIC")) ? 
-                            \ expand("$TEMP") : expand("$PUBLIC") ).
-                            \ '\vim_temp.txt'
+                let s:writable_file = (empty($PUBLIC) ? $TEMP : $PUBLIC ).
+                            \ '\vim_temp_'.getpid().'.txt'
                 let s:writable_file = shellescape(fnamemodify(s:writable_file, ':p:8'))
             endif
         else
-            let s:writable_file = tempname()
+            if !exists("s:writable_file")
+                let s:writable_file = tempname()
+            endif
         endif
 
         call <sid>SudoAskPasswd()
@@ -98,6 +99,8 @@ fu! <sid>Mkdir(dir) "{{{2
             au!
             " Clean up when quitting Vim
             exe "au VimLeave * :call SudoEdit#Rmdir(".dir. ")"
+            " Remove writeable file
+            au VimLeave * :call SudoEdit#RmFile(s:writable_file)
         augroup END
     endif
 endfu
@@ -115,6 +118,9 @@ fu! <sid>LocalSettings(values, readflag, file) "{{{2
         let o_tte = &t_te
         " Turn off screen switching
         set t_ti= t_te=
+        " avoid a problem with noshelltemp #32
+        let o_stmp = &stmp
+        setl stmp
         " Set shell to something sane (zsh, doesn't allow to override files using
         " > redirection, issue #24, hopefully POSIX sh works everywhere)
         let o_shell = &shell
@@ -135,7 +141,7 @@ fu! <sid>LocalSettings(values, readflag, file) "{{{2
             endif
             let file = fnamemodify(file, ':p')
         endif
-        return [o_srr, o_ar, o_tti, o_tte, o_shell, file]
+        return [o_srr, o_ar, o_tti, o_tte, o_shell, o_stmp, file]
     else
         " Make sure, persistent undo information is written
         " but only for valid files and not empty ones
@@ -166,7 +172,7 @@ fu! <sid>LocalSettings(values, readflag, file) "{{{2
                     \ "directory, skipping writing undofiles!")
                     throw "sudo:undofileError"
                 elseif empty(glob(fnameescape(undofile(file))))
-                    " Writing undofile not possible 
+                    " Writing undofile not possible
                     call add(s:msg,  "Error occured, when writing undofile")
                     return
                 endif
@@ -198,7 +204,7 @@ fu! <sid>LocalSettings(values, readflag, file) "{{{2
             " shellredirection
             let &srr  = a:values[0]
             " Screen switchting codes, and shell
-            let [ &t_ti, &t_te, &shell ] = a:values[2:4]
+            let [ &t_ti, &t_te, &shell, &stmp ] = a:values[2:5]
             " Reset autoread option
             let &l:ar = a:values[1]
         endtry
@@ -234,7 +240,7 @@ fu! <sid>SudoRead(file) "{{{2
     sil %d _
     if <sid>Is("win")
         let file=shellescape(fnamemodify(a:file, ':p:8'))
-        let cmd= '!'. s:dir.'\sudo.cmd dummy read '. file. 
+        let cmd= '!'. s:dir.'\sudo.cmd read '. file.
             \ ' '. s:writable_file.  ' '.
             \ join(s:AuthTool, ' ')
     else
@@ -251,7 +257,7 @@ fu! <sid>SudoRead(file) "{{{2
     endif
     if <sid>Is("win")
         if !filereadable(s:writable_file[1:-2])
-            call add(s:msg, "Temporary file ". s:writable_file. 
+            call add(s:msg, "Temporary file ". s:writable_file.
                         \ " does not exist. Probably access was denied!")
             throw "sudo:readError"
         else
@@ -270,15 +276,19 @@ fu! <sid>SudoRead(file) "{{{2
 endfu
 
 fu! <sid>SudoWrite(file) range "{{{2
+    if bufloaded(s:writable_file)
+        " prevent E139 error
+        exe "bw!" s:writable_file
+    endif
     if  s:AuthTool[0] == 'su'
     " Workaround since su cannot be run with :w !
-        exe a:firstline . ',' . a:lastline . 'w! ' . s:writable_file
+        exe "sil keepalt noa ". a:firstline . ',' . a:lastline . 'w! ' . s:writable_file
         let cmd=':!' . join(s:AuthTool, ' ') . '"mv ' . s:writable_file . ' ' .
-            \ shellescape(a:file,1) . '" --'
+            \ shellescape(a:file,1) . '" -- 2>' . shellescape(s:error_file)
     else
         if <sid>Is("win")
-            exe a:firstline . ',' . a:lastline . 'w! ' . s:writable_file[1:-2]
-            let cmd= '!'. s:dir.'\sudo.cmd dummy write '. shellescape(fnamemodify(a:file, ':p:8')).
+            exe 'sil keepalt noa '. a:firstline . ',' . a:lastline . 'w! ' . s:writable_file[1:-2]
+            let cmd= '!'. s:dir.'\sudo.cmd write '. shellescape(fnamemodify(a:file, ':p:8')).
                 \ ' '. s:writable_file. ' '. join(s:AuthTool, ' ')
         else
             let cmd=printf('%s >/dev/null 2>%s %s', <sid>Path('tee'),
@@ -300,10 +310,7 @@ fu! <sid>SudoWrite(file) range "{{{2
         if empty(glob(a:file))
             let s:new_file = 1
         endif
-        let sshm = &shortmess
-        set shortmess+=A  " don't give the "ATTENTION" message when an existing swap file is found.
-        exe "f" fnameescape(a:file)
-        let &shortmess = sshm
+        call <sid>SetBufName(a:file)
         call <sid>Exec(cmd)
     endif
     if v:shell_error
@@ -376,9 +383,8 @@ fu! <sid>SudoAskPasswd() "{{{2
         let askpwd = insert(askpwd, g:sudo_askpass, 0)
     endif
     let sudo_arg = '-A'
-    let sudo_askpass = expand("$SUDO_ASKPASS")
-    if sudo_askpass != "$SUDO_ASKPASS"
-        let list = [ sudo_askpass ] + askpwd
+    if len($SUDO_ASKPASS)
+        let list = [ $SUDO_ASKPASS ] + askpwd
     else
         let list = askpwd
     endif
@@ -398,7 +404,9 @@ endfu
 fu! <sid>Exec(cmd) "{{{2
     let cmd = a:cmd
     if exists("g:sudoDebug") && g:sudoDebug
-        let cmd = substitute(a:cmd, '2>'.shellescape(s:error_file), '', 'g')
+        " On Windows, s:error_file could be something like
+        " c:\Users\cbraba~1\... and one needs to escape the '~'
+        let cmd = substitute(a:cmd, '2>'.escape(shellescape(s:error_file), '~'), '', 'g')
         let cmd = 'verb '. cmd
         call <sid>echoWarn(cmd)
         exe cmd
@@ -418,6 +426,16 @@ fu! <sid>Exec(cmd) "{{{2
         call delete(s:error_file)
     endif
 endfu
+fu! <sid>SetBufName(file) "{{{2
+    if bufname('') !=# fnameescape(a:file)
+        " don't give the "ATTENTION" message when an existing swap file is
+        " found.
+        let sshm = &shortmess
+        set shortmess+=A
+        exe "sil f" fnameescape(a:file)
+        let &shortmess = sshm
+    endif
+endfu
 fu! SudoEdit#Rmdir(dir) "{{{2
     if <sid>Is("win")
         sil! call system("rd /s /q ". a:dir)
@@ -425,7 +443,9 @@ fu! SudoEdit#Rmdir(dir) "{{{2
         sil! call system("rm -rf -- ". a:dir)
     endif
 endfu
-
+fu! SudoEdit#RmFile(file) "{{{2
+    call delete(fnameescape(a:file))
+endfu
 fu! SudoEdit#SudoDo(readflag, force, file) range "{{{2
     try
         let _settings=<sid>LocalSettings([], 1, a:file)
@@ -450,18 +470,23 @@ fu! SudoEdit#SudoDo(readflag, force, file) range "{{{2
             endif
         else
             exe a:firstline . ',' . a:lastline . 'call <sid>SudoWrite(file)'
+            call <sid>SetBufName(a:file)
             call add(s:msg, <sid>Stats(file))
         endif
     catch /sudo:writeError/
         " output error message (only the last line)
-        call <sid>Exception("There was an error writing the file! ".
+        if !empty(s:msg)
+            call <sid>Exception("There was an error writing the file! ".
                     \ substitute(s:msg[-1], "\n(.*)$", "\1", ''))
+        endif
         let s:skip_wundo = 1
         return
     catch /sudo:readError/
-        " output error message (only the last line)
-        call <sid>Exception("There was an error reading the file ". file. " !". 
-                    \ substitute(s:msg[-1], "\n(.*)$", "\1", ''))
+        if !empty(s:msg)
+            " output error message (only the last line)
+            call <sid>Exception("There was an error reading the file ". file. " !".
+                        \ substitute(s:msg[-1], "\n(.*)$", "\1", ''))
+        endif
         " skip writing the undofile, it will most likely also fail.
         let s:skip_wundo = 1
         return

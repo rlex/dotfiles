@@ -2,15 +2,15 @@
 UseVimball
 finish
 autoload/SudoEdit.vim	[[[1
-468
+512
 " SudoEdit.vim - Use sudo/su for writing/reading files with Vim
 " ---------------------------------------------------------------
-" Version:  0.19
+" Version:  0.20
 " Authors:  Christian Brabandt <cb@256bit.org>
-" Last Change: Wed, 14 Aug 2013 22:29:27 +0200
+" Last Change: Thu, 27 Mar 2014 23:19:50 +0100
 " Script:  http://www.vim.org/scripts/script.php?script_id=2709 
 " License: VIM License
-" GetLatestVimScripts: 2709 19 :AutoInstall: SudoEdit.vim
+" GetLatestVimScripts: 2709 20 :AutoInstall: SudoEdit.vim
 
 " Functions: "{{{1
 
@@ -73,7 +73,9 @@ fu! <sid>Init() "{{{2
                 let s:writable_file = shellescape(fnamemodify(s:writable_file, ':p:8'))
             endif
         else
-            let s:writable_file = tempname()
+            if !exists("s:writable_file")
+                let s:writable_file = tempname()
+            endif
         endif
 
         call <sid>SudoAskPasswd()
@@ -107,7 +109,7 @@ fu! <sid>Mkdir(dir) "{{{2
     endif
 endfu
 
-fu! <sid>LocalSettings(values, readflag) "{{{2
+fu! <sid>LocalSettings(values, readflag, file) "{{{2
     if empty(a:values)
         " Set shellrediraction temporarily
         " This is used to get su working right!
@@ -120,6 +122,9 @@ fu! <sid>LocalSettings(values, readflag) "{{{2
         let o_tte = &t_te
         " Turn off screen switching
         set t_ti= t_te=
+        " avoid a problem with noshelltemp #32
+        let o_stmp = &stmp
+        setl stmp
         " Set shell to something sane (zsh, doesn't allow to override files using
         " > redirection, issue #24, hopefully POSIX sh works everywhere)
         let o_shell = &shell
@@ -127,12 +132,28 @@ fu! <sid>LocalSettings(values, readflag) "{{{2
             set shell=sh
         endif
         call <sid>Init()
-        return [o_srr, o_ar, o_tti, o_tte, o_shell]
+        if empty(a:file)
+            let file = expand("%")
+        else
+            let file = expand(a:file)
+            if empty(file)
+                let file = a:file " expand() might fail (issue #17)
+            endif
+            if file =~ '^sudo:'
+                let s:use_sudo_protocol_handler = 1
+                let file = substitute(file, '^sudo:', '', '')
+            endif
+            let file = fnamemodify(file, ':p')
+        endif
+        return [o_srr, o_ar, o_tti, o_tte, o_shell, o_stmp, file]
     else
         " Make sure, persistent undo information is written
         " but only for valid files and not empty ones
-        let file=substitute(expand("%"), '^sudo:', '', '')
+        let file=a:values[-1]
         try
+            if exists("s:skip_wundo") && s:skip_wundo
+                return
+            endif
             if has("persistent_undo")
             let undofile = undofile(file)
             if !empty(file) &&
@@ -147,20 +168,19 @@ fu! <sid>LocalSettings(values, readflag) "{{{2
                     " Be careful, :e! within a BufWriteCmd can crash Vim!
                     exe "e!" file
                 endif
-                if empty(glob(undofile)) &&
+                call <sid>Exec("wundo! ". fnameescape(undofile(file)))
+                if empty(glob(fnameescape(undofile))) &&
                     \ &undodir =~ '^\.\($\|,\)'
                     " Can't create undofile
                     call add(s:msg, "Can't create undofile in current " .
                     \ "directory, skipping writing undofiles!")
                     throw "sudo:undofileError"
-                endif
-                call <sid>Exec("wundo! ". fnameescape(undofile(file)))
-                if empty(glob(fnameescape(undofile(file))))
+                elseif empty(glob(fnameescape(undofile(file))))
                     " Writing undofile not possible 
                     call add(s:msg,  "Error occured, when writing undofile")
                     return
                 endif
-                if <sid>is("unix") && !empty(undofile)
+                if <sid>Is("unix") && !empty(undofile) && s:error_exists == 0
                     let ufile = string(shellescape(undofile, 1))
                     let perm = system("stat -c '%u:%g' " .
                         \ shellescape(file, 1))[:-2]
@@ -188,7 +208,7 @@ fu! <sid>LocalSettings(values, readflag) "{{{2
             " shellredirection
             let &srr  = a:values[0]
             " Screen switchting codes, and shell
-            let [ &t_ti, &t_te, &shell ] = a:values[2:4]
+            let [ &t_ti, &t_te, &shell, &stmp ] = a:values[2:5]
             " Reset autoread option
             let &l:ar = a:values[1]
         endtry
@@ -213,11 +233,18 @@ fu! <sid>echoWarn(mess) "{{{2
     echohl Normal
 endfu
 
+fu! <sid>Path(cmd) "{{{2
+    if exists("g:sudo_{a:cmd}")
+        return g:sudo_{a:cmd}
+    endif
+    return a:cmd
+endfu
+
 fu! <sid>SudoRead(file) "{{{2
     sil %d _
     if <sid>Is("win")
         let file=shellescape(fnamemodify(a:file, ':p:8'))
-        let cmd= '!'. s:dir.'\sudo.cmd dummy read '. file. 
+        let cmd= '!'. s:dir.'\sudo.cmd read '. file. 
             \ ' '. s:writable_file.  ' '.
             \ join(s:AuthTool, ' ')
     else
@@ -253,18 +280,23 @@ fu! <sid>SudoRead(file) "{{{2
 endfu
 
 fu! <sid>SudoWrite(file) range "{{{2
+    if bufloaded(s:writable_file)
+        " prevent E139 error
+        exe "bw!" s:writable_file
+    endif
     if  s:AuthTool[0] == 'su'
     " Workaround since su cannot be run with :w !
-        exe a:firstline . ',' . a:lastline . 'w! ' . s:writable_file
+        exe "sil keepalt noa ". a:firstline . ',' . a:lastline . 'w! ' . s:writable_file
         let cmd=':!' . join(s:AuthTool, ' ') . '"mv ' . s:writable_file . ' ' .
-            \ shellescape(a:file,1) . '" --'
+            \ shellescape(a:file,1) . '" -- 2>' . shellescape(s:error_file)
     else
         if <sid>Is("win")
-            exe a:firstline . ',' . a:lastline . 'w! ' . s:writable_file[1:-2]
-            let cmd= '!'. s:dir.'\sudo.cmd dummy write '. shellescape(fnamemodify(a:file, ':p:8')).
+            exe 'sil keepalt noa '. a:firstline . ',' . a:lastline . 'w! ' . s:writable_file[1:-2]
+            let cmd= '!'. s:dir.'\sudo.cmd write '. shellescape(fnamemodify(a:file, ':p:8')).
                 \ ' '. s:writable_file. ' '. join(s:AuthTool, ' ')
         else
-            let cmd=printf('tee >/dev/null 2>%s %s',shellescape(s:error_file), shellescape(a:file,1))
+            let cmd=printf('%s >/dev/null 2>%s %s', <sid>Path('tee'),
+                \ shellescape(s:error_file), shellescape(a:file,1))
             let cmd=a:firstline . ',' . a:lastline . 'w !' .
             \ join(s:AuthTool, ' ') . cmd
         endif
@@ -282,6 +314,7 @@ fu! <sid>SudoWrite(file) range "{{{2
         if empty(glob(a:file))
             let s:new_file = 1
         endif
+        call <sid>SetBufName(a:file)
         call <sid>Exec(cmd)
     endif
     if v:shell_error
@@ -376,7 +409,9 @@ endfu
 fu! <sid>Exec(cmd) "{{{2
     let cmd = a:cmd
     if exists("g:sudoDebug") && g:sudoDebug
-        let cmd = substitute(a:cmd, '2>'.shellescape(s:error_file), '', 'g')
+        " On Windows, s:error_file could be something like
+        " c:\Users\cbraba~1\... and one needs to escape the '~'
+        let cmd = substitute(a:cmd, '2>'.escape(shellescape(s:error_file), '~'), '', 'g')
         let cmd = 'verb '. cmd
         call <sid>echoWarn(cmd)
         exe cmd
@@ -392,8 +427,18 @@ fu! <sid>Exec(cmd) "{{{2
     endif
     if filereadable(s:error_file) && getfsize(s:error_file) > 0
         let error=readfile(s:error_file)
-        call add(s:msg, join(error, "\n"))
+        let s:msg += error
         call delete(s:error_file)
+    endif
+endfu
+fu! <sid>SetBufName(file) "{{{2
+    if bufname('') !=# fnameescape(a:file)
+        " don't give the "ATTENTION" message when an existing swap file is
+        " found.
+        let sshm = &shortmess
+        set shortmess+=A
+        exe "sil f" fnameescape(a:file)
+        let &shortmess = sshm
     endif
 endfu
 fu! SudoEdit#Rmdir(dir) "{{{2
@@ -406,28 +451,16 @@ endfu
 
 fu! SudoEdit#SudoDo(readflag, force, file) range "{{{2
     try
-        let _settings=<sid>LocalSettings([], 1)
+        let _settings=<sid>LocalSettings([], 1, a:file)
     catch /sudo:noTool/
-        call <sid>LocalSettings(_settings, a:readflag)
+        call <sid>LocalSettings(_settings, a:readflag, '')
         return
     endtry
     let s:use_sudo_protocol_handler = 0
-    if empty(a:file)
-        let file = expand("%")
-    else
-        let file = expand(a:file)
-        if empty(file)
-            let file = a:file " expand() might fail (issue #17)
-        endif
-        if file =~ '^sudo:'
-            let s:use_sudo_protocol_handler = 1
-            let file = substitute(file, '^sudo:', '', '')
-        endif
-        let file = fnamemodify(file, ':p')
-    endif
+    let file = _settings[-1]
     if empty(file)
         call <sid>echoWarn("Cannot write file. Please enter filename for writing!")
-        call <sid>LocalSettings(_settings, 1)
+        call <sid>LocalSettings(_settings, 1, '')
         return
     endif
     try
@@ -436,26 +469,37 @@ fu! SudoEdit#SudoDo(readflag, force, file) range "{{{2
                 call <sid>SudoRead(file)
             else
                 call add(s:msg, "Buffer modified, not reloading!")
-                return
+                throw "sudo:BufferNotModified"
             endif
         else
-            if !&mod && empty(a:force) && empty(a:file)
-                call add(s:msg, "Buffer not modified, not writing!")
-                return
-            endif
             exe a:firstline . ',' . a:lastline . 'call <sid>SudoWrite(file)'
+            call <sid>SetBufName(a:file)
             call add(s:msg, <sid>Stats(file))
         endif
     catch /sudo:writeError/
-        call <sid>Exception("There was an error writing the file!")
+        " output error message (only the last line)
+        if !empty(s:msg)
+            call <sid>Exception("There was an error writing the file! ".
+                    \ substitute(s:msg[-1], "\n(.*)$", "\1", ''))
+        endif
+        let s:skip_wundo = 1
         return
     catch /sudo:readError/
-        call <sid>Exception("There was an error reading the file ". file. " !")
+        if !empty(s:msg)
+            " output error message (only the last line)
+            call <sid>Exception("There was an error reading the file ". file. " !". 
+                        \ substitute(s:msg[-1], "\n(.*)$", "\1", ''))
+        endif
+        " skip writing the undofile, it will most likely also fail.
+        let s:skip_wundo = 1
+        return
+    catch /sudo:BufferNotModified/
+        let s:skip_wundo = 1
         return
     finally
         " Delete temporary file
         call delete(s:writable_file)
-        call <sid>LocalSettings(_settings, a:readflag)
+        call <sid>LocalSettings(_settings, a:readflag, '')
         call <sid>Mes(s:msg)
     endtry
     if file !~ 'sudo:' && s:use_sudo_protocol_handler
@@ -472,11 +516,11 @@ endfu
 " Modeline {{{1
 " vim: set fdm=marker fdl=0 ts=4 sts=4 sw=4 et:  }}}
 doc/SudoEdit.txt	[[[1
-363
+385
 *SudoEdit.txt*  Edit Files using Sudo/su
 
 Author:  Christian Brabandt <cb@256bit.org>
-Version: Vers 0.19 Wed, 14 Aug 2013 22:29:27 +0200
+Version: Vers 0.20 Thu, 27 Mar 2014 23:19:50 +0100
 Copyright: (c) 2009-2013 by Christian Brabandt               *SudoEdit-copyright*
            The VIM LICENSE applies to SudoEdit.vim and SudoEdit.txt
            (see |copyright|) except use SudoEdit instead of "Vim".
@@ -550,7 +594,7 @@ filename completion)
         :[range]SudoWrite[!] [file]
 
 SudoWrite will write the given file using any of the configured methods for
-superuser authtication. It basically does something like this: >
+superuser authentication. It basically does something like this: >
 
     :w !sudo tee >/dev/null file
 
@@ -613,6 +657,15 @@ to make use of gnome-ssh-askpass for querying the password.
 If you like to disable this, set the variable g:sudo_no_gui, e.g. >
 
     :let g:sudo_no_gui=1
+<
+							      *g:sudo_tee*
+
+By default, the SudoEdit plugin uses the tee command to write your file (at
+least on Unix and Mac). If you don't have the tee command available in your
+path or you want to use a different tool, that is similar but called
+differently, specify this option like this: >
+
+    :let g:sudo_tee='/usr/bin/tee'
 
 ==============================================================================
 3.1 SudoEdit on Windows                                          *SudoEdit-Win*
@@ -733,6 +786,19 @@ third line of this document.
 
 ==============================================================================
 6. SudoEdit History                                         *SudoEdit-history*
+	0.21: (unreleased) "{{{1
+	    - temporarily set shelltemp (issue 
+	      https://github.com/chrisbra/SudoEdit.vim/issues/32, reported by
+	      Fernando da Silva, thanks!)
+	    - Do not trigger autocommands when writing temp files
+	    - Make UAC actually work for Windows
+	    - many small improvements for Windows
+	0.20: Mar 27, 2014 "{{{1
+	    - skip writing undo, if the buffer hasn't been written.
+	    - document |g:sudo_tee| variable
+	    - possibly wrong undofile was written (issue
+	      https://github.com/chrisbra/SudoEdit.vim/issues/21, reported by
+	      blueyed, thanks!)
         0.19: Aug 14, 2013 "{{{1
             - |SudoWrite| should always write if a filename has been given
               (issue #23, reported by Daniel Hahler, thanks!)
@@ -840,12 +906,12 @@ plugin/SudoEdit.vim	[[[1
 84
 " SudoEdit.vim - Use sudo/su for writing/reading files with Vim
 " ---------------------------------------------------------------
-" Version:  0.19
+" Version:  0.20
 " Authors:  Christian Brabandt <cb@256bit.org>
-" Last Change: Wed, 14 Aug 2013 22:29:27 +0200
+" Last Change: Thu, 27 Mar 2014 23:19:50 +0100
 " Script:  http://www.vim.org/scripts/script.php?script_id=2709 
 " License: VIM License
-" GetLatestVimScripts: 2709 19 :AutoInstall: SudoEdit.vim
+" GetLatestVimScripts: 2709 20 :AutoInstall: SudoEdit.vim
 " Documentation: see :h SudoEdit.txt
 
 " ---------------------------------------------------------------------
@@ -923,40 +989,33 @@ unlet s:keepcpo
 " Modeline {{{1
 " vim: fdm=marker sw=2 sts=2 ts=8 fdl=0
 autoload/sudo.cmd	[[[1
-84
+58
 @echo off
 cls
 
-setlocal DisableDelayedExpansion
-set "batchPath=%~0"
-setlocal EnableDelayedExpansion
-
 :: File to write to
-set dummy=%1
-set mode=%2
-set myfile=%3
-set newcontent=%4
-set sudo=%5
-shift
+set mode=%1
+set myfile=%2
+set newcontent=%3
+set sudo=%4
 shift
 shift
 shift
 shift
 
-if '%sudo%' == 'uac' goto checkPrivileges
-if '%dummy%' == 'ELEV' goto gotPrivileges
+if '%sudo%' == 'uac' goto CHECKPRIVILEGES
 
 :: Use runas or something alike to elevate priviliges, but
 :: first parse parameter for runas
 :: Windows cmd.exe is very clumsy to use ;(
 set params=%1
-:loop
+:LOOP
 shift
-if [%1]==[] goto afterloop
+if [%1]==[] goto AFTERLOOP
 set params=%params% %1
-goto loop
+goto LOOP
 
-:afterloop
+:AFTERLOOP
 
 :: Use runas or so to elevate rights
 echo.
@@ -964,47 +1023,28 @@ echo ***************************************
 echo Calling %sudo% for Privilege Escalation
 echo ***************************************
 if '%mode%' == 'write' (
-    %sudo% %params% "cmd.exe /c type %newcontent% >%myfile%"
-    ) else (
-    %sudo% %params% "cmd.exe /c type %myfile% >%newcontent%"
-    )
-goto end
+    %sudo% %params% " %COMSPEC% /c copy /Y %newcontent% %myfile% "
+) else (
+    %sudo% %params% " %COMSPEC% /c copy /Y %myfile% %newcontent% "
+)
+exit /B
 
 :: Use UAC to elevate rights, idea taken from:
 :: http://stackoverflow.com/questions/7044985/how-can-i-auto-elevate-my-batch-file-so-that-it-requests-from-uac-admin-rights
-:checkPrivileges
-::NET FILE 1>NUL 2>NUL
+:CHECKPRIVILEGES
 set vbs="%temp%\GetPrivileges.vbs"
 
-:: Check if we already have system priviliges
->NUL 2>&1 "%SYSTEMROOT%\system32\cacls.exe" "%SYSTEMROOT%\system32\config\system"
-if '%errorlevel%' EQU '0' (goto gotPrivileges) else (goto getPrivileges)
-
-:getPrivileges
 echo.
 echo **************************************
 echo Invoking UAC for Privilege Escalation 
 echo **************************************
 
 echo Set UAC = CreateObject^("Shell.Application"^) > %vbs%
-echo UAC.ShellExecute "!batchPath!", "ELEV !mode! "!myfile!" "!newcontent!""   , "", "runas", 1 >> %vbs%
-:: Run VBS script
-%vbs%
-exit /B 
-
-:gotPrivileges
-::setlocal & pushd .
-:: Doesn't work?
-if exist %vbs% (del %vbs%)
-pushd "%CD%"
-cd /d "%~dp0"
-
 if '%mode%' == 'write' (
-    cmd.exe /c type %newcontent% > %myfile%
+    echo UAC.ShellExecute "%COMSPEC%", "/c copy /Y "%newcontent%" "%myfile%"", "", "runas", 1 >> %vbs%
 ) else (
-    cmd.exe /c type %myfile% > %newcontent%
+    echo UAC.ShellExecute "%COMSPEC%", "/c copy /Y "%myfile%" "%newcontent%"", "", "runas", 1 >> %vbs%
 )
-
-if '%errorlevel%' NEQ 0 echo "An error occured"
-
-:end
+:: Run VBS script and delete it afterwards
+%vbs%
+if exist %vbs% (del %vbs%)

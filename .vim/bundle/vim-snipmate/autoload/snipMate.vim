@@ -10,7 +10,7 @@ catch /.*/
 endtry
 
 " match $ which doesn't follow a \
-let s:d = '\%([\\]\@<!\$\)'
+let s:d = nr2char(31)
 
 fun! Filename(...)
 	let filename = expand('%:t:r')
@@ -103,6 +103,7 @@ endfunction
 " Prepare snippet to be processed by s:BuildTabStops
 fun! s:ProcessSnippet(snip)
 	let snippet = a:snip
+	let esc_bslash = '\%(\\\@<!\%(\\\\\)*\)\@<='
 
 	if exists('b:snipmate_content_visual')
 		let visual = b:snipmate_content_visual
@@ -118,7 +119,7 @@ fun! s:ProcessSnippet(snip)
 	" Using a loop here instead of a regex fixes a bug with nested "\=".
 	if stridx(snippet, '`') != -1
 		let new = []
-		let snip = split(snippet, '\%(\\\@<!\%(\\\\\)*\)\@<=`', 1)
+		let snip = split(snippet, esc_bslash . '`', 1)
 		let isexp = 0
 		for i in snip
 			if isexp
@@ -131,13 +132,15 @@ fun! s:ProcessSnippet(snip)
 		let snippet = join(new, '')
 		let snippet = substitute(snippet, "\r", "\n", 'g')
 		let snippet = substitute(snippet, '\\`', "`", 'g')
-		let snippet = substitute(snippet, '\\\\', "\\", 'g')
 	endif
 
 	" Place all text after a colon in a tab stop after the tab stop
 	" (e.g. "${#:foo}" becomes "${:foo}foo").
 	" This helps tell the position of the tab stops later.
-	let snippet = substitute(snippet, s:d.'{\d\+:\(.\{-}\)}', '&\1', 'g')
+	let snippet = substitute(snippet, esc_bslash . '\$\({\d\+:\(.\{-}\)}\|{\d\+}\)', s:d . '\1\2', 'g')
+	let snippet = substitute(snippet, esc_bslash . '\$\(\d\+\)', s:d . '\1', 'g')
+	let snippet = substitute(snippet, esc_bslash . '\\\$', '$', 'g')
+	let snippet = substitute(snippet, '\\\\', "\\", 'g')
 
 	" Update the a:snip so that all the $# become the text after
 	" the colon in their associated ${#}.
@@ -153,14 +156,14 @@ fun! s:ProcessSnippet(snip)
 
 	" Add ${0} tab stop if found
 	if snippet =~ s:d . '{0'
-		let snippet = substitute(snippet, s:d.'{0', '${'.i, '')
+		let snippet = substitute(snippet, s:d.'{0', s:d . '{' . i, '')
 		let s = matchstr(snippet, s:d.'{'.i.':\zs.\{-}\ze}')
 		if s != ''
-			let snippet = substitute(snippet, s:d.'0', '$'.i, 'g')
+			let snippet = substitute(snippet, s:d.'0', s:d . i, 'g')
 			let snippet = substitute(snippet, s:d.i, s.'&', 'g')
 		endif
 	else
-		let snippet .= '${'.i.'}'
+		let snippet .= s:d . '{'.i.'}'
 	endif
 
 	if &et " Expand tabs to spaces if 'expandtab' is set.
@@ -194,7 +197,7 @@ endf
 fun! s:BuildTabStops(snip, lnum, col, indent)
 	let snipPos = []
 	let i = 1
-	let withoutVars = substitute(a:snip, '$\d\+', '', 'g')
+	let withoutVars = substitute(a:snip, s:d . '\d\+', '', 'g')
 	while a:snip =~ s:d.'{'.i
 		let beforeTabStop = matchstr(withoutVars, '^.*\ze'.s:d .'{'.i.'\D')
 		let withoutOthers = substitute(withoutVars, ''.s:d .'{\('.i.'\D\)\@!\d\+.\{-}}', '', 'g')
@@ -243,13 +246,12 @@ function! s:state_proto.jump_stop(backwards)
 	" Loop over the snippet when going backwards from the beginning
 	if self.stop_no < 0 | let self.stop_no = self.stop_count - 1 | endif
 
-	if self.stop_no == self.stop_count
-		call self.remove()
-		return ''
-	endif
-
 	call self.set_stop(self.stop_no)
-	return self.select_word()
+	let ret = self.select_word()
+	if self.stop_no == self.stop_count - 1
+		call self.remove()
+	endif
+	return ret
 endfunction
 
 " Updates tab stops/vars
@@ -321,10 +323,13 @@ function! s:state_proto.update_changes()
 	let self.end_col += change_len
 
 	let col = col('.')
-	if line('.') != self.cur_stop[0] || col < self.start_col || col > self.end_col
-		call self.remove()
-	elseif self.has_vars
-		call self.update_vars(change_len)
+	if mode() == 'i'
+		if line('.') != self.cur_stop[0]
+					\ || col < self.start_col || col > self.end_col
+			call self.remove()
+		elseif self.has_vars
+			call self.update_vars(change_len)
+		endif
 	endif
 
 	let self.prev_len = col('$')
@@ -383,12 +388,16 @@ endfunction
 " returns list of
 " ['triggername', 'name', 'contents']
 " if triggername is not set 'default' is assumed
+" TODO: better error checking
 fun! snipMate#ReadSnippetsFile(file)
 	let result = []
 	let new_scopes = []
 	if !filereadable(a:file) | return [result, new_scopes] | endif
 	let inSnip = 0
+	let line_no = 0
 	for line in readfile(a:file) + ["\n"]
+		let line_no += 1
+
 		if inSnip && (line[0] == "\t" || line == '')
 			let content .= strpart(line, 1)."\n"
 			continue
@@ -407,6 +416,10 @@ fun! snipMate#ReadSnippetsFile(file)
 				let trigger = strpart(trigger, 0, space - 1)
 			endif
 			let content = ''
+			if trigger =~ '^\s*$' " discard snippets with empty triggers
+				echom 'Invalid snippet in' a:file 'near line' line_no
+				let inSnip = 0
+			endif
 		elseif line[:6] == 'extends'
 			call extend(new_scopes, map(split(strpart(line, 8)),
 						\ "substitute(v:val, ',*$', '', '')"))
@@ -416,7 +429,7 @@ fun! snipMate#ReadSnippetsFile(file)
 endf
 
 function! s:GetScopes()
-	let ret = exists('b:snipMate_scope_aliases') ? copy(b:snipMate.scope_aliases) : {}
+	let ret = exists('b:snipMate.scope_aliases') ? copy(b:snipMate.scope_aliases) : {}
 	let global = get(g:snipMate, 'scope_aliases', {})
 	for alias in keys(global)
 		if has_key(ret, alias)
@@ -450,11 +463,7 @@ fun! s:AddScopeAliases(list)
   return keys(did)
 endf
 
-if v:version >= 704
-	function! s:Glob(path, expr)
-		return split(globpath(a:path, a:expr), "\n")
-	endfunction
-else
+if v:version < 704 || has('win32')
 	function! s:Glob(path, expr)
 		let res = []
 		for p in split(a:path, ',')
@@ -464,6 +473,10 @@ else
 			endif
 		endfor
 		return filter(res, 'filereadable(v:val)')
+	endfunction
+else
+	function! s:Glob(path, expr)
+		return split(globpath(a:path, a:expr), "\n")
 	endfunction
 endif
 
@@ -518,7 +531,7 @@ function! snipMate#GetSnippetFiles(mustExist, scopes, trigger)
 endfunction
 
 " should be moved to utils or such?
-function! snipMate#SetByPath(dict, trigger, path, snippet)
+function! snipMate#SetByPath(dict, trigger, path, snippet) abort
 	let d = a:dict
 	if !has_key(d, a:trigger)
 		let d[a:trigger] = {}

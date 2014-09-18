@@ -35,16 +35,16 @@ the user is notified and is happy because they didn't have to compile their
 code or execute their script to find them.
 
 At the time of this writing, syntax checking plugins exist for ActionScript,
-Ada, AppleScript, AsciiDoc, ASM, BEMHTML, Bro, Bourne shell, C, C++, C#,
-Chef, CoffeeScript, Coco, Coq, CSS, Cucumber, CUDA, D, Dart, DocBook, Dust,
-Elixir, Erlang, eRuby, Fortran, Gentoo metadata, GLSL, Go, Haml, Haskell, Haxe,
-Handlebars, HSS, HTML, Java, JavaScript, JSON, JSX, LESS, Lex, Limbo, LISP,
-LLVM intermediate language, Lua, MATLAB, NASM, Objective-C, Objective-C++,
-OCaml, Perl, Perl POD, PHP, gettext Portable Object, OS X and iOS property
-lists, Puppet, Python, Racket, R, reStructuredText, Ruby, Rust, SASS/SCSS,
-Scala, Slim, Tcl, TeX, Texinfo, Twig, TypeScript, Vala, Verilog, VHDL, VimL,
-xHtml, XML, XSLT, YACC, YAML, z80, Zope page templates, and zsh.  See the
-[wiki][3] for details about the corresponding supported checkers.
+Ada, AppleScript, Arduino, AsciiDoc, ASM, BEMHTML, Bro, Bourne shell, C,
+C++, C#, Cabal, Chef, CoffeeScript, Coco, Coq, CSS, Cucumber, CUDA, D, Dart,
+DocBook, Dust, Elixir, Erlang, eRuby, Fortran, Gentoo metadata, GLSL, Go,
+Haml, Haskell, Haxe, Handlebars, HSS, HTML, Java, JavaScript, JSON, JSX, LESS,
+Lex, Limbo, LISP, LLVM intermediate language, Lua, MATLAB, NASM, Objective-C,
+Objective-C++, OCaml, Perl, Perl POD, PHP, gettext Portable Object, OS X
+and iOS property lists, Puppet, Python, Racket, R, reStructuredText, Ruby,
+SASS/SCSS, Scala, Slim, Tcl, TeX, Texinfo, Twig, TypeScript, Vala, Verilog,
+VHDL, VimL, xHtml, XML, XSLT, YACC, YAML, z80, Zope page templates, and zsh.
+See the [wiki][3] for details about the corresponding supported checkers.
 
 Below is a screenshot showing the methods that Syntastic uses to display syntax
 errors.  Note that, in practise, you will only have a subset of these methods
@@ -127,6 +127,16 @@ error output for a syntax checker may have changed. In this case, make sure you
 have the latest version of the syntax checker installed. If it still fails then
 create an issue - or better yet, create a pull request.
 
+<a name="faqpython3"></a>
+
+__Q. The `python` checker complains about syntactically valid Python 3 constructs...__
+
+A. Configure the `python` checker to call a Python 3 interpreter rather than
+Python 2, e.g:
+```vim
+let g:syntastic_python_python_exec = '/path/to/python3'
+```
+
 <a name="faqperl"></a>
 
 __Q. The `perl` checker has stopped working...__
@@ -137,10 +147,19 @@ statements in your file (cf. [perlrun][10]).  This is probably fine if you
 wrote the file yourself, but it's a security problem if you're checking third
 party files.  Since there is currently no way to disable this behaviour while
 still producing useful results, the checker is now disabled by default.  To
-(re-)enable it, set `g:syntastic_enable_perl_checker` to 1 in your vimrc:
+(re-)enable it, make sure the `g:syntastic_perl_checkers` list includes `perl`,
+and set `g:syntastic_enable_perl_checker` to 1 in your vimrc:
 ```vim
 let g:syntastic_enable_perl_checker = 1
 ```
+
+<a name="faqrust"></a>
+
+__Q. What happened to the `rustc` checker?__
+
+A. It has been included in the [Rust compiler package][12].  If you have
+a recent version of the Rust compiler, the checker should be picked up
+automatically by syntastic.
 
 <a name="faqloclist"></a>
 
@@ -191,8 +210,7 @@ To tell syntastic to use `pylint`, you would use this setting:
 let g:syntastic_python_checkers = ['pylint']
 ```
 
-Some filetypes, like PHP, have style checkers as well as syntax checkers. These
-can be chained together like this:
+Checkers can be chained together like this:
 ```vim
 let g:syntastic_php_checkers = ['php', 'phpcs', 'phpmd']
 ```
@@ -210,7 +228,32 @@ e.g. to run `phpcs` and `phpmd`:
 This works for any checkers available for the current filetype, even if they
 aren't listed in `g:syntastic_<filetype>_checkers`.  You can't run checkers for
 "foreign" filetypes though (e.g. you can't run, say, a Python checker if the
-current filetype is `php`).
+filetype of the current file is `php`).
+
+<a name="faqstyle"></a>
+
+__Q. What is the difference between syntax checkers and style checkers?__
+
+A. The errors and warnings they produce are highlighted differently and can
+be filtered by different rules, but otherwise the distinction is pretty much
+arbitrary. There is no guarantee that a style checker wouldn't produce messages
+for syntax errors, nor that a syntax checker wouldn't give you style hints.
+There is also no guarantee that messages marked as "style" are somehow less
+severe than the ones marked as "syntax". There are even a few Frankenstein
+checkers (for example `flake8` and `pylama`), that produce both kinds of
+messages.
+
+In fact, since the distinction between syntax and style is orthogonal to the
+distinction between errors and warnings, the main use for this is to give you
+more flexibility when filtering unwanted messages, rather than as an indication
+of severity levels. You can thus turn off messages based on level, on type, or
+both.
+
+e.g. To turn off all style messages:
+```vim
+let g:syntastic_quiet_messages = { "type": "style" }
+```
+See `:help syntastic_quiet_messages` for details.
 
 <a name="faqaggregate"></a>
 
@@ -235,22 +278,6 @@ A. Vim provides several built in commands for this. See `:help :lnext` and
 If you use these commands a lot then you may want to add shortcut mappings to
 your vimrc, or install something like [unimpaired][2], which provides such
 mappings (among other things).
-
-<a name="faqstyle"></a>
-
-__Q. A syntax checker is giving me unwanted/strange style tips?__
-
-A. Some filetypes (e.g. php) have style checkers as well as syntax
-checkers. You can usually configure the options that are passed to the style
-checkers, or just disable them. Take a look at the [wiki][3] to see what
-options are available.
-
-Alternatively, you can use `g:syntastic_quiet_messages` to filter out the
-messages you don't want to see. e.g. To turn off all style messages:
-```vim
-let g:syntastic_quiet_messages = { "type": "style" }
-```
-See `:help syntastic_quiet_messages` for details.
 
 <a name="faqbdelete"></a>
 
@@ -293,3 +320,4 @@ a look at [jedi-vim][7], [python-mode][8], or [YouCompleteMe][9].
 [9]: http://valloric.github.io/YouCompleteMe/
 [10]: http://perldoc.perl.org/perlrun.html#*-c*
 [11]: https://github.com/scrooloose/syntastic/wiki/Syntax-Checker-Guide
+[12]: https://github.com/rust-lang/rust/
