@@ -41,6 +41,7 @@ g:tlib#input#numeric_chars	tlib.txt	/*g:tlib#input#numeric_chars*
 g:tlib#input#or	tlib.txt	/*g:tlib#input#or*
 g:tlib#input#sortprefs_threshold	tlib.txt	/*g:tlib#input#sortprefs_threshold*
 g:tlib#input#use_popup	tlib.txt	/*g:tlib#input#use_popup*
+g:tlib#input#user_shortcuts	tlib.txt	/*g:tlib#input#user_shortcuts*
 g:tlib#scratch#hidden	tlib.txt	/*g:tlib#scratch#hidden*
 g:tlib#sys#check_cygpath	tlib.txt	/*g:tlib#sys#check_cygpath*
 g:tlib#sys#cygwin_expr	tlib.txt	/*g:tlib#sys#cygwin_expr*
@@ -175,6 +176,7 @@ tlib#char#GetWithTimeout()	tlib.txt	/*tlib#char#GetWithTimeout()*
 tlib#char#IsAvailable()	tlib.txt	/*tlib#char#IsAvailable()*
 tlib#cmd#BrowseOutput()	tlib.txt	/*tlib#cmd#BrowseOutput()*
 tlib#cmd#BrowseOutputWithCallback()	tlib.txt	/*tlib#cmd#BrowseOutputWithCallback()*
+tlib#cmd#Capture()	tlib.txt	/*tlib#cmd#Capture()*
 tlib#cmd#DefaultBrowseOutput()	tlib.txt	/*tlib#cmd#DefaultBrowseOutput()*
 tlib#cmd#OutputAsList()	tlib.txt	/*tlib#cmd#OutputAsList()*
 tlib#cmd#ParseScriptname()	tlib.txt	/*tlib#cmd#ParseScriptname()*

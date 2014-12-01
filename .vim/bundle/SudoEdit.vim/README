@@ -52,7 +52,7 @@ The SudoEdit Plugin provides 2 Commands:
         :SudoRead[!] [file]
 
 SudoRead will read the given file name using any of the configured methods for
-superuser authtication. It basically does something like this: >
+superuser authentication. It basically does something like this: >
 
     :r !sudo cat file
 
@@ -61,7 +61,7 @@ If the current buffer does not contain any file, it will abort. If the !
 argument is used, the current buffer contents will be discarded, if it was
 modified.
 
-SudoRead provides file completion, so you can use <Tab> on the commandline to
+SudoRead provides file completion, so you can use <Tab> on the command line to
 specify the file to read.
 
 For compatibility with the old sudo.vim Plugin, SudoEdit.vim also supports
@@ -250,7 +250,7 @@ work, set the 'undodir' option to a directory, that is writable.
 5) Great work!
 
 Write me an email (look in the first line for my mail address). And if you are
-really happy, vote for the plugin and consider looking at my Amazon whishlist:
+really happy, vote for the plugin and consider looking at my Amazon wish list:
 http://www.amazon.de/wishlist/2BKAHE8J7Z6UW
 
 6) Plugin Feedback                                        *SudoEdit-feedback*
