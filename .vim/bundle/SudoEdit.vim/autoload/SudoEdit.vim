@@ -20,11 +20,17 @@ fu! <sid>Init() "{{{2
 
 "    each time check, whether the authentication
 "    method changed (e.g. the User set a variable)
+    let s:slash='/'
     let s:sudoAuth=" sudo su "
     if <sid>Is("mac")
         let s:sudoAuth = "security ". s:sudoAuth
     elseif <sid>Is("win")
         let s:sudoAuth = "runas elevate ". s:sudoAuth
+        let s:slash=(&ssl ? '/' : '\')
+        if s:slash is# '\'
+            " because of the shellslash setting, need to adjust s:dir for it
+            let s:dir=substitute(s:dir, '/', '\\', 'g')
+        endif
     endif
     if exists("g:sudoAuth")
         let s:sudoAuth = g:sudoAuth .' '. s:sudoAuth
@@ -63,7 +69,7 @@ fu! <sid>Init() "{{{2
             " Write into public directory so everybody can access it
             " easily
             let s:writable_file = (empty($PUBLIC) ? $TEMP : $PUBLIC ).
-                        \ '\vim_temp_'.getpid().'.txt'
+                        \ s:slash. 'vim_temp_'.getpid().'.txt'
             let s:writable_file = shellescape(fnamemodify(s:writable_file, ':p:8'))
         endif
     else
@@ -79,15 +85,16 @@ fu! <sid>Init() "{{{2
         call <sid>Mkdir(s:error_dir)
         let s:error_file = s:error_dir. '/error'
         if <sid>Is("win")
-            let s:error_file = s:error_dir. '\error'
+            let s:error_file = s:error_dir. s:slash. 'error'
             let s:error_file = fnamemodify(s:error_file, ':p:8')
         endif
     endif
     " Reset skip writing undo files
     let s:skip_wundo = 0
-"    endif
     " Stack of messages
     let s:msg = []
+    " Save last file modification times
+    let g:buf_changes = get(g:, 'buf_changes', {})
 endfu
 
 fu! <sid>Mkdir(dir) "{{{2
@@ -148,6 +155,10 @@ fu! <sid>LocalSettings(values, readflag, file) "{{{2
             endif
             let file = fnamemodify(file, ':p')
         endif
+        augroup SudoEditChanged
+            au!
+            au FileChangedShell <buffer> :call SudoEdit#FileChanged(expand("<afile>"))
+        augroup END
         return [o_srr, o_ar, o_tti, o_tte, o_shell, o_stmp, o_ssl, file]
     else
         " Make sure, persistent undo information is written
@@ -245,9 +256,10 @@ fu! <sid>SudoRead(file) "{{{2
     if <sid>Is("win")
         " Use Windows Shortnames (should makeing quoting easy)
         let file = shellescape(fnamemodify(a:file, ':p:8'))
-        let cmd  = printf('!%s\%s read %s %s %s', s:dir,
+        let cmd  = printf('!%s%s%s%s read %s %s %s', 
+                \ (s:IsUAC ? 'start /B cmd /c "wscript.exe ':''), s:dir, s:slash,
                 \ (s:IsUAC ? 'SudoEdit.vbs' : 'sudo.cmd'),
-                \ file, s:writable_file, (s:IsUAC ? '' : join(s:AuthTool, ' ')))
+                \ file, s:writable_file, (s:IsUAC ? '"' : join(s:AuthTool, ' ')))
     else
         let cmd='cat ' . shellescape(a:file,1) . ' 2>'. shellescape(s:error_file)
         if  s:AuthTool[0] =~ '^su$'
@@ -294,9 +306,12 @@ fu! <sid>SudoWrite(file) range "{{{2
         if <sid>Is("win")
             exe 'sil keepalt noa '. a:firstline . ',' . a:lastline . 'w! ' . s:writable_file[1:-2]
             let file = shellescape(fnamemodify(a:file, ':p:8'))
-            let cmd= printf('!%s\%s write %s %s %s', s:dir,
+            " Do not try to understand the funny quotes...
+            " That looks unreadable currently...
+            let cmd= printf('!%s%s%s%s write %s %s %s',
+                \ (s:IsUAC ? 'start /B cmd /c "wscript.exe ' : ''), s:dir, s:slash,
                 \ (s:IsUAC ? 'SudoEdit.vbs' : 'sudo.cmd'), file, s:writable_file,
-                \ (s:IsUAC ? '' : join(s:AuthTool, ' ')))
+                \ (s:IsUAC ? '"' : join(s:AuthTool, ' ')))
         else
             let cmd=printf('%s >/dev/null 2>%s %s', <sid>Path('tee'),
                 \ shellescape(s:error_file), shellescape(a:file,1))
@@ -317,7 +332,9 @@ fu! <sid>SudoWrite(file) range "{{{2
         if empty(glob(a:file))
             let s:new_file = 1
         endif
-        call <sid>SetBufName(a:file)
+        " Record last modification time (this is used to prevent W11 warning
+        " later
+        let g:buf_changes[bufnr(fnamemodify(a:file, ':p'))] = localtime()
         call <sid>Exec(cmd)
     endif
     if v:shell_error
@@ -434,7 +451,7 @@ fu! <sid>Exec(cmd) "{{{2
     endif
 endfu
 fu! <sid>SetBufName(file) "{{{2
-    if bufname('') !=# fnameescape(a:file)
+    if bufname('') !=# fnameescape(a:file) && !empty(fnameescape(a:file))
         " don't give the "ATTENTION" message when an existing swap file is
         " found.
         let sshm = &shortmess
@@ -451,7 +468,7 @@ fu! SudoEdit#Rmdir(dir) "{{{2
     endif
 endfu
 fu! SudoEdit#RmFile(file) "{{{2
-    call delete(fnameescape(a:file))
+    call delete(a:file)
 endfu
 fu! SudoEdit#SudoDo(readflag, force, file) range "{{{2
     try
@@ -507,9 +524,19 @@ fu! SudoEdit#SudoDo(readflag, force, file) range "{{{2
     endif
     if s:use_sudo_protocol_handler ||
         \ empty(expand("%")) ||
-        \ file != expand("%")
+        \ fnamemodify(file, ':p') != fnamemodify(expand("%"), ':p')
         exe ':sil f ' . file
         filetype detect
+    endif
+endfu
+fu! SudoEdit#FileChanged(file) "{{{2
+    let file=fnamemodify(expand("<afile>"), ':p')
+    if getftime(file) > get(g:buf_changes, bufnr(file), 0) + 2
+        " consider everything within the last 2 seconds as caused by this plugin
+        " Avoids W11 warning
+        let v:fcs_choice='ask'
+    else
+        let v:fcs_choice='reload'
     endif
 endfu
 " Modeline {{{1
