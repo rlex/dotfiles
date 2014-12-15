@@ -40,7 +40,7 @@ fi
 #PS1
 prompt_command () {
     local rts=$?
-    local w="\[\033[1;32m\]\u@\[\033[1;31m\]\h"
+    local w="\[\033[1;32m\]\u@\[\033[1;31m\]\H"
     # different colors for different return status
     [ $rts -eq 0 ] && \
     local p="\[\033[1;30m\]>\[\033[0;32m\]>\[\033[1;32m\]>\[\033[m\]" || \

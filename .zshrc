@@ -32,9 +32,9 @@ fi
 function precmd {
     # different colors for different return status
     if  [[ $? -eq 0 ]]; then
-    PROMPT="%{$fg[green]%}%n%{$fg[cyan]%}@%m%{$fg[green]%}%{$fg[green]%} > %{$reset_color%}"
+    PROMPT="%{$fg[green]%}%n%{$fg[cyan]%}@%M%{$fg[green]%}%{$fg[green]%} > %{$reset_color%}"
     else
-    PROMPT="%{$fg[green]%}%n%{$fg[cyan]%}@%m%{$fg[green]%}%{$fg[red]%} > %{$reset_color%}"
+    PROMPT="%{$fg[green]%}%n%{$fg[cyan]%}@%M%{$fg[green]%}%{$fg[red]%} > %{$reset_color%}"
     fi
 }
 
