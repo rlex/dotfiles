@@ -3,7 +3,7 @@
 
 ### Array of all config files and directories
 # dotfiles, for example .bashrc. Put it in array without leading dot. Also dirs.
-dotfiles=( screenrc vimrc zshrc bashrc bash_profile gemrc htoprc gitconfig biewrc dircolors ackrc muttrc my.cnf toprc Xdefaults gvimrc nanorc mc vim mutt config/awesome config/mc config/htop tmux.conf tmux mailcap )
+dotfiles=( screenrc vimrc zshrc bashrc bash_profile gemrc htoprc gitconfig biewrc dircolors ackrc muttrc my.cnf toprc Xdefaults gvimrc nanorc mc vim mutt config/awesome config/mc config/htop tmux.conf tmux mailcap gitignore_global )
 
 # Function to symlink dotfiles
 # We checking if OS is Linux (GNU coreutils), if no, we assume OS use BSD utils
