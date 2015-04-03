@@ -49,7 +49,7 @@ while getopts ':C:vhR' OPTION ; do
       ARGS=${ARGS}" -v "
       UNZIPARGS=$UNZIPARGS""
     ;;
-    C)  
+    C)
       TARARGS=${ARGS}" -C $OPTARG"
       UNZIPARGS=$UNZIPARGS" -d $OPTARG"
     ;;
