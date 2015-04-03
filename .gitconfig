@@ -1,70 +1,70 @@
 [merge]
-    summary = true
-    tool = vimdiff
+  summary = true
+  tool = vimdiff
 [diff]
-    renames = true
+  renames = true
 [i18n]
-    logoutputencoding = UTF-8
+  logoutputencoding = UTF-8
 [rerere]
-    enabled = true
+  enabled = true
 [format]
-    numbered = true
+  numbered = true
 [status]
-    submodulesummary = -1 
+  submodulesummary = -1
 [color]
-    branch = true
-    diff = true
-    interactive = true
-    status = true
-    showbranch = true
-    ui = true
-    grep = true
+  branch = true
+  diff = true
+  interactive = true
+  status = true
+  showbranch = true
+  ui = true
+  grep = true
 [core]
-    editor = vim
-    pager = less -JFRSX
-	excludesfile = ~/.gitignore_global
+  editor = vim
+  pager = less -JFRSX
+  excludesfile = ~/.gitignore_global
 [color "branch"]
-    current = green
-    local = yellow
-    remote = red
+  current = green
+  local = yellow
+  remote = red
 [color "diff"]
-    meta = yellow
+  meta = yellow
 [color "grep"]
-    match = green
+  match = green
 [color "status"]
-    changed = yellow
+  changed = yellow
 [alias]
-    b = branch
-    ba = branch -a -v -v
-    ci = commit
-    co = checkout
+  b = branch
+  ba = branch -a -v -v
+  ci = commit
+  co = checkout
 
-    d = diff -C
-    ds = diff -C --stat
-    dsp = diff -C --stat -p
-    dw = diff -C --color-words
+  d = diff -C
+  ds = diff -C --stat
+  dsp = diff -C --stat -p
+  dw = diff -C --color-words
 
-    l = log -C --decorate
-    ls = log -C --stat --decorate
-    lsp = log -C --stat -p --decorate
-    lg = log --graph '--pretty=tformat:%Cblue%h%Creset %Cgreen%ar%Creset %Cblue%d%Creset %s'
-    lga = log --graph '--pretty=tformat:%Cblue%h%Creset %Cgreen%ar%Creset %Cblue%d%Creset %s' --all
-    l19 = log --graph '--pretty=tformat:%Cblue%h%Creset %Cgreen%ar%Creset %Cblue%d%Creset %s' --all -19
-    lsd = log --graph '--pretty=tformat:%Cblue%h%Creset %Cgreen%ar%Creset %Cblue%d%Creset %s' --all --simplify-by-decoration
-    ru = remote update
-    sb = show-branch --sha1-name
-    ls-del = ls-files -d
-    ls-mod = ls-files -m
-    ls-new = ls-files --exclude-standard -o
-    ls-ign = ls-files --exclude-standard -o -i
-    clog = log --date=short --pretty=format:\"%Cred%ad %Cblue%h %Cgreen%an %Creset%s%C(yellow)%d\"
-    lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --
-    s = status -sb
-    wipe = reset --hard
-    today = !git log --since=midnight --author=\"$(git config user.name)\" --oneline
+  l = log -C --decorate
+  ls = log -C --stat --decorate
+  lsp = log -C --stat -p --decorate
+  lg = log --graph '--pretty=tformat:%Cblue%h%Creset %Cgreen%ar%Creset %Cblue%d%Creset %s'
+  lga = log --graph '--pretty=tformat:%Cblue%h%Creset %Cgreen%ar%Creset %Cblue%d%Creset %s' --all
+  l19 = log --graph '--pretty=tformat:%Cblue%h%Creset %Cgreen%ar%Creset %Cblue%d%Creset %s' --all -19
+  lsd = log --graph '--pretty=tformat:%Cblue%h%Creset %Cgreen%ar%Creset %Cblue%d%Creset %s' --all --simplify-by-decoration
+  ru = remote update
+  sb = show-branch --sha1-name
+  ls-del = ls-files -d
+  ls-mod = ls-files -m
+  ls-new = ls-files --exclude-standard -o
+  ls-ign = ls-files --exclude-standard -o -i
+  clog = log --date=short --pretty=format:\"%Cred%ad %Cblue%h %Cgreen%an %Creset%s%C(yellow)%d\"
+  lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --
+  s = status -sb
+  wipe = reset --hard
+  today = !git log --since=midnight --author=\"$(git config user.name)\" --oneline
 [user]
-    name = Lex Rivera
-    email = me@lex.io
-    signingkey = 0FC7CF34
+  name = Lex Rivera
+  email = me@lex.io
+  signingkey = 0FC7CF34
 [push]
-    default = matching
+  default = matching

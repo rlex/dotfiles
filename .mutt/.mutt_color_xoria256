@@ -33,7 +33,7 @@ color index      color15          color1   ~D  # Deleted
 #color index     red              default "~l ~N ~D"
 
 #color index     brightblue   default "~l ~Q"
-#color index     brightcyan       default "~l ~T"   
+#color index     brightcyan       default "~l ~T"
 
 ##--- body ---##
 color   quoted          color239   default

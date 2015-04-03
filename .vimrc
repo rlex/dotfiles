@@ -192,7 +192,7 @@ call SMap("<C-Left>", ":tabprev<cr>")
 call SMap("<C-t>", ":tabnew<cr>")
 
 " Encoding settings (koi8-r, cp1251, cp866, utf8)
-set wcm=<Tab> 
+set wcm=<Tab>
 menu Encoding.utf-8 :e ++enc=utf8<cr>
 menu Encoding.koi8-r :e ++enc=koi8-r<cr>
 menu Encoding.windows-1251 :e ++enc=cp1251<cr>
@@ -202,7 +202,7 @@ call SMap("<F7>", ":emenu Encoding.<TAB>")
 " C-Q - Exit Vim
 map <C-Q> <Esc>:qa<cr>
 
-" Window resizing 
+" Window resizing
 nnoremap <S-Up> <C-W>+<CR>
 nnoremap <S-Down> <C-W>-<CR>
 nnoremap <S-Left> <C-w>><CR>
@@ -261,7 +261,7 @@ let g:Tlist_Show_One_File = 1
 set completeopt-=preview
 set completeopt+=longest
 set mps-=[:]
- 
+
 let g:ctags_title=1
 let generate_tags=1
 let g:ctags_regenerate=1
@@ -271,12 +271,12 @@ let g:ctags_regenerate=1
 " {{{ NeoComplCache
 
 let g:neocomplcache_enable_at_startup = 0                 " Enable NeoComplCache
-let g:neocomplcache_enable_smart_case = 1                       " Use smartcase 
-let g:neocomplcache_enable_camel_case_completion = 1       " Camel case completion 
+let g:neocomplcache_enable_smart_case = 1                       " Use smartcase
+let g:neocomplcache_enable_camel_case_completion = 1       " Camel case completion
 let g:neocomplcache_enable_underbar_completion = 1        " Underbar completion
-let g:neocomplcache_min_syntax_length = 3                 " Minimum syntax keywork length 
-let g:neocomplcache_manual_completion_start_length = 0     " Manual completion length 
-let g:neocomplcache_min_keyword_length = 3                " Minimal keyword length 
+let g:neocomplcache_min_syntax_length = 3                 " Minimum syntax keywork length
+let g:neocomplcache_manual_completion_start_length = 0     " Manual completion length
+let g:neocomplcache_min_keyword_length = 3                " Minimal keyword length
 
 imap <silent><C-l>     <Plug>(neocomplcache_snippets_expand)
 smap <silent><C-l>     <Plug>(neocomplcache_snippets_expand)
@@ -296,18 +296,18 @@ endif
 
 " {{{ srcexpl
 let g:SrcExpl_winHeight = 8 " Set Source explorer height
-let g:SrcExpl_refreshTime = 100 " 100 ms to refresh 
-let g:SrcExpl_jumpKey = "<ENTER>" " Set Enter key to jump into the exact definition context 
-let g:SrcExpl_gobackKey = "<SPACE>" "Set Space key for back from the definition contex 
-let g:SrcExpl_pluginList = [ 
-        \ "__Tag_List__", 
-        \ "_NERD_tree_", 
-        \ "Source_Explorer" 
-    \ ] 
+let g:SrcExpl_refreshTime = 100 " 100 ms to refresh
+let g:SrcExpl_jumpKey = "<ENTER>" " Set Enter key to jump into the exact definition context
+let g:SrcExpl_gobackKey = "<SPACE>" "Set Space key for back from the definition contex
+let g:SrcExpl_pluginList = [
+        \ "__Tag_List__",
+        \ "_NERD_tree_",
+        \ "Source_Explorer"
+    \ ]
 let g:SrcExpl_searchLocalDef = 0 " Disable local def searching
 let g:SrcExpl_isUpdateTags = 1  " Update ctags automatically
 let g:SrcExpl_updateTagsCmd = "ctags --sort=foldcase -R ." " Use ctags with args
-let g:SrcExpl_updateTagsKey = "<F12>" "Set F12 key for updating the tags file artificially 
+let g:SrcExpl_updateTagsKey = "<F12>" "Set F12 key for updating the tags file artificially
 
 " }}}
 
@@ -321,14 +321,14 @@ set csto=1
 
 " add any cscope database in current directory
 if filereadable("cscope.out")
-        cs add cscope.out 
-" else add the database pointed to by environment variable 
+        cs add cscope.out
+" else add the database pointed to by environment variable
 elseif $CSCOPE_DB != ""
         cs add $CSCOPE_DB
 endif
 
 " show msg when any other cscope db added
-set cscopeverbose  
+set cscopeverbose
 autocmd FileType python set omnifunc=pythoncomplete#Complete
 autocmd FileType javascript set omnifunc=javascriptcomplete#CompleteJS
 autocmd FileType html set omnifunc=htmlcomplete#CompleteTags
@@ -374,4 +374,3 @@ endif
 " {{{ Syntastic plugin
 let g:syntastic_enable_signs=1
 " }}}
-

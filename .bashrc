@@ -24,10 +24,10 @@ shopt -s histappend
 shopt -s cdspell
 shopt -s hostcomplete
 shopt -s execfail
-set -o notify           
+set -o notify
 complete -cf sudo
-shopt -s no_empty_cmd_completion 
-stty -ixon 
+shopt -s no_empty_cmd_completion
+stty -ixon
 set -o noclobber
 set completion-ignore-case on
 set match-hidden-files on

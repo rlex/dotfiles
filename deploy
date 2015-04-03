@@ -9,12 +9,12 @@ dotfiles=( screenrc vimrc zshrc bashrc bash_profile gemrc htoprc gitconfig biewr
 # We checking if OS is Linux (GNU coreutils), if no, we assume OS use BSD utils
 # Yeah this is fuckin' dirty, but works in most of cases
 symlink() {
-    if [[ `uname` == "Linux" ]];
-        then
-            ln -sfvn $1 $2
-        else
-            ln -svfh $1 $2
-    fi
+  if [[ `uname` == "Linux" ]];
+    then
+      ln -sfvn $1 $2
+    else
+      ln -svfh $1 $2
+  fi
 }
 
 # dotfiles deployment
@@ -24,17 +24,16 @@ echo "Deploying dotfiles from `pwd` to ${HOME}"
 
 # Standart dotfiles
 if [ -d ~/.config ];
-    then
-        echo "skipping config folder creation"
-    else
-        mkdir ~/.config
+  then
+     echo "skipping config folder creation"
+  else
+    mkdir ~/.config
 fi
 
 for file in ${dotfiles[@]}
-    do
-        symlink ~/.rc/.${file} ~/.${file}
-    done
-      
+  do
+    symlink ~/.rc/.${file} ~/.${file}
+  done
 echo "Finished!"
 
 cd - >&/dev/null

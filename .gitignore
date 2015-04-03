@@ -18,5 +18,5 @@
 ### AWESOME AUTORUN ###
 .config/awesome/autorun/*
 
-### SHELL ENV ###
+### LOCAL SHELL ENV ###
 sh.d/S99_local

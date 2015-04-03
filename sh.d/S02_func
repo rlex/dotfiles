@@ -1,5 +1,5 @@
 # get current revision of a repo
-svn_revision() { 
+svn_revision() {
     svn info $@ | awk '/^Revision:/ {print $2} ;'
 }
 
@@ -55,7 +55,7 @@ bu() {
     for f in "$@"
         do cp -a $f ~/.backup/${f}-`date +%Y%m%d%H%M`.backup ;
     done
-} 
+}
 
 pk() {
     if [ $1 ] ; then
@@ -120,7 +120,7 @@ cpx() {
         echo Usage: cpx src dest
         return 1
     fi
-    
+
     tar cpf - $1 | (cd $2 && tar xvpBf -)
     return $?
 }
@@ -131,7 +131,7 @@ ssh-send-id() {
         echo "Usage: ssh-send-id pubkey_name machine"
         return 1
     fi
-    
+
     cat ~/.ssh/${1}.pub | ssh $2 'mkdir .ssh; cat >> .ssh/authorized_keys'
     return $?
 }

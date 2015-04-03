@@ -5,10 +5,10 @@
 *.exe
 *.o
 *.so
- 
+
 #logs and crap
 *.log
- 
+
 #OS crap
 .DS_Store
 .DS_Store?
@@ -17,4 +17,3 @@
 .Trashes
 ehthumbs.db
 Thumbs.db
-

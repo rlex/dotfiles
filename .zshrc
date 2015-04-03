@@ -5,8 +5,10 @@ setopt NO_HUP               # don't send kill to background jobs when exiting
 
 ## History options ##
 export HISTFILE="$HOME/.zsh-history"                      # path to history file
-setopt append_history
+SAVEHIST=10000
+#setopt append_history
 setopt inc_append_history
+setopt share_history
 setopt extended_history
 setopt hist_find_no_dups
 setopt hist_ignore_all_dups
@@ -22,20 +24,20 @@ autoload -U promptinit; promptinit
 autoload -U colors; colors
 
 ## ls colors ##
-if whence dircolors >/dev/null; then    
-    eval `dircolors ~/.dircolors -b`
+if whence dircolors >/dev/null; then
+  eval `dircolors ~/.dircolors -b`
 else
-    export CLICOLOR=1
+  export CLICOLOR=1
 fi
 
 # Prompt!
 function precmd {
-    # different colors for different return status
-    if  [[ $? -eq 0 ]]; then
+  # different colors for different return status
+  if  [[ $? -eq 0 ]]; then
     PROMPT="%{$fg[green]%}%n%{$fg[cyan]%}@%M%{$fg[green]%}%{$fg[green]%} > %{$reset_color%}"
-    else
+  else
     PROMPT="%{$fg[green]%}%n%{$fg[cyan]%}@%M%{$fg[green]%}%{$fg[red]%} > %{$reset_color%}"
-    fi
+  fi
 }
 
 
@@ -95,19 +97,17 @@ zstyle ":completion:*" list-colors ""
 zstyle ':completion:*:hosts' hosts $ssh_config_hosts $ssh_known_hosts $ssh_known_hosts_work
 
 #system-wide bash completion
-if [ -f /etc/bash_completion.d ]; then
-    . /etc/bash_completion.d
-fi
-
-#homebrew bash completion
-if [ -f /usr/local/etc/bash_completion.d ]; then
-    . /usr/local/etc/bash_completion.d
-fi
-
+#if [ -f /etc/bash_completion.d ]; then
+#    . /etc/bash_completion.d
+#fi
 
 #Homebrew zsh-only completion
 if [ -f /usr/local/share/zsh/site-functions ]; then
-    . /usr/local/share/zsh/site-functions
+  . /usr/local/share/zsh/site-functions
+fi
+
+if [ -f /usr/local/share/zsh-completions ]; then
+  fpath=(/usr/local/share/zsh-completions $fpath)
 fi
 
 ## Keybindings ##
