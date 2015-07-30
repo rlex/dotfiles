@@ -177,6 +177,8 @@ tab stop, >
         :imap <C-J> <Plug>snipMateNextOrTrigger
         :smap <C-J> <Plug>snipMateNextOrTrigger
 
+Note: The noremap variants of the map commands must NOT be used.
+
 The list of possible <Plug> mappings is as follows:
 
 <Plug>snipMateNextOrTrigger     Default: <Tab>          Mode: Insert, Select
@@ -299,18 +301,19 @@ and so on. After expansion, SnipMate will jump to the first tab stop. From
 then on, the <Plug>snipMateNextOrTrigger map will jump to the next higher
 numbered tabs top.
 
-However, SnipMate will always stop at the zero tab stop $0. Once it jumps to
+In the case of an ambiguity, for example if a stop occurs just before
+a literal number, braces may be placed around the stop number to resolve it:
+${3}79 is the third tab stop followed by the string "79".
+
+NOTE: In the version 0 snippet parser, the braces are mandatory.
+
+                                                       *SnipMate-zero-tabstop*
+SnipMate will always stop at the special zero tab stop $0. Once it jumps to
 the zero tab stop, snippet expansion is finished. If the zero tab stop is not
 present in a definition, it will be put at the end.
 
-In the case of an ambiguity, for example if a stop occurs just before a literal
-number, braces may be placed around the stop number to resolve it: ${3}79 is
-the third tab stop followed by the string "79".
-
-Note: In the version 0 snippet parser, the braces are mandatory.
-
-For example, to place the cursor first on the id of a <div> tag, then on
-its class, and finally end editing its contents: >
+For example, to place the cursor first on the id of a <div> tag, then on its
+class, and finally end editing its contents: >
 
     snippet div
         <div id="$1" class="$2">
@@ -496,6 +499,42 @@ Perhaps some of these features will be added in a later release.
 
 ==============================================================================
 CHANGELOG                                                 *SnipMate-changelog*
+
+0.88 - 2015-04-04
+-----------------
+
+* Implement simple caching
+* Remove expansion guards
+* Add `:SnipMateLoadScope` command and buffer-local scope aliases
+* Load `<scope>_*.snippets` files
+* Use CursorMoved autocmd events entirely
+
+* The nested branch has been merged
+    * A new snippet parser has been added. The g:snipmate.version as well as
+      version lines in snippet files determines which is used
+    * The new parser supports tab stops placed within placeholders,
+      substitutions, non-consecutive stop numbers, and fewer ambiguities
+    * The stop jumping code has been updated
+    * Tests have been added for the jumping code and the new parser
+
+* The override branch has been merged
+    * The g:snipMate.override option is added. When enabled, if two snippets
+      share the same name, the later-loaded one is kept and the other discarded
+    * Override behavior can be enabled on a per-snippet basis with a bang (!) in
+      the snippet file
+    * Otherwise, SnipMate tries to preserve all snippets loaded
+
+* Fix bug with mirrors in the first column
+* Fix bug with tabs in indents
+  <http://github.com/garbas/vim-snipmate/issues/143>
+* Fix bug with mirrors in placeholders
+* Fix reading single snippet files
+* Fix the use of the visual map at the end of a line
+* Fix expansion of stops containing only the zero tab stop
+* Remove select mode mappings
+* Indent visual placeholder expansions and remove extraneous lines
+  <http://github.com/garbas/vim-snipmate/issues/177>
+  <http://github.com/garbas/vim-snipmate/issues/178>
 
 0.87 - 2014-01-04
 -----------------

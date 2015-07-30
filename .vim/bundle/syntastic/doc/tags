@@ -63,6 +63,7 @@ syntastic-filetype-checkers	syntastic.txt	/*syntastic-filetype-checkers*
 syntastic-filtering-errors	syntastic.txt	/*syntastic-filtering-errors*
 syntastic-fish	syntastic.txt	/*syntastic-fish*
 syntastic-fizsh	syntastic.txt	/*syntastic-fizsh*
+syntastic-flagship	syntastic.txt	/*syntastic-flagship*
 syntastic-functionality	syntastic.txt	/*syntastic-functionality*
 syntastic-global-options	syntastic.txt	/*syntastic-global-options*
 syntastic-highlighting	syntastic.txt	/*syntastic-highlighting*
@@ -75,11 +76,12 @@ syntastic-powershell	syntastic.txt	/*syntastic-powershell*
 syntastic-pymode	syntastic.txt	/*syntastic-pymode*
 syntastic-quickstart	syntastic.txt	/*syntastic-quickstart*
 syntastic-recommended	syntastic.txt	/*syntastic-recommended*
+syntastic-sessions	syntastic.txt	/*syntastic-sessions*
 syntastic-shellslash	syntastic.txt	/*syntastic-shellslash*
 syntastic-statusline-flag	syntastic.txt	/*syntastic-statusline-flag*
-syntastic-vim-airline	syntastic.txt	/*syntastic-vim-airline*
 syntastic-vim-auto-save	syntastic.txt	/*syntastic-vim-auto-save*
 syntastic-vim-go	syntastic.txt	/*syntastic-vim-go*
 syntastic-vim-virtualenv	syntastic.txt	/*syntastic-vim-virtualenv*
 syntastic-ycm	syntastic.txt	/*syntastic-ycm*
+syntastic-zsh	syntastic.txt	/*syntastic-zsh*
 syntastic.txt	syntastic.txt	/*syntastic.txt*
