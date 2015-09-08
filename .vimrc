@@ -64,7 +64,7 @@ Plugin 'VundleVim/Vundle.vim'
 
 Bundle "scrooloose/nerdtree"
 Bundle "scrooloose/syntastic"
-Bundle "Shougo/neocomplcache"
+Bundle "Shougo/neocomplete"
 Bundle "chrisbra/SudoEdit.vim"
 Bundle "rodjek/vim-puppet"
 Bundle "garbas/vim-snipmate"
@@ -78,7 +78,7 @@ Bundle "bling/vim-airline"
 Bundle "bling/vim-bufferline"
 Plugin 'airblade/vim-gitgutter'
 Plugin 'tpope/vim-fugitive'
-
+Plugin 'kien/ctrlp.vim'
 
 Bundle "Gundo"
 Bundle "TaskList.vim"
