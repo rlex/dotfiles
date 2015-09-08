@@ -29,6 +29,7 @@ set viminfo=\'100,\"500,:100"       " read/write a .viminfo file --"Limit regs t
 set showmatch                       " show matching brackets and etc
 set wildmenu                        " Filesystem via :e
 set fileencodings=utf-8,cp1251      " Well, sometimes i edit files from win.
+set number
 " Tabulation params
 set shiftwidth=4
 set softtabstop=4
@@ -47,6 +48,7 @@ endif
 " Turn on syntax highlighting
 syntax on
 " Status line settings
+let g:airline_powerline_fonts = 1
 set statusline=File:%F%m%r%h%w\ Enc:%{strlen(&fenc)?&fenc:'none'}\ Line:%{&ff}\ Syntax:%Y\ ASCII:\%03.3b\ HEX:\%02.2B\ Position:%04l,%04v\ Percent:%p%%
 set laststatus=2
 set fo+=cr " Fix enter for comment
@@ -55,10 +57,10 @@ set sessionoptions=curdir,buffers,tabpages
 
 " {{{ Vundle
 filetype off
-set rtp+=~/.vim/bundle/vundle/
-call vundle#rc()
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
 
-Bundle 'gmarik/vundle'
+Plugin 'VundleVim/Vundle.vim'
 
 Bundle "scrooloose/nerdtree"
 Bundle "scrooloose/syntastic"
@@ -72,11 +74,19 @@ Bundle "tomtom/tlib_vim"
 Bundle "honza/vim-snippets"
 Bundle "ghewgill/vim-scmdiff"
 Bundle "0rca/vim-mikrotik"
+Bundle "bling/vim-airline"
+Bundle "bling/vim-bufferline"
+Plugin 'airblade/vim-gitgutter'
+Plugin 'tpope/vim-fugitive'
+
 
 Bundle "Gundo"
 Bundle "TaskList.vim"
-Bundle "buftabs"
 Bundle "Rename"
+
+call vundle#end()
+filetype plugin indent on
+
 " }}}
 
 " {{{ Functions
@@ -286,7 +296,7 @@ smap <silent><C-l>     <Plug>(neocomplcache_snippets_expand)
 " {{{ Colorscheme based on $TERM
 if $TERM =~ "xterm" || $TERM =~ "rxvt" || $TERM =~ "screen" || &term =~ "builtin_gui" || $TERM == "dumb"
     set t_Co=256
-    colorscheme darkburn
+    colorscheme xoria256
     let &t_SI = "\<Esc>]12;green\x7"
     let &t_EI = "\<Esc>]12;blue\x7"
 else
