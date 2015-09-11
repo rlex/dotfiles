@@ -49,7 +49,6 @@ endif
 " Turn on syntax highlighting
 syntax on
 " Status line settings
-let g:airline_powerline_fonts = 1
 set statusline=File:%F%m%r%h%w\ Enc:%{strlen(&fenc)?&fenc:'none'}\ Line:%{&ff}\ Syntax:%Y\ ASCII:\%03.3b\ HEX:\%02.2B\ Position:%04l,%04v\ Percent:%p%%
 set laststatus=2
 set fo+=cr " Fix enter for comment
@@ -304,6 +303,17 @@ else
     colorscheme desert
 endif
 " }}}
+
+  " {{{ Vim-airline settings
+  if $TERM =~ "xterm" || $TERM =~ "rxvt" || $TERM =~ "screen" || &term =~ "builtin_gui" || $TERM == "dumb"
+    let g:airline_powerline_fonts = 1
+    let g:airline#extensions#tabline#enabled = 0
+    let g:airline_theme='behelit'
+  else
+    let g:airline_theme='base16'
+    let g:airline_powerline_fonts = 0
+  endif
+  " }}}
 
 " {{{ srcexpl
 let g:SrcExpl_winHeight = 8 " Set Source explorer height
