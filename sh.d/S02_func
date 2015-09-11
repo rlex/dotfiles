@@ -1,29 +1,6 @@
-# get current revision of a repo
-svn_revision() {
-    svn info $@ | awk '/^Revision:/ {print $2} ;'
-}
-
-# print the log or no changes after an update
-svn_up_and_log() {
-    local old_rev=$(svn_revision $@)
-    local first_up=$((${old_rev} + 1))
-    svn up -q $@
-    if [ $(svn_revision $@) -gt ${old_rev} ];
-    then
-        svn log -v -rHEAD:${first_up} $@
-    else
-        echo "No changes.";
-    fi
-}
-
 # tag a directory in a command to come to it later
 tag() {
     alias $1="cd $PWD";
-}
-
-dirdiff() {
-#TODO fix for other OSes (bsd-like)
-    diff -yB -W 80 <(ls -1 --color=never "$1") <(ls -1 --color=never "$2")
 }
 
 zomb_ps() {
@@ -35,7 +12,7 @@ fixtty() {
     reset
 }
 
-findfiles() {
+ff() {
     if [[ -z $1 ]]; then
         echo "Find files recursively starting at \`pwd\` - usage: findfiles pattern"
         return
@@ -43,7 +20,7 @@ findfiles() {
         find . -type f \( -name "*$1*" -o -name ".$1*" -o -name ".*.*$1*" -o -name "*$1*.*" \) -print
 
 }
-finddirs() {
+fd() {
     if [[ -z $1 ]]; then
         echo "Find directories recursively starting at \`pwd\` - usage: finddirs pattern"
         return
@@ -80,49 +57,13 @@ digg() {
         *) dig -t $1 $2 +noall +answer +nocmd ;;
     esac
 }
-#toast install function
-install_toast() {
-perl -e 'socket(S,2,1,0)&&connect(S,pack("Sna4x8",2,80,gethostbyname(
-    $h="toastball.net")||die("dns")))&&syswrite(S,"GET /toast/toast "
-    ."HTTP/1.0\nHost: $h\n\n")&&open(STDIN,"<&S")&&exec($^X,qw(-x -
-    arm toast))||die($!)';
-}
-
-#rvm installation
-install_rvm () {
-    curl -L https://get.rvm.io | bash -s stable
-}
-
-psgrep() {
-    if [ ! -z $1 ] ; then
-        echo "Grepping for processes matching $1..."
-        ps -A -o pid,uname,%cpu,%mem,stat,time,args | grep "$1" | grep -v grep
-    else
-        echo "Usage: psgrep <pattern>";
-    fi
-}
 
 grab() {
     sudo chown -R ${USER} ${1:-.};
 }
 
-have() {
-    type "$1" &> /dev/null;
-}
-
 calc() {
     gawk -v CONVFMT="%12.2f" -v OFMT="%.9g"  "BEGIN { print $* ; }";
-}
-
-cpx() {
-    if [ -z "$1" -o -z "$2" ]
-    then
-        echo Usage: cpx src dest
-        return 1
-    fi
-
-    tar cpf - $1 | (cd $2 && tar xvpBf -)
-    return $?
 }
 
 ssh-send-id() {

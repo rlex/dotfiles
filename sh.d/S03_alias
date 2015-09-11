@@ -1,4 +1,4 @@
-# set aliases
+#file for short aliases
 #very ugly hack to allow bypassing aliases via sudo.
 alias sudo='A=`alias` sudo  '
 alias j="jobs"

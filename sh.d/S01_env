@@ -4,23 +4,11 @@ if [ -x /etc/profile ]; then
     source "/etc/profile"
 fi
 
-#history settings
-export HISTCONTROL=ignoredups
-export HISTSIZE=20000
-export HISTFILESIZE=20000
-export HISTTIMEFORMAT="[%Y-%m-%d - %H:%M:%S]"
-export HISTIGNORE="&:ls:ll:la:l:pwd:exit:clear:b:r:exit:env:date:.:..:...:....:.....:pwd:cfg:rb:eb:!!:fg:bg:cd:h:mc"
-
 #main path
 export PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:$HOME/.rc/.bin:$PATH"
 
 #init rbenv
 if which rbenv > /dev/null; then eval "$(rbenv init -)"; fi
-
-#toast
-if [ -x $HOME/.toast/armed/bin/toast ]; then
-    eval `$HOME/.toast/armed/bin/toast env`
-fi
 
 #Locales
 export LC_ALL=en_US.UTF-8

@@ -2,13 +2,11 @@
 unsetopt BG_NICE            # do not nice bg commands
 setopt EXTENDED_HISTORY     # puts timestamps in the history
 setopt NO_HUP               # don't send kill to background jobs when exiting
-
+setopt AUTO_CD              # enter dirname to cd
 ## History options ##
 export HISTFILE="$HOME/.zsh-history"                      # path to history file
 SAVEHIST=10000
-#setopt append_history
 setopt inc_append_history
-setopt share_history
 setopt extended_history
 setopt hist_find_no_dups
 setopt hist_ignore_all_dups
@@ -95,11 +93,6 @@ zstyle ":completion:*" list-colors ""
 [ -f ~/.ssh/known_hosts.work ] && : ${(A)ssh_known_hosts_debian:=${${${(f)"$(<$HOME/.ssh/known_hosts.work)"}%%\ *}%%,*}}
 
 zstyle ':completion:*:hosts' hosts $ssh_config_hosts $ssh_known_hosts $ssh_known_hosts_work
-
-#system-wide bash completion
-#if [ -f /etc/bash_completion.d ]; then
-#    . /etc/bash_completion.d
-#fi
 
 #Homebrew zsh-only completion
 if [ -f /usr/local/share/zsh/site-functions ]; then
