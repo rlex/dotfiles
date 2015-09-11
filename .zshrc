@@ -104,7 +104,10 @@ if [ -f /usr/local/share/zsh-completions ]; then
 fi
 
 ## Keybindings ##
-#bindkey -e
+#up/arrow keys for complete + history 
+bindkey '\e[A' history-beginning-search-backward
+bindkey '\e[B' history-beginning-search-forward
+
 
 # load env
 for envfile in ~/.rc/sh.d/S[0-9][0-9]*[^~] ; do
