@@ -38,6 +38,9 @@ function precmd {
   fi
 }
 
+if [[ ! -z "$SSH_CLIENT" ]]; then
+  RPROMPT="$RPROMPT ⇄" # ssh icon
+fi
 
 # format titles for screen and rxvt
 function title() {

@@ -1,6 +1,6 @@
 #file for short aliases
-#very ugly hack to allow bypassing aliases via sudo.
-alias sudo='A=`alias` sudo  '
+#sudo bypass aliases
+alias sudo='sudo '
 alias j="jobs"
 if ls -F --color=auto >&/dev/null; then
   alias ls="ls --color=auto -F"
