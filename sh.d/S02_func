@@ -114,7 +114,7 @@ function ram() {
   fi
 }
 #TODO: move all OS-specific functions to one block
-if [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
+if [[ "$OSTYPE" =~ ^linux ]]; then
   function swapusage() {
     SUM=0
     OVERALL=0
