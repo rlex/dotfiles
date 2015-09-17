@@ -38,10 +38,6 @@ function precmd {
   fi
 }
 
-if [[ ! -z "$SSH_CLIENT" ]]; then
-  RPROMPT="$RPROMPT ⇄" # ssh icon
-fi
-
 # format titles for screen and rxvt
 function title() {
   # escape '%' chars in $1, make nonprintables visible
@@ -162,3 +158,9 @@ bindkey '\e[B' history-beginning-search-forward
 for envfile in ~/.rc/sh.d/S[0-9][0-9]*[^~] ; do
     source $envfile
 done
+
+if [[ ! -z "$SSH_CLIENT" ]]; then
+  RPROMPT="$(git_prompt_string) $RPROMPT ⇄" # ssh icon
+else
+  RPROMPT="$(git_prompt_string)"
+fi
