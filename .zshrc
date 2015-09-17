@@ -69,30 +69,76 @@ function preexec() {
 
 ## Zsh completion ##
 # New style completion system
-autoload -U compinit; compinit
-autoload -U bashcompinit; bashcompinit
-#  * List of completers to use
-zstyle ":completion:*" completer _complete _match _approximate
-#  * Allow approximate
-zstyle ":completion:*:match:*" original only
-zstyle ":completion:*:approximate:*" max-errors 1 numeric
-#  * Selection prompt as menu
-zstyle ":completion:*" menu select=1
-#  * Menu selection for PID completion
-zstyle ":completion:*:*:kill:*" menu yes select
-zstyle ":completion:*:kill:*" force-list always
-zstyle ":completion:*:processes" command "ps -au$USER"
-zstyle ":completion:*:*:kill:*:processes" list-colors "=(#b) #([0-9]#)*=0=01;32"
-#  * Don't select parent dir on cd
-zstyle ":completion:*:cd:*" ignore-parents parent pwd
-#  * Complete with colors
-zstyle ":completion:*" list-colors ""
-#  * SSH completion. Need clean known_hosts, thought.
-[ -f ~/.ssh/config ] && : ${(A)ssh_config_hosts:=${${${${(@M)${(f)"$(<~/.ssh/config)"}:#Host *}#Host }:#*\**}:#*\?*}}
-[ -f ~/.ssh/known_hosts ] && : ${(A)ssh_known_hosts:=${${${(f)"$(<$HOME/.ssh/known_hosts)"}%%\ *}%%,*}}
-[ -f ~/.ssh/known_hosts.work ] && : ${(A)ssh_known_hosts_debian:=${${${(f)"$(<$HOME/.ssh/known_hosts.work)"}%%\ *}%%,*}}
 
-zstyle ':completion:*:hosts' hosts $ssh_config_hosts $ssh_known_hosts $ssh_known_hosts_work
+# add custom completion scripts
+autoload -U compinit && compinit
+zmodload -i zsh/complist
+
+# man zshcontrib
+zstyle ':vcs_info:*' actionformats '%F{5}(%f%s%F{5})%F{3}-%F{5}[%F{2}%b%F{3}|%F{1}%a%F{5}]%f '
+zstyle ':vcs_info:*' formats '%F{5}(%f%s%F{5})%F{3}-%F{5}[%F{2}%b%F{5}]%f '
+zstyle ':vcs_info:*' enable git
+
+# Enable completion caching, use rehash to clear
+zstyle ':completion::complete:*' use-cache on
+zstyle ':completion::complete:*' cache-path ~/.zsh/cache
+
+# Fallback to built in ls colors
+zstyle ':completion:*' list-colors ''
+
+# Make the list prompt friendly
+zstyle ':completion:*' list-prompt '%SAt %p: Hit TAB for more, or the character to insert%s'
+
+# Make the selection prompt friendly when there are a lot of choices
+zstyle ':completion:*' select-prompt '%SScrolling active: current selection at %p%s'
+
+# Add simple colors to kill
+zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([0-9]#) ([0-9a-z-]#)*=01;34=0=01'
+
+# list of completers to use
+zstyle ':completion:*::::' completer _expand _complete _ignored _approximate
+
+zstyle ':completion:*' menu select=1 _complete _ignored _approximate
+
+# insert all expansions for expand completer
+# zstyle ':completion:*:expand:*' tag-order all-expansions
+
+# match uppercase from lowercase
+zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
+
+# offer indexes before parameters in subscripts
+zstyle ':completion:*:*:-subscript-:*' tag-order indexes parameters
+
+# formatting and messages
+zstyle ':completion:*' verbose yes
+zstyle ':completion:*:descriptions' format '%B%d%b'
+zstyle ':completion:*:messages' format '%d'
+zstyle ':completion:*:warnings' format 'No matches for: %d'
+zstyle ':completion:*:corrections' format '%B%d (errors: %e)%b'
+zstyle ':completion:*' group-name ''
+
+
+local _myhosts
+if [[ -f $HOME/.ssh/known_hosts ]]; then
+    _myhosts=( ${${${${(f)"$(<$HOME/.ssh/known_hosts)"}:#[0-9]*}%%\ *}%%,*} )
+    zstyle ':completion:*' hosts $_myhosts
+else
+    zstyle ':completion:*:hosts' hosts
+fi
+
+zstyle ':completion:*:*:*:users' ignored-patterns \
+        adm amanda apache avahi beaglidx bin cacti canna clamav daemon \
+        dbus distcache dovecot fax ftp games gdm gkrellmd gopher \
+        hacluster haldaemon halt hsqldb ident junkbust ldap lp mail \
+        mailman mailnull mldonkey mysql nagios \
+        named netdump news nfsnobody nobody nscd ntp nut nx openvpn \
+        operator pcap postfix postgres privoxy pulse pvm quagga radvd \
+        rpc rpcuser rpm shutdown squid sshd sync uucp vcsa xfs '_*'
+
+
+# ignore completion functions (until the _ignored completer)
+zstyle ':completion:*:functions' ignored-patterns '_*'
+zstyle '*' single-ignored show
 
 #Homebrew zsh-only completion
 if [ -f /usr/local/share/zsh/site-functions ]; then
