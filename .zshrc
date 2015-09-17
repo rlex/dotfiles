@@ -155,12 +155,12 @@ bindkey '\e[B' history-beginning-search-forward
 
 
 # load env
-for envfile in ~/.rc/sh.d/S[0-9][0-9]*[^~] ; do
+for envfile in ~/.rc/sh.d/[SZ][0-9][0-9]*[^~] ; do
     source $envfile
 done
 
 if [[ ! -z "$SSH_CLIENT" ]]; then
-  RPROMPT="$(git_prompt_string) $RPROMPT ⇄" # ssh icon
+  RPS1="⇄" # ssh icon
 else
-  RPROMPT="$(git_prompt_string)"
+  RPS1='$(git_prompt_string)'
 fi
