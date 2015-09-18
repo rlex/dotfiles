@@ -3,15 +3,6 @@ tag() {
     alias $1="cd $PWD";
 }
 
-zomb_ps() {
-    ps hr -Nos | awk '$1=="Z" {print $1}'
-}
-
-fixtty() {
-    stty sane
-    reset
-}
-
 ff() {
     if [[ -z $1 ]]; then
         echo "Find files recursively starting at \`pwd\` - usage: findfiles pattern"
@@ -20,6 +11,7 @@ ff() {
         find . -type f \( -name "*$1*" -o -name ".$1*" -o -name ".*.*$1*" -o -name "*$1*.*" \) -print
 
 }
+
 fd() {
     if [[ -z $1 ]]; then
         echo "Find directories recursively starting at \`pwd\` - usage: finddirs pattern"

@@ -2,6 +2,7 @@
 #sudo bypass aliases
 alias sudo='sudo '
 alias j="jobs"
+alias fixtty="stty sane && reset"
 if ls -F --color=auto >&/dev/null; then
   alias ls="ls --color=auto -F"
 else
