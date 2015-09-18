@@ -22,48 +22,42 @@ autoload -U promptinit; promptinit
 autoload -U colors; colors
 
 ## ls colors ##
+# compatible with both linux (gnu coreutils)
+# and mac os x / BSD (bsd coreutils)
 if whence dircolors >/dev/null; then
   eval `dircolors ~/.dircolors -b`
 else
   export CLICOLOR=1
 fi
 
-# Prompt!
-function precmd {
-  # different colors for different return status
-  if  [[ $? -eq 0 ]]; then
-    PROMPT="%{$fg[green]%}%n%{$fg[cyan]%}@%M%{$fg[green]%}%{$fg[green]%} > %{$reset_color%}"
-  else
-    PROMPT="%{$fg[green]%}%n%{$fg[cyan]%}@%M%{$fg[green]%}%{$fg[red]%} > %{$reset_color%}"
-  fi
-}
-
-# format titles for screen and rxvt
+# proper formatting for shell titles
+# more info: http://www.semicomplete.com/blog/productivity/better-zsh-xterm-title-fix.html
 function title() {
   # escape '%' chars in $1, make nonprintables visible
-  a=${(V)1//\%/\%\%}
+  local a=${(V)1//\%/\%\%}
 
   # Truncate command, and join lines.
   a=$(print -Pn "%40>...>$a" | tr -d "\n")
-
   case $TERM in
-  screen*)
-    print -Pn "\ek$a\e\\"      # screen  (in ^A")
-    ;;
-  xterm*|rxvt)
-    print -Pn "\e]2;$2 | $a:$3\a" # plain xterm 
+    screen*)
+      print -Pn "\e]2;$a @ $2\a" # plain xterm title
+      print -Pn "\ek$a\e\\"      # screen title (in ^A")
+      print -Pn "\e_$2   \e\\"   # screen location
+      ;;
+    xterm*)
+      print -Pn "\e]2;$a @ $2\a" # plain xterm title
     ;;
   esac
 }
 
 # precmd is called just before the prompt is printed
-#function precmd() {
- #title "zsh" "$USER@%m" "%55<...<%~"
-#}
+function precmd() {
+  title "zsh" "%m:%55<...<%~"
+}
 
 # preexec is called just before any command line is executed
 function preexec() {
-  title "$1" "$USER@%m" "%35<...<%~"
+  title "$1" "%m:%35<...<%~"
 }
 
 ## Zsh completion ##
@@ -149,16 +143,30 @@ if [ -f /usr/local/share/zsh-completions ]; then
 fi
 
 ## Keybindings ##
-#up/arrow keys for complete + history 
+#up/arrow keys for complete + history
 bindkey '\e[A' history-beginning-search-backward
 bindkey '\e[B' history-beginning-search-forward
 
-
-# load env
+# load env (aliases, functions, etc crap)
+# Z* files for ZSH only
+# S* files for generic sh-compatible shells
 for envfile in ~/.rc/sh.d/[SZ][0-9][0-9]*[^~] ; do
     source $envfile
 done
 
+# Prompt settings
+function precmd {
+ # different colors for different return status
+ # green - ok, red - non-zero exit
+ if  [[ $? -eq 0 ]]; then
+   PROMPT="%{$fg[green]%}%n%{$fg[cyan]%}@%M%{$fg[green]%}%{$fg[green]%} > %{$reset_color%}"
+ else
+   PROMPT="%{$fg[green]%}%n%{$fg[cyan]%}@%M%{$fg[green]%}%{$fg[red]%} > %{$reset_color%}"
+ fi
+}
+
+# Indicate remote SSH session in right prompt
+# Use git status in right prompt when local
 if [[ ! -z "$SSH_CLIENT" ]]; then
   RPS1="⇄" # ssh icon
 else
