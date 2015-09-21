@@ -134,3 +134,13 @@ function retry() {
   sleep 1
   retry $@
 }
+
+# Tmux
+alias tm="tmuxStart"
+
+function tmuxStart()
+{
+    if which tmux 2>&1 >/dev/null; then
+      test -z "$TMUX" && (tmux attach || tmux new-session)
+    fi
+}
