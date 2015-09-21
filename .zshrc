@@ -159,16 +159,16 @@ function precmd {
  # different colors for different return status
  # green - ok, red - non-zero exit
  if  [[ $? -eq 0 ]]; then
-   PROMPT="%{$fg[green]%}%n%{$fg[cyan]%}@%M%{$fg[green]%}%{$fg[green]%} > %{$reset_color%}"
+   PROMPT="%{$fg[green]%}%n%{$fg[cyan]%}@%M%{$fg[green]%}%{$fg[green]%} ❯ %{$reset_color%}"
  else
-   PROMPT="%{$fg[green]%}%n%{$fg[cyan]%}@%M%{$fg[green]%}%{$fg[red]%} > %{$reset_color%}"
+   PROMPT="%{$fg[green]%}%n%{$fg[cyan]%}@%M%{$fg[green]%}%{$fg[red]%} ❯ %{$reset_color%}"
  fi
 }
 
 # Indicate remote SSH session in right prompt
 # Use git status in right prompt when local
 if [[ ! -z "$SSH_CLIENT" ]]; then
-  RPS1="⇄" # ssh icon
+  RPS1="%{$fg[green]%}⇐⇒%{$reset_color%}" # ssh icon
 else
   RPS1='$(git_prompt_string)'
 fi
