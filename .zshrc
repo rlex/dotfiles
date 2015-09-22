@@ -154,21 +154,31 @@ for envfile in ~/.rc/sh.d/[SZ][0-9][0-9]*[^~] ; do
     source $envfile
 done
 
+#use fancy fonts only on proper terminal
+
+if [[ $TERM =~ "(256color)" ]]; then
+  PROMPT_SYMBOL="❯"
+  SSH_SYMBOL="⇣⇡"
+else
+  PROMPT_SYMBOL=">"
+  SSH_SYMBOL="<==>"
+fi
+
 # Prompt settings
 function precmd {
  # different colors for different return status
  # green - ok, red - non-zero exit
  if  [[ $? -eq 0 ]]; then
-   PROMPT="%{$fg[green]%}%n%{$fg[cyan]%}@%M%{$fg[green]%}%{$fg[green]%} ❯ %{$reset_color%}"
+   PROMPT="%{$fg[green]%}%n%{$fg[cyan]%}@%M%{$fg[green]%}%{$fg[green]%} $PROMPT_SYMBOL %{$reset_color%}"
  else
-   PROMPT="%{$fg[green]%}%n%{$fg[cyan]%}@%M%{$fg[green]%}%{$fg[red]%} ❯ %{$reset_color%}"
+   PROMPT="%{$fg[green]%}%n%{$fg[cyan]%}@%M%{$fg[green]%}%{$fg[red]%} $PROMPT_SYMBOL %{$reset_color%}"
  fi
 }
 
 # Indicate remote SSH session in right prompt
 # Use git status in right prompt when local
 if [[ ! -z "$SSH_CLIENT" ]]; then
-  RPS1="%{$fg[green]%}⇐⇒%{$reset_color%}" # ssh icon
+  RPS1="%{$fg[green]%}$SSH_SYMBOL%{$reset_color%}" # ssh icon
 else
   RPS1='$(git_prompt_string)'
 fi
