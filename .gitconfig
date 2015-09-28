@@ -61,7 +61,10 @@
   lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --
   s = status -sb
   wipe = reset --hard
+  unstage = reset HEAD --
   today = !git log --since=midnight --author=\"$(git config user.name)\" --oneline
+  amend = !git log -n 1 --pretty=tformat:%s%n%n%b | git commit -F - --amend
+  aliases = !git config --list | grep 'alias\\.' | sed 's/alias\\.\\([^=]*\\)=\\(.*\\)/\\1\\ \t => \\2/' | sort
 [user]
   name = Lex Rivera
   email = me@lex.io
