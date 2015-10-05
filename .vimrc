@@ -40,7 +40,7 @@ set sts=4
 set nolist
 set expandtab
 " Persistent undo. Only in vim >= 7.3
-if v:version >= 703
+if exists('+undofile')
     set undodir=~/.vim/swap
     set undofile
     set undolevels=1000
@@ -276,6 +276,22 @@ let g:ctags_title=1
 let generate_tags=1
 let g:ctags_regenerate=1
 
+let NERDTreeIgnore=['\~$', '\.swp$', '\.git', '\.hg', '\.svn', '\.bzr', '\.pyc$']
+:nmap ,e :NERDTreeToggle<CR>
+
+highlight Pmenu ctermbg=238 gui=bold
+
+let g:ctrlp_map = '<c-p>'
+let g:ctrlp_cmd = 'CtrlP'
+let g:ctrlp_custom_ignore = '\.git$\|\.hg$\|\.svn$'
+let g:ctrlp_working_path_mode = 'ra' " search for nearest ancestor like .git, .hg, and the directory of the current file
+let g:ctrlp_match_window_bottom = 1  " show the match window at the top of the screen
+let g:ctrlp_max_height = 8           " maxiumum height of match window
+let g:ctrlp_switch_buffer = 'et'     " jump to a file if it's open already
+let g:ctrlp_use_caching = 1          " enable caching
+let g:ctrlp_clear_cache_on_exit=0    " speed up by not removing clearing cache evertime
+let g:ctrlp_show_hidden = 1          " show me dotfiles
+let g:ctrlp_mruf_max = 250           " number of recently opened files
 " }}}
 
 " {{{ NeoComplCache
