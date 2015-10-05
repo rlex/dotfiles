@@ -1,3 +1,6 @@
 --color
 --group
 --sort-files
+--ignore-case
+--before-context=2
+--after-context=2
