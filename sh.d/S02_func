@@ -86,7 +86,7 @@ nss-manage() {
     esac
 }
 
-function ram() {
+ram() {
   local sum
   local items
   local app="$1"
@@ -107,7 +107,7 @@ function ram() {
 }
 #TODO: move all OS-specific functions to one block
 if [[ "$OSTYPE" =~ ^linux ]]; then
-  function swapusage() {
+  swapusage() {
     SUM=0
     OVERALL=0
     for DIR in `find /proc/ -maxdepth 1 -type d -regex "^/proc/[0-9]+"`
@@ -125,10 +125,20 @@ if [[ "$OSTYPE" =~ ^linux ]]; then
       SUM=0
   done
   echo "Overall swap used: $OVERALL KB"
-}
+  }
+
+  fdusage() {
+    for x in `ps -eF | awk '{ print $2 }'`;
+    do echo `ls /proc/$x/fd 2> /dev/null | wc -l` $x `cat /proc/$x/cmdline 2> /dev/null`;
+    done | sort -n -r | head -n 20
+  }
+  
+  straceall() {
+    strace $(pidof "${1}" | sed 's/\([0-9]*\)/-p \1/g')
+  }
 fi
 
-function retry() {
+retry() {
   echo Retrying "$@"
   $@
   sleep 1
@@ -137,9 +147,7 @@ function retry() {
 
 # Tmux
 alias tm="tmuxStart"
-
-function tmuxStart()
-{
+tmuxStart() {
     if which tmux 2>&1 >/dev/null; then
       test -z "$TMUX" && (tmux attach || tmux new-session)
     fi
