@@ -129,12 +129,12 @@ if [[ "$OSTYPE" =~ ^linux ]]; then
 
   fdusage() {
     for x in `ps -eF | awk '{ print $2 }'`;
-    do echo `ls /proc/$x/fd 2> /dev/null | wc -l` $x `cat /proc/$x/cmdline 2> /dev/null`;
+    do echo `sudo ls /proc/$x/fd 2> /dev/null | wc -l` $x `sudo cat /proc/$x/cmdline 2> /dev/null`;
     done | sort -n -r | head -n 20
   }
   
   straceall() {
-    strace $(pidof "${1}" | sed 's/\([0-9]*\)/-p \1/g')
+    sudo strace $(pidof "${1}" | sed 's/\([0-9]*\)/-p \1/g')
   }
 fi
 
