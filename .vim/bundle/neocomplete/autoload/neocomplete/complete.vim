@@ -75,14 +75,14 @@ function! neocomplete#complete#_get_words(sources, complete_pos, complete_str) "
   " Append prefix.
   let candidates = []
   let len_words = 0
-  for source in sort(filter(copy(a:sources),
+  for source in sort(filter(deepcopy(a:sources),
         \ '!empty(v:val.neocomplete__context.candidates)'),
         \  's:compare_source_rank')
     let mark = source.mark
     let context = source.neocomplete__context
     let words =
           \ type(context.candidates[0]) == type('') ?
-          \ map(copy(context.candidates), "{'word': v:val, 'menu' : mark}") :
+          \ map(copy(context.candidates), "{'word': v:val}") :
           \ deepcopy(context.candidates)
     let context.candidates = words
 
@@ -125,11 +125,10 @@ EOF
     lua << EOF
     do
       local candidates = vim.eval('words')
-      local mark = vim.eval('mark')
+      local mark = vim.eval('mark') .. ' '
       for i = 0, #candidates-1 do
-        if candidates[i].menu == nil then
-          candidates[i].menu = mark
-        end
+        candidates[i].menu = mark .. (candidates[i].menu ~= nil and
+                             candidates[i].menu or '')
       end
     end
 EOF

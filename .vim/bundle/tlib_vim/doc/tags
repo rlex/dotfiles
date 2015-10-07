@@ -24,6 +24,9 @@ g:tlib#cache#script_encoding	tlib.txt	/*g:tlib#cache#script_encoding*
 g:tlib#cache#verbosity	tlib.txt	/*g:tlib#cache#verbosity*
 g:tlib#debug	tlib.txt	/*g:tlib#debug*
 g:tlib#dir#sep	tlib.txt	/*g:tlib#dir#sep*
+g:tlib#file#drop	tlib.txt	/*g:tlib#file#drop*
+g:tlib#file#edit_cmds	tlib.txt	/*g:tlib#file#edit_cmds*
+g:tlib#file#use_tabs	tlib.txt	/*g:tlib#file#use_tabs*
 g:tlib#hash#use_adler32	tlib.txt	/*g:tlib#hash#use_adler32*
 g:tlib#hash#use_crc32	tlib.txt	/*g:tlib#hash#use_crc32*
 g:tlib#input#and	tlib.txt	/*g:tlib#input#and*
@@ -197,6 +200,7 @@ tlib#dir#Push()	tlib.txt	/*tlib#dir#Push()*
 tlib#eval#FormatValue()	tlib.txt	/*tlib#eval#FormatValue()*
 tlib#file#Absolute()	tlib.txt	/*tlib#file#Absolute()*
 tlib#file#Canonic()	tlib.txt	/*tlib#file#Canonic()*
+tlib#file#Edit()	tlib.txt	/*tlib#file#Edit()*
 tlib#file#Join()	tlib.txt	/*tlib#file#Join()*
 tlib#file#Relative()	tlib.txt	/*tlib#file#Relative()*
 tlib#file#Split()	tlib.txt	/*tlib#file#Split()*

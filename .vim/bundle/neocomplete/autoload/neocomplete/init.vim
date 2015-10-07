@@ -94,14 +94,16 @@ function! neocomplete#init#_autocmds() "{{{
           \ call neocomplete#handler#_on_insert_char_pre()
     autocmd TextChangedI *
           \ call neocomplete#handler#_on_text_changed()
-    autocmd VimLeavePre *
-          \ call neocomplete#init#disable()
+    autocmd CompleteDone *
+          \ call neocomplete#handler#_on_complete_done()
   augroup END
 
   if g:neocomplete#enable_cursor_hold_i
     augroup neocomplete
       autocmd CursorHoldI *
             \ call neocomplete#handler#_do_auto_complete('CursorHoldI')
+      autocmd CursorMovedI *
+            \ call neocomplete#handler#_do_auto_complete('CursorMovedI')
       autocmd InsertEnter *
             \ call neocomplete#handler#_change_update_time()
       autocmd InsertLeave *
@@ -119,11 +121,6 @@ function! neocomplete#init#_autocmds() "{{{
   if !g:neocomplete#enable_cursor_hold_i
     autocmd neocomplete InsertEnter *
           \ call neocomplete#handler#_do_auto_complete('InsertEnter')
-  endif
-
-  if exists('v:completed_item')
-    autocmd neocomplete CompleteDone *
-          \ call neocomplete#handler#_on_complete_done()
   endif
 endfunction"}}}
 
@@ -672,7 +669,6 @@ function! neocomplete#init#_source(source) "{{{
         \ 'disabled' : 0,
         \ 'disabled_filetypes' : {},
         \ 'hooks' : {},
-        \ 'mark' : '',
         \ 'matchers' : [],
         \ 'sorters' : ['sorter_rank'],
         \ 'converters' : [
@@ -706,6 +702,11 @@ function! neocomplete#init#_source(source) "{{{
     " Set default rank.
     let source.rank = (source.kind ==# 'keyword') ? 5 :
           \ empty(source.filetypes) ? 10 : 100
+  endif
+
+  if !has_key(source, 'mark')
+    " Set default mark.
+    let source.mark = '[' . source.name . ']'
   endif
 
   if !has_key(source.keyword_patterns, '_')

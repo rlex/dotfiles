@@ -75,27 +75,20 @@ function! neocomplete#handler#_on_write_post() "{{{
   endfor
 endfunction"}}}
 function! neocomplete#handler#_on_complete_done() "{{{
-  call neocomplete#mappings#close_popup()
+  let neocomplete = neocomplete#get_current_neocomplete()
+
+  if neocomplete.event !=# 'mapping'
+    call neocomplete#mappings#close_popup()
+  endif
 
   " Use v:completed_item feature.
-  if empty(v:completed_item)
+  if !exists('v:completed_item') || empty(v:completed_item)
     return
   endif
 
   let complete_str = v:completed_item.word
   if complete_str == ''
     return
-  endif
-
-  let neocomplete = neocomplete#get_current_neocomplete()
-
-  " Restore overlapped item
-  if has_key(neocomplete.overlapped_items, complete_str)
-    " Move cursor
-    call cursor(0, col('.') - len(complete_str) +
-          \ len(neocomplete.overlapped_items[complete_str]))
-
-    let complete_str = neocomplete.overlapped_items[complete_str]
   endif
 
   let frequencies = neocomplete#variables#get_frequencies()
@@ -167,13 +160,18 @@ function! neocomplete#handler#_on_text_changed() "{{{
 endfunction"}}}
 
 function! neocomplete#handler#_do_auto_complete(event) "{{{
-  if s:check_in_do_auto_complete()
+  let neocomplete = neocomplete#get_current_neocomplete()
+
+  if (g:neocomplete#enable_cursor_hold_i
+        \ && empty(neocomplete.candidates)
+        \ && a:event ==# 'CursorMovedI')
+        \ || s:check_in_do_auto_complete()
     return
   endif
 
-  let neocomplete = neocomplete#get_current_neocomplete()
   let neocomplete.skipped = 0
   let neocomplete.event = a:event
+  call neocomplete#helper#clear_result()
 
   let cur_text = neocomplete#get_cur_text(1)
   let complete_pos = -1
@@ -215,17 +213,6 @@ function! neocomplete#handler#_do_auto_complete(event) "{{{
       return
     endif
 
-    let complete_pos =
-          \ neocomplete#complete#_get_complete_pos(
-          \ neocomplete.complete_sources)
-    let base = cur_text[complete_pos :]
-
-    let neocomplete.candidates = neocomplete#complete#_get_words(
-          \ neocomplete.complete_sources, complete_pos, base)
-    if empty(neocomplete.candidates)
-      return
-    endif
-
     " Start auto complete.
     call s:complete_key(
           \ "\<Plug>(neocomplete_start_auto_complete)")
@@ -256,25 +243,12 @@ function! s:is_skip_auto_complete(cur_text) "{{{
 
   let skip = neocomplete.skip_next_complete
 
-  if !skip
+  if !skip || a:cur_text !=# neocomplete.old_cur_text
     return 0
   endif
 
-  " Check delimiter pattern.
-  let is_delimiter = 0
-  let filetype = neocomplete#get_context_filetype()
-
-  for delimiter in ['/', '.'] +
-        \ get(g:neocomplete#delimiter_patterns, filetype, [])
-    if stridx(a:cur_text, delimiter,
-          \ len(a:cur_text) - len(delimiter)) >= 0
-      let is_delimiter = 1
-      break
-    endif
-  endfor
-
   let neocomplete.skip_next_complete = 0
-  return !(is_delimiter && skip == 2)
+  return skip
 endfunction"}}}
 function! s:close_preview_window() "{{{
   if g:neocomplete#enable_auto_close_preview
