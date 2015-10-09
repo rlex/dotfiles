@@ -17,23 +17,32 @@ symlink() {
   fi
 }
 
-# dotfiles deployment
+case "$1" in
 
-cd ~/.rc
-echo "Deploying dotfiles from `pwd` to ${HOME}"
+  env) echo "Deploying environment"
+       cd ~/.rc
+       echo "Deploying dotfiles from `pwd` to ${HOME}"
+       if [ -d ~/.config ];
+        then
+           echo "skipping config folder creation"
+        else
+          mkdir ~/.config
+       fi
 
-# Standart dotfiles
-if [ -d ~/.config ];
-  then
-     echo "skipping config folder creation"
-  else
-    mkdir ~/.config
-fi
+       for file in ${dotfiles[@]}
+         do
+           symlink ~/.rc/.${file} ~/.${file}
+         done
+       echo "Finished!"
 
-for file in ${dotfiles[@]}
-  do
-    symlink ~/.rc/.${file} ~/.${file}
-  done
-echo "Finished!"
+       cd - >&/dev/null
+  ;;
 
-cd - >&/dev/null
+  devenv) echo "Deploying pyenv+rbenv"
+          git clone https://github.com/sstephenson/rbenv.git ~/.rbenv
+          git clone https://github.com/yyuu/pyenv.git ~/.pyenv
+  ;;
+
+
+  *) echo "Possible args: env, devenv"
+esac
