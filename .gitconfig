@@ -17,7 +17,7 @@
   interactive = true
   status = true
   showbranch = true
-  ui = true
+  ui = 1
   grep = true
 [core]
   editor = vim
@@ -71,3 +71,5 @@
   signingkey = 0FC7CF34
 [push]
   default = matching
+[help]
+  autocorrect = 1
