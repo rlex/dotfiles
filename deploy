@@ -39,10 +39,49 @@ case "$1" in
   ;;
 
   devenv) echo "Deploying pyenv+rbenv"
-          git clone https://github.com/sstephenson/rbenv.git ~/.rbenv
-          git clone https://github.com/yyuu/pyenv.git ~/.pyenv
+
+         if [ -d ~/.rbenv ];
+          then
+             echo "rbenv seems to be already installed - updating instead"
+             cd ~/.rbenv && git pull
+          else
+              echo "installing rbenv"
+              git clone https://github.com/sstephenson/rbenv.git ~/.rbenv
+         fi
+
+         if [ -d ~/.rbenv/plugins/ruby-build ];
+          then
+             echo "ruby-build seems to be already installed - updating instead"
+             cd ~/.rbenv/plugins/ruby-build && git pull
+          else
+              echo "installing rbenv"
+              git clone https://github.com/sstephenson/ruby-build.git ~/.rbenv/plugins/ruby-build
+         fi
+
+         if [ -d ~/.pyenv ];
+          then
+             echo "pyenv seems to be already installed - updating instead"
+             cd ~/.pyenv && git pull
+          else
+              echo "installing pyenv"
+              git clone https://github.com/yyuu/pyenv.git ~/.pyenv
+         fi
+
   ;;
 
+  nuke) echo "Cleaning up env"
+        echo "Removing dotfiles"
+        for file in ${dotfiles[@]}
+          do
+            rm -vf ~/.${file}
+        done
+        echo "Cleaning up devenv"
+        rm -rvf ~/.pyenv
+        rm -rvf ~/.rbenv
+        echo "Removing history"
+        rm -vf ~/.zsh-history
+        rm -vf ~/.bash_history
+  ;;
 
-  *) echo "Possible args: env, devenv"
+  *) echo "Possible args: env, devenv, nuke"
 esac
