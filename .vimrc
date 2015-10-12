@@ -29,7 +29,7 @@ set viminfo=\'100,\"500,:100"       " read/write a .viminfo file --"Limit regs t
 set showmatch                       " show matching brackets and etc
 set wildmenu                        " Filesystem via :e
 set fileencodings=utf-8,cp1251      " Well, sometimes i edit files from win.
-set cryptmethod=blowfish2
+set cryptmethod=blowfish
 set number
 " Tabulation params
 set shiftwidth=4
