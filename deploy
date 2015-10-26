@@ -54,7 +54,7 @@ case "$1" in
              echo "ruby-build seems to be already installed - updating instead"
              cd ~/.rbenv/plugins/ruby-build && git pull
           else
-              echo "installing rbenv"
+              echo "installing ruby-build"
               git clone https://github.com/sstephenson/ruby-build.git ~/.rbenv/plugins/ruby-build
          fi
 
@@ -81,6 +81,8 @@ case "$1" in
         echo "Removing history"
         rm -vf ~/.zsh-history
         rm -vf ~/.bash_history
+        echo "Removing directory"
+        rm -rf ~/.rc
   ;;
 
   *) echo "Possible args: env, devenv, nuke"
