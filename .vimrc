@@ -31,6 +31,7 @@ set wildmenu                        " Filesystem via :e
 set fileencodings=utf-8,cp1251      " Well, sometimes i edit files from win.
 set cryptmethod=blowfish
 set number
+set shortmess=I
 " Tabulation params
 set shiftwidth=4
 set softtabstop=4
@@ -70,7 +71,6 @@ Bundle "rodjek/vim-puppet"
 Bundle "garbas/vim-snipmate"
 Bundle "godlygeek/tabular"
 Bundle "MarcWeber/vim-addon-mw-utils"
-Bundle "tomtom/tlib_vim"
 Bundle "honza/vim-snippets"
 Bundle "ghewgill/vim-scmdiff"
 Bundle "0rca/vim-mikrotik"
