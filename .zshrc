@@ -20,6 +20,10 @@ setopt hist_save_no_dups
 ## autoloads ##
 autoload -U promptinit; promptinit
 autoload -U colors; colors
+autoload -U edit-command-line
+
+## ZLE settings #
+zle -N edit-command-line
 
 ## ls colors ##
 # compatible with both linux (gnu coreutils)
@@ -146,6 +150,7 @@ fi
 #up/arrow keys for complete + history
 bindkey '\e[A' history-beginning-search-backward
 bindkey '\e[B' history-beginning-search-forward
+bindkey '^Xe' edit-command-line
 
 # load env (aliases, functions, etc crap)
 # Z* files for ZSH only
