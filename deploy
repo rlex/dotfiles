@@ -67,6 +67,25 @@ case "$1" in
               git clone https://github.com/yyuu/pyenv.git ~/.pyenv
          fi
 
+           if [ -d ~/.nodenv ];
+            then
+               echo "nodenv seems to be already installed - updating instead"
+               cd ~/.nodenv && git pull
+            else
+                echo "installing nodenv"
+                git clone https://github.com/OiNutter/nodenv ~/.nodenv
+           fi
+
+           if [ -d ~/.nodenv/plugins/node-build ];
+            then
+               echo "node-build seems to be already installed - updating instead"
+               cd ~/.nodenv/plugins/node-build && git pull
+            else
+                echo "installing node-build"
+                git clone https://github.com/OiNutter/node-build ~/.nodenv/plugins/node-build
+           fi
+
+
   ;;
 
   nuke) echo "Cleaning up env"

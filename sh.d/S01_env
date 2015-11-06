@@ -18,6 +18,11 @@ if [ -d "$HOME/.pyenv" ]; then
   if which pyenv > /dev/null; then eval "$(pyenv init -)"; fi
 fi
 
+if [ -d "$HOME/.nodenv" ]; then
+  export PATH="$HOME/.nodenv/bin:$PATH"
+  if which nodenv > /dev/null; then eval "$(nodenv init -)"; fi
+fi
+
 #Locales
 export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
