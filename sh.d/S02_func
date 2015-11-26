@@ -65,7 +65,7 @@ ssh-send-id() {
         return 1
     fi
 
-    cat ~/.ssh/${1}.pub | ssh $2 'mkdir .ssh; cat >> .ssh/authorized_keys'
+    cat ~/.ssh/keys/${1}.pub | ssh $2 'mkdir -p ~/.ssh; cat >> .ssh/authorized_keys'
     return $?
 }
 
