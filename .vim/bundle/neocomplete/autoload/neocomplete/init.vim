@@ -110,9 +110,7 @@ function! neocomplete#init#_autocmds() "{{{
             \ call neocomplete#handler#_restore_update_time()
     augroup END
   else
-    " Note: Vim 7.4.143 fixed TextChangedI bug.
-    let event =
-          \ (v:version > 704 || v:version == 704 && has('patch143')) ?
+    let event = neocomplete#util#is_text_changed() ?
           \  'TextChangedI' : 'CursorMovedI'
     execute 'autocmd neocomplete' event '*'
           \ 'call neocomplete#handler#_do_auto_complete("'.event.'")'
@@ -150,9 +148,6 @@ function! neocomplete#init#_others() "{{{
 
   command! -nargs=0 -bar NeoCompleteDisable
         \ call neocomplete#init#disable()
-
-  " Set for echodoc.
-  call neocomplete#echodoc#init()
 endfunction"}}}
 
 function! neocomplete#init#_variables() "{{{
@@ -385,125 +380,6 @@ function! neocomplete#init#_variables() "{{{
         \'g:neocomplete#keyword_patterns',
         \'toml',
         \'\h[[:alnum:]_.-]*')
-  "}}}
-
-  " Initialize same file types. "{{{
-  call neocomplete#util#set_default_dictionary(
-        \ 'g:neocomplete#same_filetypes',
-        \ 'c', 'cpp')
-  call neocomplete#util#set_default_dictionary(
-        \ 'g:neocomplete#same_filetypes',
-        \ 'cpp', 'c')
-  call neocomplete#util#set_default_dictionary(
-        \ 'g:neocomplete#same_filetypes',
-        \ 'erb', 'ruby,html,xhtml')
-  call neocomplete#util#set_default_dictionary(
-        \ 'g:neocomplete#same_filetypes',
-        \ 'html,xml', 'xhtml')
-  call neocomplete#util#set_default_dictionary(
-        \ 'g:neocomplete#same_filetypes',
-        \ 'html,xhtml', 'css,stylus,less')
-  call neocomplete#util#set_default_dictionary(
-        \ 'g:neocomplete#same_filetypes',
-        \ 'css', 'scss')
-  call neocomplete#util#set_default_dictionary(
-        \ 'g:neocomplete#same_filetypes',
-        \ 'scss', 'css')
-  call neocomplete#util#set_default_dictionary(
-        \ 'g:neocomplete#same_filetypes',
-        \ 'stylus', 'css')
-  call neocomplete#util#set_default_dictionary(
-        \ 'g:neocomplete#same_filetypes',
-        \ 'less', 'css')
-  call neocomplete#util#set_default_dictionary(
-        \ 'g:neocomplete#same_filetypes',
-        \ 'xhtml', 'html,xml')
-  call neocomplete#util#set_default_dictionary(
-        \ 'g:neocomplete#same_filetypes',
-        \ 'help', 'vim')
-  call neocomplete#util#set_default_dictionary(
-        \ 'g:neocomplete#same_filetypes',
-        \ 'tex', 'bib,plaintex')
-  call neocomplete#util#set_default_dictionary(
-        \ 'g:neocomplete#same_filetypes',
-        \ 'plaintex', 'bib,tex')
-  call neocomplete#util#set_default_dictionary(
-        \ 'g:neocomplete#same_filetypes',
-        \ 'lingr-say', 'lingr-messages,lingr-members')
-  call neocomplete#util#set_default_dictionary(
-        \ 'g:neocomplete#same_filetypes',
-        \ 'J6uil_say', 'J6uil')
-  call neocomplete#util#set_default_dictionary(
-        \ 'g:neocomplete#same_filetypes',
-        \ 'vimconsole', 'vim')
-
-  " Interactive filetypes.
-  call neocomplete#util#set_default_dictionary(
-        \ 'g:neocomplete#same_filetypes',
-        \ 'int-irb', 'ruby')
-  call neocomplete#util#set_default_dictionary(
-        \ 'g:neocomplete#same_filetypes',
-        \ 'int-ghci,int-hugs', 'haskell')
-  call neocomplete#util#set_default_dictionary(
-        \ 'g:neocomplete#same_filetypes',
-        \ 'int-python,int-ipython', 'python')
-  call neocomplete#util#set_default_dictionary(
-        \ 'g:neocomplete#same_filetypes',
-        \ 'int-gosh', 'scheme')
-  call neocomplete#util#set_default_dictionary(
-        \ 'g:neocomplete#same_filetypes',
-        \ 'int-clisp', 'lisp')
-  call neocomplete#util#set_default_dictionary(
-        \ 'g:neocomplete#same_filetypes',
-        \ 'int-erl', 'erlang')
-  call neocomplete#util#set_default_dictionary(
-        \ 'g:neocomplete#same_filetypes',
-        \ 'int-zsh', 'zsh')
-  call neocomplete#util#set_default_dictionary(
-        \ 'g:neocomplete#same_filetypes',
-        \ 'int-bash', 'bash')
-  call neocomplete#util#set_default_dictionary(
-        \ 'g:neocomplete#same_filetypes',
-        \ 'int-sh', 'sh')
-  call neocomplete#util#set_default_dictionary(
-        \ 'g:neocomplete#same_filetypes',
-        \ 'int-cmdproxy', 'dosbatch')
-  call neocomplete#util#set_default_dictionary(
-        \ 'g:neocomplete#same_filetypes',
-        \ 'int-powershell', 'powershell')
-  call neocomplete#util#set_default_dictionary(
-        \ 'g:neocomplete#same_filetypes',
-        \ 'int-perlsh', 'perl')
-  call neocomplete#util#set_default_dictionary(
-        \ 'g:neocomplete#same_filetypes',
-        \ 'int-perl6', 'perl6')
-  call neocomplete#util#set_default_dictionary(
-        \ 'g:neocomplete#same_filetypes',
-        \ 'int-ocaml', 'ocaml')
-  call neocomplete#util#set_default_dictionary(
-        \ 'g:neocomplete#same_filetypes',
-        \ 'int-clj,int-lein', 'clojure')
-  call neocomplete#util#set_default_dictionary(
-        \ 'g:neocomplete#same_filetypes',
-        \ 'int-sml,int-smlsharp', 'sml')
-  call neocomplete#util#set_default_dictionary(
-        \ 'g:neocomplete#same_filetypes',
-        \ 'int-js,int-kjs,int-rhino', 'javascript')
-  call neocomplete#util#set_default_dictionary(
-        \ 'g:neocomplete#same_filetypes',
-        \ 'int-coffee', 'coffee')
-  call neocomplete#util#set_default_dictionary(
-        \ 'g:neocomplete#same_filetypes',
-        \ 'int-gdb', 'gdb')
-  call neocomplete#util#set_default_dictionary(
-        \ 'g:neocomplete#same_filetypes',
-        \ 'int-scala', 'scala')
-  call neocomplete#util#set_default_dictionary(
-        \ 'g:neocomplete#same_filetypes',
-        \ 'int-nyaos', 'nyaos')
-  call neocomplete#util#set_default_dictionary(
-        \ 'g:neocomplete#same_filetypes',
-        \ 'int-php', 'php')
   "}}}
 
   " Initialize delimiter patterns. "{{{
