@@ -41,51 +41,41 @@ case "$1" in
        cd - >&/dev/null
   ;;
 
-  devenv) echo "Deploying pyenv+rbenv"
+  devenv) echo "Deploying pyenv,rbenv,nodenv"
 
-         if [ -d ~/.rbenv ];
-          then
-             echo "rbenv seems to be already installed - updating instead"
-             cd ~/.rbenv && git pull
-          else
-              echo "installing rbenv"
-              git clone https://github.com/sstephenson/rbenv.git ~/.rbenv
+         if [ -d ~/.rbenv ]; then
+            echo "rbenv seems to be already installed - aborting"
+         else
+            echo "installing rbenv"
+            git clone https://github.com/sstephenson/rbenv.git ~/.rbenv
          fi
 
-         if [ -d ~/.rbenv/plugins/ruby-build ];
-          then
-             echo "ruby-build seems to be already installed - updating instead"
-             cd ~/.rbenv/plugins/ruby-build && git pull
+         if [ -d ~/.rbenv/plugins/ruby-build ]; then
+             echo "ruby-build seems to be already installed - aborting"
           else
               echo "installing ruby-build"
               git clone https://github.com/sstephenson/ruby-build.git ~/.rbenv/plugins/ruby-build
          fi
 
-         if [ -d ~/.pyenv ];
-          then
-             echo "pyenv seems to be already installed - updating instead"
-             cd ~/.pyenv && git pull
+         if [ -d ~/.pyenv ]; then
+             echo "pyenv seems to be already installed - aborting"
           else
               echo "installing pyenv"
               git clone https://github.com/yyuu/pyenv.git ~/.pyenv
          fi
 
-           if [ -d ~/.nodenv ];
-            then
-               echo "nodenv seems to be already installed - updating instead"
-               cd ~/.nodenv && git pull
-            else
-                echo "installing nodenv"
-                git clone https://github.com/OiNutter/nodenv ~/.nodenv
-           fi
+         if [ -d ~/.nodenv ]; then
+            echo "nodenv seems to be already installed - aborting"
+         else
+            echo "installing nodenv"
+              git clone https://github.com/OiNutter/nodenv ~/.nodenv
+            fi
 
-           if [ -d ~/.nodenv/plugins/node-build ];
-            then
-               echo "node-build seems to be already installed - updating instead"
-               cd ~/.nodenv/plugins/node-build && git pull
-            else
-                echo "installing node-build"
-                git clone https://github.com/OiNutter/node-build ~/.nodenv/plugins/node-build
+           if [ -d ~/.nodenv/plugins/node-build ]; then
+               echo "node-build seems to be already installed - aborting"
+           else
+               echo "installing node-build"
+               git clone https://github.com/OiNutter/node-build ~/.nodenv/plugins/node-build
            fi
 
 
@@ -131,6 +121,26 @@ case "$1" in
                  echo "Done"
                fi
 
+               if [ -d ~/.rbenv ]; then
+                   echo "Updating rbenv and plugins"
+                   cd ~/.rbenv && git pull
+                   if [ -d ~/.rbenv/plugins/ruby-build ]; then
+                     cd ~/.rbenv/plugins/ruby-build && git pull
+                   fi
+               fi
+
+               if [ -d ~/.pyenv ]; then
+                 echo "Updating pyenv and plugins"
+                 cd ~/.pyenv && git pull
+               fi
+
+               if [ -d ~/.nodenv ]; then
+                 echo "Updating nodenv"
+                 cd ~/.nodenv && git pull
+                 if [ -d ~/.nodenv/plugins/node-build ]; then
+                   cd ~/.nodenv/plugins/node-build && git pull
+                 fi
+               fi
   ;;
 
   *) echo "Possible args: env, devenv, homebrew, nuke, housekeeper"
