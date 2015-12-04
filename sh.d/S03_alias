@@ -29,3 +29,6 @@ alias iddqd="sudo -s"
 alias ssh="ssh -C -X"
 alias fuck="sudo !!"
 alias watchip="ping -i 60 -a "
+if [ -f /usr/local/bin/brew ]; then
+  alias brew="env PATH=${PATH//$(pyenv root)\/shims:/} brew"
+fi
