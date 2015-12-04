@@ -7,6 +7,8 @@ dotfiles=( screenrc vimrc zshrc bashrc bash_profile gemrc htoprc gitconfig biewr
 brew_kegs=( ack android-platform-tools bash brew-cask curl dhcpdump dos2unix ettercap foremost git git-encrypt git-extras git-lfs gnupg2 grep hadoop hashpump htop-osx
             httpie hydra iperf3 john-jumbo lzo memtester mitmproxy mobile-shell moreutils mutt nmap p7zip pigz pngcheck pwgen sqlite sqlmap tcpreplay tcptrace tig
             tmux unrar vim wget zlib zsh zsh-completions coreutils moreutils findutils grep openssh screen foremost nmap pngcheck socat sqlmap xz pigz tree mtr )
+cask_kegs=( alfred apache-directory-studio charles chromium dropbox flux gitify gns3 java netspot pycharm royal-tsx sequel-pro skype spectacle spotify sublime-text3
+            teamspeak-client transmission tuntap virtualbox visualvm vlc vmware-fusion xca xquartz )
 
 # Function to symlink dotfiles
 # We checking if OS is Linux (GNU coreutils), if no, we assume OS use BSD utils
@@ -90,6 +92,10 @@ case "$1" in
               do
                 brew install ${keg}
             done
+#            for cask_keg in ${cask_kegs[@]}
+#              do
+#                brew cask install ${cask_keg}
+#            done
 
   ;;
 
@@ -118,19 +124,22 @@ case "$1" in
                  brew upgrade
                  brew cleanup
                  brew prune
+                 #brew cask update
+                 #brew cask cleanup
                  echo "Done"
                fi
 
                if [ -d ~/.rbenv ]; then
-                   echo "Updating rbenv and plugins"
+                   echo "Updating rbenv"
                    cd ~/.rbenv && git pull
                    if [ -d ~/.rbenv/plugins/ruby-build ]; then
+                     echo "Updating ruby-build"
                      cd ~/.rbenv/plugins/ruby-build && git pull
                    fi
                fi
 
                if [ -d ~/.pyenv ]; then
-                 echo "Updating pyenv and plugins"
+                 echo "Updating pyenv"
                  cd ~/.pyenv && git pull
                fi
 
@@ -138,6 +147,7 @@ case "$1" in
                  echo "Updating nodenv"
                  cd ~/.nodenv && git pull
                  if [ -d ~/.nodenv/plugins/node-build ]; then
+                   echo "Updating node-build"
                    cd ~/.nodenv/plugins/node-build && git pull
                  fi
                fi
