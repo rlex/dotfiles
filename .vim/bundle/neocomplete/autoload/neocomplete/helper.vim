@@ -100,18 +100,13 @@ function! neocomplete#helper#is_enabled_source(source, filetype) "{{{
         \ : a:source
 
   return !empty(source) && (empty(source.filetypes) ||
-        \     !empty(neocomplete#helper#ftdictionary2list(
-        \      source.filetypes, a:filetype)))
+        \     neocomplete#helper#check_filetype(source.filetypes))
         \  && (!get(source.disabled_filetypes, '_', 0) &&
-        \      empty(neocomplete#helper#ftdictionary2list(
-        \      source.disabled_filetypes, a:filetype)))
+        \      !neocomplete#helper#check_filetype(source.disabled_filetypes))
 endfunction"}}}
 
 function! neocomplete#helper#get_source_filetypes(filetype) "{{{
-  return exists('*context_filetype#get_filetypes') ?
-        \                      context_filetype#get_filetypes(a:filetype) :
-        \ (a:filetype == '') ? ['nothing'] :
-        \                      [a:filetype] + split(a:filetype, '\.')
+  return neocomplete#context_filetype#filetypes()
 endfunction"}}}
 
 function! neocomplete#helper#complete_check() "{{{
@@ -203,9 +198,9 @@ EOF
   return join(keyword_patterns, '\m\|')
 endfunction"}}}
 
-function! neocomplete#helper#ftdictionary2list(dictionary, filetype) "{{{
-  return map(filter(neocomplete#get_source_filetypes(a:filetype),
-        \ 'has_key(a:dictionary, v:val)'), 'a:dictionary[v:val]')
+function! neocomplete#helper#check_filetype(dictionary) "{{{
+  return !empty(filter(neocomplete#context_filetype#filetypes(),
+        \ 'get(a:dictionary, v:val, 0)'))
 endfunction"}}}
 
 function! neocomplete#helper#get_sources_list(...) "{{{
@@ -238,9 +233,8 @@ function! neocomplete#helper#get_sources_list(...) "{{{
 
   let neocomplete = neocomplete#get_current_neocomplete()
   let neocomplete.sources = filter(sources, "
-        \   (empty(v:val.filetypes) ||
-        \    !empty(neocomplete#helper#ftdictionary2list(
-        \      v:val.filetypes, neocomplete.context_filetype)))")
+        \   empty(v:val.filetypes) ||
+        \   neocomplete#helper#check_filetype(v:val.filetypes)")
   let neocomplete.sources_filetype = neocomplete.context_filetype
 
   return neocomplete.sources
@@ -259,12 +253,6 @@ function! neocomplete#helper#clear_result() "{{{
     " Restore completeopt.
     let &completeopt = neocomplete.completeopt
   endif
-
-  " Clear context.
-  for source in values(neocomplete#variables#get_sources())
-    let source.neocomplete__context = neocomplete#init#_context(
-          \ source.neocomplete__context)
-  endfor
 endfunction"}}}
 
 function! neocomplete#helper#call_hook(sources, hook_name, context) "{{{
@@ -342,8 +330,6 @@ function! neocomplete#helper#indent_current_line() "{{{
 endfunction"}}}
 
 function! neocomplete#helper#complete_configure() "{{{
-  call s:save_foldinfo()
-
   set completeopt-=menu
   set completeopt-=longest
   set completeopt+=menuone
@@ -372,26 +358,6 @@ function! neocomplete#helper#clean(directory) "{{{
     if !filereadable(orig)
       call delete(file)
     endif
-  endfor
-endfunction"}}}
-
-function! s:save_foldinfo() "{{{
-  " Save foldinfo.
-  let winnrs = filter(range(1, winnr('$')),
-        \ "winbufnr(v:val) == bufnr('%')")
-
-  " Note: for foldmethod=expr or syntax.
-  call filter(winnrs, "
-        \  (getwinvar(v:val, '&foldmethod') ==# 'expr' ||
-        \   getwinvar(v:val, '&foldmethod') ==# 'syntax') &&
-        \  getwinvar(v:val, '&modifiable')")
-  for winnr in winnrs
-    call setwinvar(winnr, 'neocomplete_foldinfo', {
-          \ 'foldmethod' : getwinvar(winnr, '&foldmethod'),
-          \ 'foldexpr'   : getwinvar(winnr, '&foldexpr')
-          \ })
-    call setwinvar(winnr, '&foldmethod', 'manual')
-    call setwinvar(winnr, '&foldexpr', 0)
   endfor
 endfunction"}}}
 

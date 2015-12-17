@@ -59,20 +59,6 @@ function! neocomplete#handler#_on_insert_leave() "{{{
   let neocomplete = neocomplete#get_current_neocomplete()
   let neocomplete.cur_text = ''
 endfunction"}}}
-function! neocomplete#handler#_on_write_post() "{{{
-  " Restore foldinfo.
-  for winnr in filter(range(1, winnr('$')),
-        \ "!empty(getwinvar(v:val, 'neocomplete_foldinfo'))")
-    let neocomplete_foldinfo =
-          \ getwinvar(winnr, 'neocomplete_foldinfo')
-    call setwinvar(winnr, '&foldmethod',
-          \ neocomplete_foldinfo.foldmethod)
-    call setwinvar(winnr, '&foldexpr',
-          \ neocomplete_foldinfo.foldexpr)
-    call setwinvar(winnr,
-          \ 'neocomplete_foldinfo', {})
-  endfor
-endfunction"}}}
 function! neocomplete#handler#_on_complete_done() "{{{
   let neocomplete = neocomplete#get_current_neocomplete()
 
@@ -167,6 +153,9 @@ function! neocomplete#handler#_do_auto_complete(event) "{{{
   let neocomplete.skipped = 0
   let neocomplete.event = a:event
   call neocomplete#helper#clear_result()
+
+  " Set context filetype.
+  call neocomplete#context_filetype#set()
 
   let cur_text = neocomplete#get_cur_text(1)
   let complete_pos = -1

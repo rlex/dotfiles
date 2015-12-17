@@ -86,8 +86,6 @@ function! neocomplete#init#_autocmds() "{{{
           \ call neocomplete#handler#_on_insert_leave()
     autocmd CursorMovedI *
           \ call neocomplete#handler#_on_moved_i()
-    autocmd BufWritePost *
-          \ call neocomplete#handler#_on_write_post()
     autocmd VimLeavePre *
           \ call neocomplete#init#disable()
     autocmd InsertCharPre *
@@ -459,8 +457,7 @@ function! neocomplete#init#_current_neocomplete() "{{{
         \ 'skip_next_complete' : 0,
         \ 'filetype' : '',
         \ 'context_filetype' : '',
-        \ 'context_filetype_range' :
-        \    [[1, 1], [line('$'), len(getline('$'))+1]],
+        \ 'context_filetypes' : [],
         \ 'completion_length' : -1,
         \ 'update_time_save' : &updatetime,
         \ 'foldinfo' : [],
@@ -663,13 +660,17 @@ function! neocomplete#init#_filter(filter) "{{{
 endfunction"}}}
 
 function! neocomplete#init#_context(context) "{{{
+  let filetype = neocomplete#get_context_filetype()
   return extend(a:context, {
         \ 'input' : '',
         \ 'prev_complete_pos' : -1,
         \ 'prev_candidates' : [],
+        \ 'prev_line' : '',
         \ 'complete_pos' : -1,
         \ 'complete_str' : '',
-        \ 'candidates' : []
+        \ 'candidates' : [],
+        \ 'filetype' : filetype,
+        \ 'filetypes' : neocomplete#context_filetype#filetypes(),
         \ })
 endfunction"}}}
 

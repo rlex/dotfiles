@@ -949,9 +949,11 @@ file						*neocomplete-source-file*
 
 omni						*neocomplete-source-omni*
 		This source calls 'omnifunc' automatically when cursor
-		text is matched with |g:neocomplete#sources#omni#input_patterns|.  If
-		|g:neocomplete_omni_function_list|is defined,
-		neocomplete will give priority it.
+		text is matched with
+		|g:neocomplete#sources#omni#input_patterns|.  If
+		|g:neocomplete_omni_function_list| is defined, neocomplete
+		will give priority it.
+		Note: It supports the fuzzy match using the previous result.
 
 
 suffix of complete candidates in popup menu declaration.
@@ -1089,6 +1091,12 @@ converter_remove_last_paren
 		The converter which removes last parentheses in a
 		candidate's word. It is useful if you use auto closing
 		parentheses plugins.
+
+			*neocomplete-filter-converter_add_paren*
+converter_add_paren
+		The converter which adds parentheses in a candidate's word. It
+		is useful if you use |neopairs.vim| or |neosnippet.vim|
+		plugins.
 
 ==============================================================================
 CREATE SOURCE					*neocomplete-create-source*
@@ -1633,7 +1641,10 @@ https://github.com/Shougo/neocomplcache.vim/issues/368
 
 A: I think you use 'foldmethod' is "expr" or "syntax". It is too heavy to use
 neocomplete (or other auto completion.) You should change 'foldmethod'
-option.
+option or install FastFold plugin.
+
+https://github.com/Konfekt/FastFold
+
 Note: In current version, neocomplete does not restore 'foldmethod'. Because
 it is too heavy.
 
@@ -1681,13 +1692,12 @@ because if_lua has double-free problem.
 	let g:lua_check_syntax = 0
 	let g:lua_complete_omni = 1
 	let g:lua_complete_dynamic = 0
+	let g:lua_define_completion_mappings = 0
 
 	let g:neocomplete#sources#omni#functions.lua =
 	      \ 'xolox#lua#omnifunc'
 	let g:neocomplete#sources#omni#input_patterns.lua =
 	      \ '\w\+[.:]\|require\s*(\?["'']\w*'
-	" let g:neocomplete#force_omni_input_patterns.lua =
-	      " \ '\w\+[.:]\|require\s*(\?["'']\w*'
 <
 
 Q: I want to disable sources in certain filetype.
