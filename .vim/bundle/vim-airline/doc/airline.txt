@@ -320,8 +320,12 @@ vcscommand   <http://www.vim.org/scripts/script.php?script_id=90>
   " default value leaves the name unmodifed
   let g:airline#extensions#branch#format = 0
 
-  " to only show the tail, e.g. a branch 'feature/foo' show 'foo'
+  " to only show the tail, e.g. a branch 'feature/foo' becomes 'foo', use
   let g:airline#extensions#branch#format = 1
+
+  " to truncate all path sections but the last one, e.g. a branch
+  " 'foo/bar/baz' becomes 'f/b/baz', use
+  let g:airline#extensions#branch#format = 2
 
   " if a string is provided, it should be the name of a function that
   " takes a string and returns the desired value
@@ -409,6 +413,8 @@ eclim <https://eclim.org>
   " the default value matches filetypes typically used for documentation
   " such as markdown and help files.
   let g:airline#extensions#wordcount#filetypes = ...
+  (default: markdown,rst,org,help,text)
+
 <
 -------------------------------------                   *airline-whitespace*
 * enable/disable detection of whitespace errors. >
@@ -874,7 +880,7 @@ Contributions and pull requests are welcome.
 ==============================================================================
 LICENSE                                                    *airline-license*
 
-MIT License.  Copyright © 2013-2015 Bailey Ling.
+MIT License.  Copyright © 2013-2016 Bailey Ling.
 
 
  vim:tw=78:ts=8:ft=help:norl:

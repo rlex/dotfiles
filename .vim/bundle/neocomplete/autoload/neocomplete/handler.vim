@@ -63,6 +63,8 @@ function! neocomplete#handler#_on_complete_done() "{{{
   let neocomplete = neocomplete#get_current_neocomplete()
 
   if neocomplete.event !=# 'mapping'
+        \ && exists('v:completed_item')
+        \ && get(v:completed_item, 'word', '') == ''
     " Check delimiter pattern.
     let is_delimiter = 0
     let filetype = neocomplete#get_context_filetype()
@@ -77,7 +79,7 @@ function! neocomplete#handler#_on_complete_done() "{{{
       endif
     endfor
 
-    if !is_delimiter
+    if !is_delimiter && !get(neocomplete, 'refresh', 0)
       call neocomplete#mappings#close_popup()
     endif
   endif
@@ -115,11 +117,18 @@ function! neocomplete#handler#_restore_update_time() "{{{
   endif
 endfunction"}}}
 function! neocomplete#handler#_on_insert_char_pre() "{{{
+  let neocomplete = neocomplete#get_current_neocomplete()
+  let neocomplete.skip_next_complete = 0
+
+  if pumvisible() && g:neocomplete#enable_refresh_always
+    " Auto refresh
+    call feedkeys("\<Plug>(neocomplete_auto_refresh)")
+  endif
+
   if neocomplete#is_cache_disabled()
     return
   endif
 
-  let neocomplete = neocomplete#get_current_neocomplete()
   if neocomplete.old_char != ' ' && v:char == ' ' && v:count == 0
     call s:make_cache_current_line()
   endif
@@ -147,6 +156,8 @@ function! neocomplete#handler#_do_auto_complete(event) "{{{
         \ && empty(neocomplete.candidates)
         \ && a:event ==# 'CursorMovedI')
         \ || s:check_in_do_auto_complete()
+        \ || (a:event ==# 'InsertEnter'
+        \     && neocomplete.old_cur_text != '')
     return
   endif
 
@@ -227,7 +238,7 @@ function! s:is_skip_auto_complete(cur_text) "{{{
 
   let skip = neocomplete.skip_next_complete
 
-  if !skip || a:cur_text !=# neocomplete.old_cur_text
+  if !skip
     return 0
   endif
 
