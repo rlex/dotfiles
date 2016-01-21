@@ -1,21 +1,19 @@
 ## ZSH Options ##
-unsetopt BG_NICE            # do not nice bg commands
-setopt EXTENDED_HISTORY     # puts timestamps in the history
-setopt NO_HUP               # don't send kill to background jobs when exiting
-setopt AUTO_CD              # enter dirname to cd
+unsetopt BG_NICE
+setopt NO_HUP
+setopt AUTO_CD
 ## History options ##
-export HISTFILE="$HOME/.zsh-history"                      # path to history file
+HISTFILE="$HOME/.zsh-history"
 SAVEHIST=10000
-setopt inc_append_history
+HISTSIZE=10000
+setopt append_history
 setopt extended_history
-setopt hist_find_no_dups
-setopt hist_ignore_all_dups
-setopt hist_reduce_blanks
+setopt hist_expire_dups_first
+setopt hist_ignore_dups
 setopt hist_ignore_space
-setopt hist_no_store
-setopt hist_no_functions
-setopt no_hist_beep
-setopt hist_save_no_dups
+setopt hist_verify
+setopt inc_append_history
+setopt share_history
 
 ## autoloads ##
 autoload -U promptinit; promptinit
@@ -160,7 +158,6 @@ for envfile in ~/.rc/sh.d/[SZ][0-9][0-9]*[^~] ; do
 done
 
 #use fancy fonts only on proper terminal
-
 if [[ $TERM =~ "(256color)" ]]; then
   PROMPT_SYMBOL="❯"
   SSH_SYMBOL="⇣⇡"
@@ -183,7 +180,7 @@ function precmd {
 # Indicate remote SSH session in right prompt
 # Use git status in right prompt when local
 if [[ ! -z "$SSH_CLIENT" ]]; then
-  RPS1="%{$fg[green]%}$SSH_SYMBOL%{$reset_color%}" # ssh icon
+  RPS1="%{$fg[green]%}$SSH_SYMBOL%{$reset_color%}"
 else
   RPS1='$(git_prompt_string)'
 fi
