@@ -20,9 +20,6 @@ autoload -U promptinit; promptinit
 autoload -U colors; colors
 autoload -U edit-command-line
 
-## ZLE settings #
-zle -N edit-command-line
-
 ## ls colors ##
 # compatible with both linux (gnu coreutils)
 # and mac os x / BSD (bsd coreutils)
@@ -145,10 +142,24 @@ if [ -f /usr/local/share/zsh-completions ]; then
 fi
 
 ## Keybindings ##
+#Create zkbd compatible hash
+typeset -A key
+
+key[Up]=${terminfo[kcuu1]}
+key[Down]=${terminfo[kcud1]}
+
 #up/arrow keys for complete + history
-bindkey '\e[A' history-beginning-search-backward
-bindkey '\e[B' history-beginning-search-forward
-bindkey '^Xe' edit-command-line
+[[ -n "${key[Up]}"   ]]  && bindkey "${key[Up]}" history-beginning-search-backward
+[[ -n "${key[Down]}" ]]  && bindkey "${key[Down]}" history-beginning-search-forward
+
+function zle-line-init () {
+    echoti smkx
+}
+function zle-line-finish () {
+    echoti rmkx
+}
+zle -N zle-line-init
+zle -N zle-line-finish
 
 # load env (aliases, functions, etc crap)
 # Z* files for ZSH only
