@@ -3,22 +3,29 @@
 
 ### Array of all config files and directories
 # dotfiles, for example .bashrc. Put it in array without leading dot. Also dirs.
-dotfiles=( screenrc vimrc zshrc bashrc bash_profile gemrc htoprc gitconfig biewrc dircolors ackrc muttrc toprc Xdefaults gvimrc vim mutt config/awesome config/mc config/htop tmux.conf mailcap gitignore_global )
-brew_kegs=( ack android-platform-tools bash brew-cask curl dhcpdump dos2unix ettercap foremost git git-encrypt git-extras git-lfs gnupg2 grep hadoop hashpump htop-osx arping httping dhcpdump dhcping dnstracer
-            httpie iperf3 john-jumbo lzo mitmproxy mobile-shell moreutils mutt nmap p7zip pigz pngcheck pwgen sqlite sqlmap tcpreplay tcptrace tig graphicsmagick sysdig ansible tmux unrar vim wget zsh
-            zsh-completions coreutils moreutils findutils grep openssh screen foremost nmap pngcheck socat sqlmap xz pigz tree mtr )
-cask_kegs=( alfred apache-directory-studio charles chromium dropbox flux gitify gns3 java netspot pycharm royal-tsx sequel-pro skype spectacle spotify sublime-text3
-            teamspeak-client transmission tuntap virtualbox visualvm vlc vmware-fusion xca xquartz )
+dotfiles=( screenrc vimrc zshrc bashrc bash_profile gemrc htoprc gitconfig biewrc dircolors ackrc
+           muttrc toprc Xdefault gvimrc vim mutt config/awesome config/mc config/htop tmux.conf
+           mailcap gitignore_global )
+brew_kegs=( ack android-platform-tools bash brew-cask curl dhcpdump dos2unix ettercap foremost git
+            git-encrypt git-extras git-lfs gnupg2 grep hadoop hashpump htop-osx arping httping
+            dhcpdump dhcping dnstracer httpie iperf3 john-jumbo lzo mitmproxy mobile-shell moreutils
+            mutt nmap p7zip pigz pngcheck pwgen sqlite sqlmap tcpreplay tcptrace tig graphicsmagick
+            sysdig ansible tmux unrar vim wget zsh zsh-completions coreutils moreutils findutils
+            grep openssh screen foremost nmap pngcheck socat sqlmap xz pigz tree mtr )
+cask_kegs=( alfred apache-directory-studio charles chromium dropbox flux gitify gns3 java netspot
+            pycharm royal-tsx sequel-pro skype spectacle spotify sublime-text3 teamspeak-client
+            transmission tuntap virtualbox visualvm vlc vmware-fusion xca xquartz )
 
 # Function to symlink dotfiles
-# We checking if OS is Linux (GNU coreutils), if no, we assume OS use BSD utils
+# We checking if OS is Linux (GNU coreutils)
+# If not, we assume OS uses BSD utils
 # Yeah this is fuckin' dirty, but works in most of cases
 symlink() {
   if [[ `uname` == "Linux" ]];
     then
       ln -sfvn $1 $2
     else
-      ln -svfh $1 $2
+      ln -sfvh $1 $2
   fi
 }
 
@@ -84,7 +91,8 @@ case "$1" in
   ;;
 
   homebrew) echo "Installing homebrew and favourite packages"
-            #probably i should migrate to manual install. Running (even respected) scripts from interwebs is stupid.
+            #probably i should migrate to manual install.
+            #Running (even respected) scripts from interwebs is stupid.
             if [ ! -f /usr/local/bin/brew ]; then
               ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
             fi
