@@ -11,7 +11,8 @@ brew_kegs=( ack android-platform-tools bash brew-cask curl dhcpdump dos2unix ett
             dhcpdump dhcping dnstracer httpie iperf3 john-jumbo lzo mitmproxy mobile-shell moreutils
             mutt nmap p7zip pigz pngcheck pwgen sqlite sqlmap tcpreplay tcptrace tig graphicsmagick
             sysdig ansible tmux unrar vim wget zsh zsh-completions coreutils moreutils findutils
-            grep openssh screen foremost nmap pngcheck socat sqlmap xz pigz tree mtr )
+            grep openssh screen foremost nmap pngcheck socat sqlmap xz pigz tree mtr docker-machine
+            docker )
 cask_kegs=( alfred apache-directory-studio charles chromium dropbox flux gitify gns3 java netspot
             pycharm royal-tsx sequel-pro skype spectacle spotify sublime-text3 teamspeak-client
             transmission tuntap virtualbox visualvm vlc vmware-fusion xca xquartz )
@@ -161,5 +162,10 @@ case "$1" in
                fi
   ;;
 
-  *) echo "Possible args: env, devenv, homebrew, nuke, housekeeper"
+  *) echo "Possible args:"
+     echo  "env - deploy basic dotfiles"
+     echo  "devenv - deploy basic dotfiles + pyenv/rbenv/nodenv"
+     echo  "homebrew - install homebrew and favourite packages"
+     echo  "nuke - remove all symlinks, devenv and shell history"
+     echo  "housekeeper - upgrade homebrew and devenv"
 esac
