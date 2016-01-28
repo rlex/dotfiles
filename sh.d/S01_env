@@ -1,4 +1,3 @@
-#### paths
 #source system files
 if [ -x /etc/profile ]; then
     source "/etc/profile"
@@ -28,15 +27,14 @@ export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
 export LANGUAGE=en_US.UTF-8
 
-#### user variables
+#User variables
 export EDITOR="vim"
 export VISUAL="vim"
 export PAGER="less"
-export GREP_OPTIONS="--color=auto"
 export GREP_COLOR="1;32"
 export LESSCHARSET="UTF-8"
 
-#### 'less' colors for colored manpages
+#'less' colors for colored manpages
 export LESS_TERMCAP_mb=$'\E[01;31m'
 export LESS_TERMCAP_md=$'\E[01;31m'
 export LESS_TERMCAP_me=$'\E[0m'

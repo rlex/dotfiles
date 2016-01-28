@@ -3,23 +3,6 @@ tag() {
     alias $1="cd $PWD";
 }
 
-ff() {
-    if [[ -z $1 ]]; then
-        echo "Find files recursively starting at \`pwd\` - usage: findfiles pattern"
-        return
-    fi
-        find . -type f \( -name "*$1*" -o -name ".$1*" -o -name ".*.*$1*" -o -name "*$1*.*" \) -print
-
-}
-
-fd() {
-    if [[ -z $1 ]]; then
-        echo "Find directories recursively starting at \`pwd\` - usage: finddirs pattern"
-        return
-    fi
-        find . -type d \( -name "*$1*" -o -name ".$1*" -o -name ".*.*$1*" -o -name "*$1*.*" \) -print
-}
-
 bu() {
     for f in "$@"
         do cp -a $f ~/.backup/${f}-`date +%Y%m%d%H%M`.backup ;
@@ -65,7 +48,7 @@ ssh-send-id() {
         return 1
     fi
 
-    cat ~/.ssh/keys/${1}.pub | ssh $2 'mkdir -p ~/.ssh; cat >> .ssh/authorized_keys'
+    cat ~/.ssh/keys/id_${1}.pub | ssh $2 'mkdir -p ~/.ssh; cat >> .ssh/authorized_keys'
     return $?
 }
 
@@ -105,6 +88,7 @@ ram() {
     fi
   fi
 }
+
 #TODO: move all OS-specific functions to one block
 if [[ "$OSTYPE" =~ ^linux ]]; then
   swapusage() {
