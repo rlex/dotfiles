@@ -52,7 +52,7 @@ function! s:source.hooks.on_init(context) "{{{
   call neocomplete#util#set_default_dictionary(
         \'g:neocomplete#sources#omni#input_patterns',
         \'css,scss,sass',
-        \'^\s\+\w\+\|\w\+[):;]\?\s\+\w*\|[@!]')
+        \'\w\+\|\w\+[):;]\?\s\+\w*\|[@!]')
   call neocomplete#util#set_default_dictionary(
         \'g:neocomplete#sources#omni#input_patterns',
         \'javascript',
@@ -235,7 +235,8 @@ function! s:set_complete_results_words(complete_results) "{{{
 
     try
       let ret = call(omnifunc, [0, result.complete_str])
-      let list = type(ret) == type([]) ? ret : ret.words
+      let list = type(ret) == type(0) ? [] :
+            \ type(ret) == type([]) ? ret : ret.words
     catch
       call neocomplete#print_error(
             \ 'Error occurred calling omnifunction: ' . omnifunc)

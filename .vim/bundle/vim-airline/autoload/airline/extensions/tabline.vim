@@ -4,7 +4,7 @@
 let s:formatter = get(g:, 'airline#extensions#tabline#formatter', 'default')
 let s:show_buffers = get(g:, 'airline#extensions#tabline#show_buffers', 1)
 let s:show_tabs = get(g:, 'airline#extensions#tabline#show_tabs', 1)
-
+let s:ignore_bufadd_pat = get(g:, 'airline#extensions#tabline#ignore_bufadd_pat', '\c\vgundo|undotree|vimfiler|tagbar|nerd_tree')
 let s:taboo = get(g:, 'airline#extensions#taboo#enabled', 1) && get(g:, 'loaded_taboo', 0)
 if s:taboo
   let g:taboo_tabline = 0
@@ -35,6 +35,24 @@ function! s:toggle_on()
   call airline#extensions#tabline#buffers#on()
 
   set tabline=%!airline#extensions#tabline#get()
+endfunction
+
+function! s:update_tabline()
+  let match = expand('<afile>')
+  if pumvisible()
+    return
+  elseif !get(g:, 'airline#extensions#tabline#enabled', 0)
+    return
+  " return, if buffer matches ignore pattern or is directory (netrw)
+  elseif empty(match) 
+        \ || match(match, s:ignore_bufadd_pat) > -1
+        \ || isdirectory(expand("<afile>"))
+    return
+  endif
+  " force re-evaluation of tabline setting
+  set mod!
+  redraw
+  set mod!
 endfunction
 
 function! airline#extensions#tabline#load_theme(palette)
@@ -70,6 +88,9 @@ function! airline#extensions#tabline#get()
     call airline#extensions#tabline#buffers#invalidate()
   endif
 
+  if !exists('#airline#BufAdd#*')
+    autocmd airline BufAdd * call <sid>update_tabline()
+  endif
   if s:show_buffers && curtabcnt == 1 || !s:show_tabs
     return airline#extensions#tabline#buffers#get()
   else

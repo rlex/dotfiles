@@ -79,7 +79,7 @@ Bundle "bling/vim-bufferline"
 Plugin 'airblade/vim-gitgutter'
 Plugin 'tpope/vim-fugitive'
 Plugin 'kien/ctrlp.vim'
-
+Plugin 'vim-airline/vim-airline-themes'
 Bundle "Gundo"
 Bundle "TaskList.vim"
 Bundle "Rename"

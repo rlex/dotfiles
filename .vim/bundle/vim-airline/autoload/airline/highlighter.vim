@@ -9,10 +9,11 @@ let s:accents = {}
 function! s:gui2cui(rgb, fallback)
   if a:rgb == ''
     return a:fallback
+  elseif match(a:rgb, '^\%(NONE\|[fb]g\)$') > -1
+    return a:rgb
   endif
-  let rgb = map(matchlist(a:rgb, '#\(..\)\(..\)\(..\)')[1:3], '0 + ("0x".v:val)')
-  let rgb = [rgb[0] > 127 ? 4 : 0, rgb[1] > 127 ? 2 : 0, rgb[2] > 127 ? 1 : 0]
-  return rgb[0]+rgb[1]+rgb[2]
+  let rgb = map(split(a:rgb[1:], '..\zs'), '0 + ("0x".v:val)')
+  return airline#msdos#round_msdos_colors(rgb)
 endfunction
 
 function! s:get_syn(group, what)
@@ -64,13 +65,13 @@ function! airline#highlighter#exec(group, colors)
   endif
   exec printf('hi %s %s %s %s %s %s %s %s',
         \ a:group,
-        \ get(colors, 0, '') != '' ? 'guifg='.colors[0] : '',
-        \ get(colors, 1, '') != '' ? 'guibg='.colors[1] : '',
-        \ get(colors, 2, '') != '' ? 'ctermfg='.colors[2] : '',
-        \ get(colors, 3, '') != '' ? 'ctermbg='.colors[3] : '',
-        \ get(colors, 4, '') != '' ? 'gui='.colors[4] : '',
-        \ get(colors, 4, '') != '' ? 'cterm='.colors[4] : '',
-        \ get(colors, 4, '') != '' ? 'term='.colors[4] : '')
+        \ get(colors, 0, '') isnot# '' ? 'guifg='.colors[0] : '',
+        \ get(colors, 1, '') isnot# '' ? 'guibg='.colors[1] : '',
+        \ get(colors, 2, '') isnot# '' ? 'ctermfg='.colors[2] : '',
+        \ get(colors, 3, '') isnot# '' ? 'ctermbg='.colors[3] : '',
+        \ get(colors, 4, '') isnot# '' ? 'gui='.colors[4] : '',
+        \ get(colors, 4, '') isnot# '' ? 'cterm='.colors[4] : '',
+        \ get(colors, 4, '') isnot# '' ? 'term='.colors[4] : '')
 endfunction
 
 function! s:exec_separator(dict, from, to, inverse, suffix)
