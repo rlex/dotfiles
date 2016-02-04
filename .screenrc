@@ -24,7 +24,7 @@ hardstatus string '%{= kG}[ %{G}%H %{g}][%= %{= kw}%?%-Lw%?%{r}(%{W}%n*%f%t%?(%u
 activity "%c activity -> %n%f %t"
 bell "%c bell -> %n%f %t^G"
 vbell_msg " *beep* "
-caption always "%{=b dw}%{=b dw}[ %H ] [ %= %?%{-b dc}%-Lw%?%{+b dk}(%{+b dw}%n:%t%{+b dk})%?(%u)%?%{-b dw}%?%{-b dc}%+Lw%? %{=b dk}%{=b dw}] [ %{-b dw}Load%{+b dk}: %{-b dc}%l %{=b dw}] [ %{-b dw}%{-b dc}%D %M %d %c:%s %Y%{=b dw} ]" 
+caption always "%{=b dw}%{=b dw}[ %H ] [ %= %?%{-b dc}%-Lw%?%{+b dk}(%{+b dw}%n:%t%{+b dk})%?(%u)%?%{-b dw}%?%{-b dc}%+Lw%? %{=b dk}%{=b dw}] [ %{-b dw}Load%{+b dk}: %{-b dc}%l %{=b dw}] [ %{-b dw}%{-b dc}%D %M %d %c:%s %Y%{=b dw} ]"
 # caption always " %m%d %c |  %w"
 bind ~ activity "%c activity -> %n%f %t"
 bind * activity "%c activity -> %n%f %t"
