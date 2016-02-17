@@ -43,6 +43,7 @@ endfunction
 
 function! s:on_colorscheme_changed()
   call s:init()
+  let g:airline_gui_mode = airline#init#gui_mode()
   if !s:theme_in_vimrc
     call airline#switch_matching_theme()
   endif
@@ -77,10 +78,11 @@ function! s:airline_toggle()
             \ | call <sid>on_window_changed()
       autocmd CmdwinLeave * call airline#remove_statusline_func('airline#cmdwinenter')
 
-      autocmd ColorScheme * call <sid>on_colorscheme_changed()
+      autocmd GUIEnter,ColorScheme * call <sid>on_colorscheme_changed()
       autocmd VimEnter,WinEnter,BufWinEnter,FileType,BufUnload,VimResized *
             \ call <sid>on_window_changed()
 
+      autocmd TabEnter * :unlet! w:airline_lastmode
       autocmd BufWritePost */autoload/airline/themes/*.vim
             \ exec 'source '.split(globpath(&rtp, 'autoload/airline/themes/'.g:airline_theme.'.vim', 1), "\n")[0]
             \ | call airline#load_theme()

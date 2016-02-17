@@ -52,6 +52,7 @@ syntastic-checker-options	syntastic.txt	/*syntastic-checker-options*
 syntastic-commands	syntastic.txt	/*syntastic-commands*
 syntastic-compatibility	syntastic.txt	/*syntastic-compatibility*
 syntastic-composite	syntastic.txt	/*syntastic-composite*
+syntastic-config-debug	syntastic.txt	/*syntastic-config-debug*
 syntastic-config-exec	syntastic.txt	/*syntastic-config-exec*
 syntastic-config-makeprg	syntastic.txt	/*syntastic-config-makeprg*
 syntastic-config-sort	syntastic.txt	/*syntastic-config-sort*
