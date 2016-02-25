@@ -124,9 +124,10 @@ case "$1" in
         rm -rf ~/.rc
   ;;
 
-  housekeeper) echo "Cleaning up outdated symlinks"
+  housekeeper) echo "Updating dotfiles repo"
+               git -C ~/.rc pull
+               echo "Cleaning up outdated symlinks"
                find -L $HOME -maxdepth 1 -type l -exec rm -i {} +
-               echo "Done"
                if [ -f /usr/local/bin/brew ]; then
                  echo "Updating & cleaning up homebrew"
                  brew update
