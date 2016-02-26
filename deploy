@@ -164,9 +164,9 @@ case "$1" in
   ;;
 
   *) echo "Possible args:"
-     echo  "env - deploy basic dotfiles"
-     echo  "devenv - deploy basic dotfiles + pyenv/rbenv/nodenv"
-     echo  "homebrew - install homebrew and favourite packages"
-     echo  "nuke - remove all symlinks, devenv and shell history"
-     echo  "housekeeper - upgrade homebrew and devenv"
+     echo "env - deploy basic dotfiles"
+     echo "devenv - deploy basic dotfiles + pyenv/rbenv/nodenv"
+     echo "homebrew - install homebrew and favourite packages"
+     echo "nuke - remove all symlinks, devenv and shell history"
+     echo "housekeeper - upgrade homebrew and devenv"
 esac
