@@ -27,7 +27,7 @@ alias iddqd="sudo -s"
 alias ssh="ssh -C -X"
 alias fuck="sudo !!"
 alias watchip="ping -i 60 -a "
-alias flushssh="ps aux | grep ssh | grep -v grep | grep -v ssh-agent | awk {'print $2'} | xargs kill"
+alias flushssh="ps aux | grep ssh | grep -v grep | grep -v ssh-agent | awk {'print \$2'} | xargs kill"
 if [ -f /usr/local/bin/brew ]; then
   alias brew="env PATH=${PATH//$(pyenv root)\/shims:/} brew"
 fi
