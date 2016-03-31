@@ -863,7 +863,9 @@ function! s:StageUndo() abort
   let hash = repo.git_chomp('hash-object', '-w', filename)
   if !empty(hash)
     if section ==# 'untracked'
-      call delete(s:repo().tree(filename))
+      call repo.git_chomp_in_tree('clean', '--', filename)
+    elseif section ==# 'unmerged'
+      call repo.git_chomp_in_tree('rm', '--', filename)
     elseif section ==# 'unstaged'
       call repo.git_chomp_in_tree('checkout', '--', filename)
     else
@@ -1566,6 +1568,7 @@ function! s:Write(force,...) abort
 
   unlet! restorewinnr
   let zero = s:repo().translate(':0:'.path)
+  silent execute 'doautocmd BufWritePost' s:fnameescape(zero)
   for tab in range(1,tabpagenr('$'))
     for winnr in range(1,tabpagewinnr(tab,'$'))
       let bufnr = tabpagebuflist(tab)[winnr-1]
@@ -2689,7 +2692,7 @@ function! s:BufReadObject() abort
         if b:fugitive_display_format
           call s:ReplaceCmd(s:repo().git_command('cat-file',b:fugitive_type,hash))
         else
-          call s:ReplaceCmd(s:repo().git_command('show','--no-color','--pretty=format:tree %T%nparent %P%nauthor %an <%ae> %ad%ncommitter %cn <%ce> %cd%nencoding %e%n%n%s%n%n%b',hash))
+          call s:ReplaceCmd(s:repo().git_command('show','--no-color','--pretty=format:tree%x20%T%nparent%x20%P%nauthor%x20%an%x20<%ae>%x20%ad%ncommitter%x20%cn%x20<%ce>%x20%cd%nencoding%x20%e%n%n%s%n%n%b',hash))
           keepjumps call search('^parent ')
           if getline('.') ==# 'parent '
             silent keepjumps delete_

@@ -56,11 +56,7 @@ function! s:update_tabline()
         \ || isdirectory(expand("<afile>"))
     return
   endif
-  if empty(mapcheck("<Plug>AirlineTablineRefresh", 'n'))
-    noremap <silent> <Plug>AirlineTablineRefresh :set mod!<cr>
-  endif
-  call feedkeys("\<Plug>AirlineTablineRefresh")
-  call feedkeys("\<Plug>AirlineTablineRefresh")
+  doautocmd User BufMRUChange
 endfunction
 
 function! airline#extensions#tabline#load_theme(palette)
@@ -133,6 +129,10 @@ function! airline#extensions#tabline#title(n)
   let title = ''
   if s:taboo
     let title = TabooTabTitle(a:n)
+  endif
+
+  if empty(title) && exists('*gettabvar')
+    let title = gettabvar(a:n, 'title')
   endif
 
   if empty(title)

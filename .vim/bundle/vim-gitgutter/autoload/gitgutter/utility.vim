@@ -24,15 +24,19 @@ endfunction
 " Returns truthy when the buffer's file should be processed; and falsey when it shouldn't.
 " This function does not and should not make any system calls.
 function! gitgutter#utility#is_active()
-  return g:gitgutter_enabled && gitgutter#utility#exists_file() && gitgutter#utility#not_git_dir() && !gitgutter#utility#help_file()
+  return g:gitgutter_enabled &&
+        \ !pumvisible() &&
+        \ gitgutter#utility#is_file_buffer() &&
+        \ gitgutter#utility#exists_file() &&
+        \ gitgutter#utility#not_git_dir()
 endfunction
 
 function! gitgutter#utility#not_git_dir()
   return gitgutter#utility#full_path_to_directory_of_file() !~ '[/\\]\.git\($\|[/\\]\)'
 endfunction
 
-function! gitgutter#utility#help_file()
-  return getbufvar(s:bufnr, '&filetype') ==# 'help' && getbufvar(s:bufnr, '&buftype') ==# 'help'
+function! gitgutter#utility#is_file_buffer()
+  return empty(getbufvar(s:bufnr, '&buftype'))
 endfunction
 
 " A replacement for the built-in `shellescape(arg)`.
