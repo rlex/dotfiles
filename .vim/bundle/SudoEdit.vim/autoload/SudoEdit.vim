@@ -351,7 +351,7 @@ fu! <sid>SudoWrite(file) range "{{{2
         call <sid>Exec(cmd)
         augroup SudoEditWrite
             au! BufWriteCmd <buffer>
-            au BufWriteCmd <buffer> :SudoWrite
+            au BufWriteCmd <buffer> :exe ":SudoWrite ". expand("<afile>")
         augroup END
     endif
     if v:shell_error
@@ -360,6 +360,9 @@ fu! <sid>SudoWrite(file) range "{{{2
     " Write successful
     if &mod
         setl nomodified
+    endif
+    if get(g:, 'SudoEdit_skip_wundo', 1)
+        let s:skip_wundo = 1
     endif
 endfu
 

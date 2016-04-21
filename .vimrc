@@ -80,6 +80,7 @@ Plugin 'airblade/vim-gitgutter'
 Plugin 'tpope/vim-fugitive'
 Plugin 'kien/ctrlp.vim'
 Plugin 'vim-airline/vim-airline-themes'
+Plugin 'tomtom/tlib_vim'
 Bundle "Gundo"
 Bundle "TaskList.vim"
 Bundle "Rename"

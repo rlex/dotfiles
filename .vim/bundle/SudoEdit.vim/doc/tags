@@ -9,6 +9,7 @@ SudoEdit-feedback	SudoEdit.txt	/*SudoEdit-feedback*
 SudoEdit-history	SudoEdit.txt	/*SudoEdit-history*
 SudoEdit-manual	SudoEdit.txt	/*SudoEdit-manual*
 SudoEdit.txt	SudoEdit.txt	/*SudoEdit.txt*
+SudoEdit_skip_wundo	SudoEdit.txt	/*SudoEdit_skip_wundo*
 SudoRead	SudoEdit.txt	/*SudoRead*
 SudoWrite	SudoEdit.txt	/*SudoWrite*
 g:sudoAuth	SudoEdit.txt	/*g:sudoAuth*
