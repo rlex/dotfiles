@@ -41,7 +41,7 @@ function! s:on_window_changed()
   " different autocommands.
   let l:key = [bufnr('%'), winnr(), winnr('$')]
   if get(t:, 'airline_last_window_changed', []) == l:key
-        \ && &stl =~? 'airline#statusline(\d\+)$'
+        \ && &stl is# '%!airline#statusline('.winnr().')'
     return
   endif
   let t:airline_last_window_changed = l:key
@@ -87,10 +87,11 @@ function! s:airline_toggle()
       autocmd CmdwinLeave * call airline#remove_statusline_func('airline#cmdwinenter')
 
       autocmd GUIEnter,ColorScheme * call <sid>on_colorscheme_changed()
-      autocmd SessionLoadPost,VimEnter,WinEnter,BufWinEnter,FileType,BufUnload,VimResized *
+      autocmd SessionLoadPost,VimEnter,WinEnter,BufWinEnter,FileType,BufUnload *
             \ call <sid>on_window_changed()
 
-      autocmd TabEnter * :unlet! w:airline_lastmode
+      autocmd VimResized * unlet! w:airline_lastmode | :call <sid>airline_refresh()
+      autocmd TabEnter * :unlet! w:airline_lastmode w:airline_active
       autocmd BufWritePost */autoload/airline/themes/*.vim
             \ exec 'source '.split(globpath(&rtp, 'autoload/airline/themes/'.g:airline_theme.'.vim', 1), "\n")[0]
             \ | call airline#load_theme()
@@ -118,7 +119,11 @@ function! s:airline_theme(...)
 endfunction
 
 function! s:airline_refresh()
-  silent doautocmd User AirlineBeforeRefresh
+  let nomodeline=''
+  if v:version > 703 || v:version == 703 && has("patch438")
+    let nomodeline = '<nomodeline>'
+  endif
+  exe printf("silent doautocmd %s User AirlineBeforeRefresh", nomodeline)
   call airline#load_theme()
   call airline#update_statusline()
 endfunction
