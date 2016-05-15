@@ -15,7 +15,7 @@ brew_kegs=( ack android-platform-tools bash brew-cask curl dhcpdump dos2unix ett
             docker )
 cask_kegs=( alfred apache-directory-studio charles chromium dropbox flux gitify gns3 java netspot
             pycharm royal-tsx sequel-pro skype spectacle spotify sublime-text3 teamspeak-client
-            transmission tuntap virtualbox visualvm vlc vmware-fusion xca xquartz )
+            transmission tuntap visualvm vlc vmware-fusion xca xquartz )
 
 # Function to symlink dotfiles
 # We checking if OS is Linux (GNU coreutils)
@@ -101,10 +101,10 @@ case "$1" in
               do
                 brew install ${keg}
             done
-#            for cask_keg in ${cask_kegs[@]}
-#              do
-#                brew cask install ${cask_keg}
-#            done
+            for cask_keg in ${cask_kegs[@]}
+              do
+                brew cask install ${cask_keg}
+            done
 
   ;;
 
@@ -134,8 +134,19 @@ case "$1" in
                  brew upgrade
                  brew cleanup
                  brew prune
-                 #brew cask update
-                 #brew cask cleanup
+                 for app in $(brew cask list); do
+                   cver="$(brew cask info "${app}" | head -n 1 | cut -d " " -f 2)";
+                   ivers=$(ls -1 "/opt/homebrew-cask/Caskroom/${app}/.metadata/" | tr '\n' ' ' | sed -e 's/ $//');
+                   aivers=(${ivers});
+                   nvers=$(echo ${#aivers[@]});
+                   echo "[x] Found ${app} in cask list. Latest available version is ${cver}. You have installed version(s): ${ivers}";
+                   if [[ ${nvers} -eq 1 ]]; then
+                     echo "${ivers}" | grep -q "^${cver}$" && { echo "[x] Latest version already installed, skipping changes ..."; continue; };
+                   fi;
+                   echo "[+] Fixing from ${ivers} to ${cver} ...";
+                   brew cask uninstall "${app}" --force;
+                   brew cask install "${app}";
+                 done
                  echo "Done"
                fi
 
