@@ -139,8 +139,6 @@ function! neocomplete#handler#_do_auto_complete(event) abort "{{{
         \ && empty(neocomplete.candidates)
         \ && a:event ==# 'CursorMovedI')
         \ || s:check_in_do_auto_complete(a:event)
-        \ || (a:event ==# 'InsertEnter'
-        \     && neocomplete.old_cur_text != '')
     return
   endif
 
@@ -220,7 +218,7 @@ function! s:check_in_do_auto_complete(event) abort "{{{
     redir => foldmethod
       verbose setlocal foldmethod?
     redir END
-    for msg in split(foldmethod, "\n")
+    for msg in split(substitute(foldmethod, '\t', '', 'g'), "\n")
       call neocomplete#print_error(msg)
     endfor
     call neocomplete#print_error(
