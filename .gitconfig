@@ -36,7 +36,7 @@
 [alias]
   b = branch
   ba = branch -a -v -v
-  ci = commit
+  c = commit -S -m "$1"
   co = checkout
 
   d = diff -C
@@ -68,7 +68,7 @@
 [user]
   name = Lex Rivera
   email = me@lex.io
-  signingkey = 0FC7CF34
+  signingkey = 453AF56C
 [push]
   default = matching
 [help]
