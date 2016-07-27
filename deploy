@@ -136,7 +136,7 @@ case "$1" in
                  brew prune
                  for app in $(brew cask list); do
                    cver="$(brew cask info "${app}" | head -n 1 | cut -d " " -f 2)";
-                   ivers=$(ls -1 "/opt/homebrew-cask/Caskroom/${app}/.metadata/" | tr '\n' ' ' | sed -e 's/ $//');
+                   ivers=$(ls -1 "/usr/local/Caskroom/${app}/.metadata/" | tr '\n' ' ' | sed -e 's/ $//');
                    aivers=(${ivers});
                    nvers=$(echo ${#aivers[@]});
                    echo "[x] Found ${app} in cask list. Latest available version is ${cver}. You have installed version(s): ${ivers}";
@@ -147,6 +147,7 @@ case "$1" in
                    brew cask uninstall "${app}" --force;
                    brew cask install "${app}";
                  done
+                 brew cask cleanup
                  echo "Done"
                fi
 
