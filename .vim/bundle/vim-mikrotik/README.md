@@ -1,3 +1,5 @@
+DEPRECATED in favour of [zainin/vim-mikrotik](https://github.com/zainin/vim-mikrotik)
+
 vim-mikrotik
 ============
 

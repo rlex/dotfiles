@@ -201,6 +201,7 @@
 :SyntasticReset	syntastic.txt	/*:SyntasticReset*
 :SyntasticSetLoclist	syntastic.txt	/*:SyntasticSetLoclist*
 :SyntasticToggleMode	syntastic.txt	/*:SyntasticToggleMode*
+SyntasticCheckHook()	syntastic.txt	/*SyntasticCheckHook()*
 filter-overrides	syntastic.txt	/*filter-overrides*
 g:syntastic_avrgcc_config_file	syntastic-checkers.txt	/*g:syntastic_avrgcc_config_file*
 syntastic	syntastic.txt	/*syntastic*
@@ -375,6 +376,7 @@ syntastic-cucumber-cucumber	syntastic-checkers.txt	/*syntastic-cucumber-cucumber
 syntastic-cuda-nvcc	syntastic-checkers.txt	/*syntastic-cuda-nvcc*
 syntastic-d-dmd	syntastic-checkers.txt	/*syntastic-d-dmd*
 syntastic-dart-dartanalyzer	syntastic-checkers.txt	/*syntastic-dart-dartanalyzer*
+syntastic-debug	syntastic.txt	/*syntastic-debug*
 syntastic-docbk-igor	syntastic-checkers.txt	/*syntastic-docbk-igor*
 syntastic-docbk-xmllint	syntastic-checkers.txt	/*syntastic-docbk-xmllint*
 syntastic-dockerfile-dockerfile_lint	syntastic-checkers.txt	/*syntastic-dockerfile-dockerfile_lint*
@@ -442,6 +444,7 @@ syntastic-license	syntastic.txt	/*syntastic-license*
 syntastic-limbo-limbo	syntastic-checkers.txt	/*syntastic-limbo-limbo*
 syntastic-lisp-clisp	syntastic-checkers.txt	/*syntastic-lisp-clisp*
 syntastic-llvm-llvm	syntastic-checkers.txt	/*syntastic-llvm-llvm*
+syntastic-loclist-callback	syntastic.txt	/*syntastic-loclist-callback*
 syntastic-lua-luac	syntastic-checkers.txt	/*syntastic-lua-luac*
 syntastic-lua-luacheck	syntastic-checkers.txt	/*syntastic-lua-luacheck*
 syntastic-markdown-mdl	syntastic-checkers.txt	/*syntastic-markdown-mdl*
@@ -544,7 +547,6 @@ syntastic-turtle-rapper	syntastic-checkers.txt	/*syntastic-turtle-rapper*
 syntastic-turtle-ttl	syntastic-checkers.txt	/*syntastic-turtle-ttl*
 syntastic-twig-twiglint	syntastic-checkers.txt	/*syntastic-twig-twiglint*
 syntastic-typescript-eslint	syntastic-checkers.txt	/*syntastic-typescript-eslint*
-syntastic-typescript-tsc	syntastic-checkers.txt	/*syntastic-typescript-tsc*
 syntastic-typescript-tslint	syntastic-checkers.txt	/*syntastic-typescript-tslint*
 syntastic-vala-valac	syntastic-checkers.txt	/*syntastic-vala-valac*
 syntastic-verilog-iverilog	syntastic-checkers.txt	/*syntastic-verilog-iverilog*
