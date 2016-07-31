@@ -129,9 +129,22 @@ retry() {
   retry $@
 }
 
+sshk() {
+  if [ "$1" = "load" ]; then
+    ssh_keys=($(find ~/.ssh/keys -type f -depth 1 \( -iname "id_*" ! -iname "*.pub" \)))
+    for ssh_key in ${ssh_keys[@]}; do
+      ssh-add $ssh_key
+    done
+  elif [ "$1" = "unload" ]; then
+    ssh-add -D
+  elif [ -z $1 ]; then
+    echo "Loaded keys:"
+    ssh-add -l | awk {'print $3'}
+  fi
+}
+
 # Tmux
-alias tm="tmuxStart"
-tmuxStart() {
+tm() {
     if which tmux 2>&1 >/dev/null; then
       test -z "$TMUX" && (tmux attach || tmux new-session)
     fi

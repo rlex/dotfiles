@@ -31,3 +31,4 @@ alias flushssh="ps aux | grep ssh | grep -v grep | grep -v ssh-agent | awk {'pri
 if [ -f /usr/local/bin/brew ]; then
   alias brew="env PATH=${PATH//$(pyenv root)\/shims:/} brew"
 fi
+alias myip="dig +short myip.opendns.com @resolver1.opendns.com"
