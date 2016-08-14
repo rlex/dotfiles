@@ -6,15 +6,16 @@
 dotfiles=( screenrc vimrc zshrc bashrc bash_profile gemrc htoprc gitconfig biewrc dircolors ackrc
            muttrc toprc Xdefaults gvimrc vim mutt config/awesome config/mc config/htop tmux.conf
            mailcap gitignore_global )
-brew_kegs=( ack android-platform-tools bash brew-cask curl dhcpdump dos2unix ettercap foremost git
-            git-encrypt git-extras git-lfs gnupg2 grep hadoop hashpump htop-osx arping httping
-            dhcpdump dhcping dnstracer httpie iperf3 john-jumbo lzo mitmproxy mobile-shell moreutils
+# homebrew packages
+brew_kegs=( ack android-platform-tools bash curl dhcpdump dos2unix ettercap foremost git
+            git-extras git-lfs gnupg2 grep hadoop hashpump htop-osx arping httping dhcpdump
+            dhcping dnstracer httpie iperf3 john-jumbo lzo mitmproxy mobile-shell moreutils
             mutt nmap p7zip pigz pngcheck pwgen sqlite sqlmap tcpreplay tcptrace tig graphicsmagick
             sysdig tmux unrar vim wget zsh zsh-completions coreutils moreutils findutils openssh
             screen foremost nmap pngcheck socat sqlmap xz pigz tree mtr docker-machine docker )
+# homebrew-cask packages
 cask_kegs=( alfred charles dropbox gns3 java netspot royal-tsx sequel-pro skype spectacle spotify
-            sublime-text teamspeak-client transmission visualvm vlc vmware-fusion xca xquartz
-            wireshark )
+            atom teamspeak-client transmission visualvm vlc vmware-fusion xca xquartz wireshark )
 
 # Function to symlink dotfiles
 # We checking if OS is Linux (GNU coreutils)
@@ -96,13 +97,11 @@ case "$1" in
             if [ ! -f /usr/local/bin/brew ]; then
               ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
             fi
-            for keg in ${brew_kegs[@]}
-              do
-                brew install ${keg}
+            for keg in ${brew_kegs[@]}; do
+              brew install ${keg}
             done
-            for cask_keg in ${cask_kegs[@]}
-              do
-                brew cask install ${cask_keg}
+            for cask_keg in ${cask_kegs[@]}; do
+              brew cask install ${cask_keg}
             done
 
   ;;
