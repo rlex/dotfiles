@@ -22,6 +22,30 @@ if [ -d "$HOME/.nodenv" ]; then
   if which nodenv > /dev/null; then eval "$(nodenv init -)"; fi
 fi
 
+# gpg-agent setup
+if hash gpg-agent 2>/dev/null; then
+  function _start_gpg_agent {
+    gpg-agent --daemon --enable-ssh-support \
+    --write-env-file "${HOME}/.gpg-agent-info" > /dev/null 2>&1
+    . "${HOME}/.gpg-agent-info"
+  }
+
+  if [ -f "${HOME}/.gpg-agent-info" ]; then
+    . "${HOME}/.gpg-agent-info"
+
+    if $(! kill -0 ${SSH_AGENT_PID} > /dev/null 2>&1); then
+      # gpg-agent not running, restarting
+      _start_gpg_agent;
+    fi
+    export GPG_AGENT_INFO
+    export SSH_AUTH_SOCK
+    export SSH_AGENT_PID
+  else
+    _start_gpg_agent
+  fi
+  export GPG_TTY=$(tty)
+fi
+
 #Locales
 export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
