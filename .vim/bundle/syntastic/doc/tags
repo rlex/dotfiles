@@ -28,6 +28,7 @@
 'g:syntastic_asm_errorformat'	syntastic-checkers.txt	/*'g:syntastic_asm_errorformat'*
 'g:syntastic_asm_include_dirs'	syntastic-checkers.txt	/*'g:syntastic_asm_include_dirs'*
 'g:syntastic_asm_remove_include_errors'	syntastic-checkers.txt	/*'g:syntastic_asm_remove_include_errors'*
+'g:syntastic_avrgcc_config_file'	syntastic-checkers.txt	/*'g:syntastic_avrgcc_config_file'*
 'g:syntastic_c_auto_refresh_includes'	syntastic-checkers.txt	/*'g:syntastic_c_auto_refresh_includes'*
 'g:syntastic_c_check_header'	syntastic-checkers.txt	/*'g:syntastic_c_check_header'*
 'g:syntastic_c_compiler'	syntastic-checkers.txt	/*'g:syntastic_c_compiler'*
@@ -203,7 +204,6 @@
 :SyntasticToggleMode	syntastic.txt	/*:SyntasticToggleMode*
 SyntasticCheckHook()	syntastic.txt	/*SyntasticCheckHook()*
 filter-overrides	syntastic.txt	/*filter-overrides*
-g:syntastic_avrgcc_config_file	syntastic-checkers.txt	/*g:syntastic_avrgcc_config_file*
 syntastic	syntastic.txt	/*syntastic*
 syntastic-about	syntastic.txt	/*syntastic-about*
 syntastic-actionscript-mxmlc	syntastic-checkers.txt	/*syntastic-actionscript-mxmlc*
@@ -213,6 +213,7 @@ syntastic-ansible-ansible_lint	syntastic-checkers.txt	/*syntastic-ansible-ansibl
 syntastic-apiblueprint-drafter	syntastic-checkers.txt	/*syntastic-apiblueprint-drafter*
 syntastic-applescript-osacompile	syntastic-checkers.txt	/*syntastic-applescript-osacompile*
 syntastic-asciidoc-asciidoc	syntastic-checkers.txt	/*syntastic-asciidoc-asciidoc*
+syntastic-asl-iasl	syntastic-checkers.txt	/*syntastic-asl-iasl*
 syntastic-asm-gcc	syntastic-checkers.txt	/*syntastic-asm-gcc*
 syntastic-bemhtml-bemhtmllint	syntastic-checkers.txt	/*syntastic-bemhtml-bemhtmllint*
 syntastic-bro-bro	syntastic-checkers.txt	/*syntastic-bro-bro*
@@ -236,6 +237,7 @@ syntastic-checkers-ansible	syntastic-checkers.txt	/*syntastic-checkers-ansible*
 syntastic-checkers-apiblueprint	syntastic-checkers.txt	/*syntastic-checkers-apiblueprint*
 syntastic-checkers-applescript	syntastic-checkers.txt	/*syntastic-checkers-applescript*
 syntastic-checkers-asciidoc	syntastic-checkers.txt	/*syntastic-checkers-asciidoc*
+syntastic-checkers-asl	syntastic-checkers.txt	/*syntastic-checkers-asl*
 syntastic-checkers-asm	syntastic-checkers.txt	/*syntastic-checkers-asm*
 syntastic-checkers-bemhtml	syntastic-checkers.txt	/*syntastic-checkers-bemhtml*
 syntastic-checkers-bro	syntastic-checkers.txt	/*syntastic-checkers-bro*
@@ -356,6 +358,7 @@ syntastic-config-no-makeprgbuild	syntastic.txt	/*syntastic-config-no-makeprgbuil
 syntastic-config-sort	syntastic.txt	/*syntastic-config-sort*
 syntastic-contents	syntastic.txt	/*syntastic-contents*
 syntastic-coq-coqtop	syntastic-checkers.txt	/*syntastic-coq-coqtop*
+syntastic-cpp-avrgcc	syntastic-checkers.txt	/*syntastic-cpp-avrgcc*
 syntastic-cpp-clang_check	syntastic-checkers.txt	/*syntastic-cpp-clang_check*
 syntastic-cpp-clang_tidy	syntastic-checkers.txt	/*syntastic-cpp-clang_tidy*
 syntastic-cpp-cppcheck	syntastic-checkers.txt	/*syntastic-cpp-cppcheck*
