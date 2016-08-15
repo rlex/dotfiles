@@ -1,8 +1,12 @@
 #!/bin/bash
-### Simple shell script for symlinking all files from .rc dir to home directory (c) Lex Rivera
 
-### Array of all config files and directories
-# dotfiles, for example .bashrc. Put it in array without leading dot. Also dirs.
+# Simple shell script for symlinking all files from .rc dir to home directory
+# Also upgrades, cleanups homebrew and similar stuff in single command
+# Actually absurdly ugly, but hey, it works! Somehow.
+
+# Array of all dotfiles, for example .bashrc
+# Put them in array without leading dot. Directories is fine too
+# All those arrays are used only one time (at initial deploy)
 dotfiles=( screenrc vimrc zshrc bashrc bash_profile gemrc htoprc gitconfig biewrc dircolors ackrc
            muttrc toprc Xdefaults gvimrc vim mutt config/awesome config/mc config/htop tmux.conf
            mailcap gitignore_global )
@@ -14,169 +18,159 @@ brew_kegs=( ack android-platform-tools bash curl dhcpdump dos2unix ettercap fore
             sysdig tmux unrar vim wget zsh zsh-completions coreutils moreutils findutils openssh
             screen foremost nmap pngcheck socat sqlmap xz pigz tree mtr docker-machine docker )
 # homebrew-cask packages
+# Make sure that same cask-less app is not installed in /Applications
 cask_kegs=( alfred charles dropbox gns3 java netspot royal-tsx sequel-pro skype spectacle spotify
             atom teamspeak-client transmission visualvm vlc vmware-fusion xca xquartz wireshark )
 
 # Function to symlink dotfiles
-# We checking if OS is Linux (GNU coreutils)
-# If not, we assume OS uses BSD utils
-# Yeah this is fuckin' dirty, but works in most of cases
+# Checking if OS is Linux (GNU coreutils), if not, we assume OS uses BSD utils
 symlink() {
-  if [[ `uname` == "Linux" ]];
-    then
-      ln -sfvn $1 $2
-    else
-      ln -sfvh $1 $2
+  if [[ `uname` == "Linux" ]]; then
+    ln -sfvn $1 $2
+  else
+    ln -sfvh $1 $2
+  fi
+}
+
+#Another ugly function for installing/updating py/nod/rb-envs. Still counts!
+langenv() {
+  if [ -d ~/.$2 ]; then
+    echo "Updating $2"
+    cd ~/.$2 && git pull
+  else
+    echo "Installing $2"
+    git clone $1 ~/.$2
   fi
 }
 
 case "$1" in
 
-  env) echo "Deploying environment"
-       cd ~/.rc
-       echo "Deploying dotfiles from `pwd` to ${HOME}"
-       if [ -d ~/.config ];
-        then
-           echo "skipping config folder creation"
-        else
-          mkdir ~/.config
-       fi
+  env)
+    echo "Deploying environment"
+    cd ~/.rc
+    echo "Deploying dotfiles from `pwd` to ${HOME}"
+    if [ -d ~/.config ]; then
+      echo "skipping config folder creation"
+    else
+      mkdir ~/.config
+    fi
 
-       for file in ${dotfiles[@]}
-         do
-           symlink ~/.rc/.${file} ~/.${file}
-         done
-       echo "Finished!"
+    for file in ${dotfiles[@]}; do
+      symlink ~/.rc/.${file} ~/.${file}
+    done
 
-       cd - >&/dev/null
+    echo "Finished!"
+
+    cd - >&/dev/null
   ;;
 
-  devenv) echo "Deploying pyenv,rbenv,nodenv"
-
-         if [ -d ~/.rbenv ]; then
-            echo "rbenv seems to be already installed - aborting"
-         else
-            echo "installing rbenv"
-            git clone https://github.com/sstephenson/rbenv.git ~/.rbenv
-         fi
-
-         if [ -d ~/.rbenv/plugins/ruby-build ]; then
-             echo "ruby-build seems to be already installed - aborting"
-          else
-              echo "installing ruby-build"
-              git clone https://github.com/sstephenson/ruby-build.git ~/.rbenv/plugins/ruby-build
-         fi
-
-         if [ -d ~/.pyenv ]; then
-             echo "pyenv seems to be already installed - aborting"
-          else
-              echo "installing pyenv"
-              git clone https://github.com/yyuu/pyenv.git ~/.pyenv
-         fi
-
-         if [ -d ~/.nodenv ]; then
-            echo "nodenv seems to be already installed - aborting"
-         else
-            echo "installing nodenv"
-              git clone https://github.com/OiNutter/nodenv ~/.nodenv
-            fi
-
-           if [ -d ~/.nodenv/plugins/node-build ]; then
-               echo "node-build seems to be already installed - aborting"
-           else
-               echo "installing node-build"
-               git clone https://github.com/OiNutter/node-build ~/.nodenv/plugins/node-build
-           fi
-
-
+  #Probably need re-sourcing of S01_env after install
+  #Also, how i can make this more ugly? Associated arrays, maybe?
+  devenv)
+    langenv https://github.com/sstephenson/rbenv.git rbenv
+    langenv https://github.com/sstephenson/ruby-build.git rbenv/plugins/ruby-build
+    langenv https://github.com/yyuu/pyenv.git pyenv
+    langenv https://github.com/OiNutter/nodenv nodenv
+    langenv https://github.com/OiNutter/node-build nodenv/plugins/node-build
   ;;
 
-  homebrew) echo "Installing homebrew and favourite packages"
-            #probably i should migrate to manual install.
-            #Running (even respected) scripts from interwebs is stupid.
-            if [ ! -f /usr/local/bin/brew ]; then
-              ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
-            fi
-            for keg in ${brew_kegs[@]}; do
-              brew install ${keg}
-            done
-            for cask_keg in ${cask_kegs[@]}; do
-              brew cask install ${cask_keg}
-            done
-
+  #Probably run it just after deploy devenv?
+  devenv-latest)
+    for devenv in pyenv nodenv rbenv; do
+      $devenv install $($devenv install --list | sed 's/^  //' | grep '^\d' | grep --invert-match 'dev\|a\|b' | grep -v preview | tail -1)
+    done
   ;;
 
-  nuke) echo "Cleaning up env"
-        echo "Removing dotfiles"
-        for file in ${dotfiles[@]}
-          do
-            rm -vf ~/.${file}
-        done
-        echo "Cleaning up devenv"
-        rm -rvf ~/.pyenv
-        rm -rvf ~/.rbenv
-        echo "Removing history"
-        rm -vf ~/.zsh-history
-        rm -vf ~/.bash_history
-        echo "Removing directory"
-        rm -rf ~/.rc
+  homebrew)
+    echo "Installing homebrew and favourite packages"
+    #probably i should migrate to manual install.
+    #Running (even respected) scripts from interwebs is stupid.
+    if [ ! -f /usr/local/bin/brew ]; then
+      ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+    fi
+    for keg in ${brew_kegs[@]}; do
+      brew install ${keg}
+    done
+    for cask_keg in ${cask_kegs[@]}; do
+      brew cask install ${cask_keg}
+    done
   ;;
 
-  housekeeper) echo "Updating dotfiles repo"
-               git -C ~/.rc pull
-               echo "Cleaning up outdated symlinks"
-               find -L $HOME -maxdepth 1 -type l -exec rm -i {} +
-               if [ -f /usr/local/bin/brew ]; then
-                 echo "Updating & cleaning up homebrew"
-                 brew update
-                 brew upgrade
-                 brew cleanup
-                 brew prune
-                 for app in $(brew cask list); do
-                   cver="$(brew cask info "${app}" | head -n 1 | cut -d " " -f 2)";
-                   ivers=$(ls -1 "/usr/local/Caskroom/${app}/.metadata/" | tr '\n' ' ' | sed -e 's/ $//');
-                   aivers=(${ivers});
-                   nvers=$(echo ${#aivers[@]});
-                   echo "[x] Found ${app} in cask list. Latest available version is ${cver}. You have installed version(s): ${ivers}";
-                   if [[ ${nvers} -eq 1 ]]; then
-                     echo "${ivers}" | grep -q "^${cver}$" && { echo "[x] Latest version already installed, skipping changes ..."; continue; };
-                   fi;
-                   echo "[+] Fixing from ${ivers} to ${cver} ...";
-                   brew cask uninstall "${app}" --force;
-                   brew cask install "${app}";
-                 done
-                 brew cask cleanup
-                 echo "Done"
-               fi
-
-               if [ -d ~/.rbenv ]; then
-                   echo "Updating rbenv"
-                   cd ~/.rbenv && git pull
-                   if [ -d ~/.rbenv/plugins/ruby-build ]; then
-                     echo "Updating ruby-build"
-                     cd ~/.rbenv/plugins/ruby-build && git pull
-                   fi
-               fi
-
-               if [ -d ~/.pyenv ]; then
-                 echo "Updating pyenv"
-                 cd ~/.pyenv && git pull
-               fi
-
-               if [ -d ~/.nodenv ]; then
-                 echo "Updating nodenv"
-                 cd ~/.nodenv && git pull
-                 if [ -d ~/.nodenv/plugins/node-build ]; then
-                   echo "Updating node-build"
-                   cd ~/.nodenv/plugins/node-build && git pull
-                 fi
-               fi
+  nuke)
+    echo "Cleaning up env"
+    echo "Removing dotfiles"
+    for file in ${dotfiles[@]}; do
+      rm -vf ~/.${file}
+    done
+    echo "Cleaning up devenv"
+    rm -rvf ~/.pyenv
+    rm -rvf ~/.rbenv
+    rm -rvf ~/.nodenv
+    echo "Removing history"
+    rm -vf ~/.zsh-history
+    rm -vf ~/.bash_history
+    echo "Removing dotfiles directory"
+    rm -rf ~/.rc
   ;;
 
-  *) echo "Possible args:"
-     echo "env - deploy basic dotfiles"
-     echo "devenv - deploy basic dotfiles + pyenv/rbenv/nodenv"
-     echo "homebrew - install homebrew and favourite packages"
-     echo "nuke - remove all symlinks, devenv and shell history"
-     echo "housekeeper - upgrade homebrew and devenv"
+  housekeeper)
+    echo "Updating dotfiles repo"
+    git -C ~/.rc pull
+    echo "Cleaning up outdated symlinks"
+    find -L $HOME -maxdepth 1 -type l -exec rm -i {} +
+    if [ -f /usr/local/bin/brew ]; then
+      echo "Updating & cleaning up homebrew"
+      brew update
+      brew upgrade
+      brew cleanup
+      brew prune
+      for app in $(brew cask list); do
+        cver="$(brew cask info "${app}" | head -n 1 | cut -d " " -f 2)";
+        ivers=$(ls -1 "/usr/local/Caskroom/${app}/.metadata/" | tr '\n' ' ' | sed -e 's/ $//');
+        aivers=(${ivers});
+        nvers=$(echo ${#aivers[@]});
+        echo "[x] Found ${app} in cask list. Latest available version is ${cver}. You have installed version(s): ${ivers}";
+        if [[ ${nvers} -eq 1 ]]; then
+          echo "${ivers}" | grep -q "^${cver}$" && { echo "[x] Latest version already installed, skipping changes ..."; continue; };
+        fi;
+        echo "[+] Fixing from ${ivers} to ${cver} ...";
+        brew cask uninstall "${app}" --force;
+        brew cask install "${app}";
+    done
+    brew cask cleanup
+    echo "Done"
+    fi
+
+    #Probably migrate that to langenv as well.
+    if [ -d ~/.rbenv ]; then
+      echo "Updating rbenv"
+      cd ~/.rbenv && git pull
+      if [ -d ~/.rbenv/plugins/ruby-build ]; then
+        echo "Updating ruby-build"
+        cd ~/.rbenv/plugins/ruby-build && git pull
+      fi
+    fi
+
+    if [ -d ~/.pyenv ]; then
+      echo "Updating pyenv"
+      cd ~/.pyenv && git pull
+    fi
+
+    if [ -d ~/.nodenv ]; then
+      echo "Updating nodenv"
+      cd ~/.nodenv && git pull
+      if [ -d ~/.nodenv/plugins/node-build ]; then
+        echo "Updating node-build"
+        cd ~/.nodenv/plugins/node-build && git pull
+      fi
+    fi
+  ;;
+
+  *)
+    echo "Possible args:"
+    echo "env - deploy basic dotfiles"
+    echo "devenv - deploy pyenv/rbenv/nodenv"
+    echo "homebrew - install homebrew and favourite packages"
+    echo "nuke - remove all symlinks, devenv and shell history"
+    echo "housekeeper - upgrade homebrew and devenv"
 esac
