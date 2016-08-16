@@ -28,8 +28,8 @@ URxvt.borderless: true
 !}}}
 
 !{{{ Xterm rules
-XTerm*FaceName: terminus
-XTerm*FaceSize: 11
+XTerm*FaceName: PragmataPro Mono
+XTerm*FaceSize: 12
 !}}}
 
 !{{{ Yeahconsole rules
@@ -54,7 +54,7 @@ yeahconsole*metaSendsEscape: true
 *color1:    #ED0F32
 *color9:    #DD314C
 !green
-color2:    #407B2A
+*color2:    #407B2A
 *color10:   #60954B
 !yellow
 *color3:    #fd971f
