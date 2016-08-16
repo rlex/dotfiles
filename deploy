@@ -11,7 +11,7 @@ dotfiles=( screenrc vimrc zshrc bashrc bash_profile gemrc htoprc gitconfig biewr
            muttrc toprc Xdefaults gvimrc vim mutt config/awesome config/mc config/htop tmux.conf
            mailcap gitignore_global )
 # homebrew packages
-brew_kegs=( ack android-platform-tools bash curl dhcpdump dos2unix ettercap foremost git
+brewkegs=( ack android-platform-tools bash curl dhcpdump dos2unix ettercap foremost git
             git-extras git-lfs gnupg2 grep hadoop hashpump htop-osx arping httping dhcpdump
             dhcping dnstracer httpie iperf3 john-jumbo lzo mitmproxy mobile-shell moreutils
             mutt nmap p7zip pigz pngcheck pwgen sqlite sqlmap tcpreplay tcptrace tig graphicsmagick
@@ -19,8 +19,12 @@ brew_kegs=( ack android-platform-tools bash curl dhcpdump dos2unix ettercap fore
             screen foremost nmap pngcheck socat sqlmap xz pigz tree mtr docker-machine docker )
 # homebrew-cask packages
 # Make sure that same cask-less app is not installed in /Applications
-cask_kegs=( alfred charles dropbox gns3 java netspot royal-tsx sequel-pro skype spectacle spotify
+caskkegs=( alfred charles dropbox gns3 java netspot royal-tsx sequel-pro skype spectacle spotify
             atom teamspeak-client transmission visualvm vlc vmware-fusion xca xquartz wireshark )
+
+# Not used ATM
+gems=( pry rubocop puppet-lint puppet )
+pypi=( ptpython yapf jsbeautifier )
 
 # Function to symlink dotfiles
 # Checking if OS is Linux (GNU coreutils), if not, we assume OS uses BSD utils
@@ -88,10 +92,10 @@ case "$1" in
     if [ ! -f /usr/local/bin/brew ]; then
       ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
     fi
-    for keg in ${brew_kegs[@]}; do
+    for keg in ${brewkegs[@]}; do
       brew install ${keg}
     done
-    for cask_keg in ${cask_kegs[@]}; do
+    for cask_keg in ${caskkegs[@]}; do
       brew cask install ${cask_keg}
     done
   ;;
