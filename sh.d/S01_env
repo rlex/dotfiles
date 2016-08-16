@@ -7,20 +7,12 @@ fi
 export PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:$HOME/.rc/.bin:$PATH"
 
 #init rbenv & pyenv
-if [ -d "$HOME/.rbenv" ]; then
-  export PATH="$HOME/.rbenv/bin:$PATH"
-  if which rbenv > /dev/null; then eval "$(rbenv init -)"; fi
-fi
-
-if [ -d "$HOME/.pyenv" ]; then
-  export PATH="$HOME/.pyenv/bin:$PATH"
-  if which pyenv > /dev/null; then eval "$(pyenv init -)"; fi
-fi
-
-if [ -d "$HOME/.nodenv" ]; then
-  export PATH="$HOME/.nodenv/bin:$PATH"
-  if which nodenv > /dev/null; then eval "$(nodenv init -)"; fi
-fi
+for langenv in pyenv rbenv nodenv; do
+  if [ -d "$HOME/.${langenv}" ]; then
+    export PATH="$HOME/.$langenv/bin:$PATH"
+    if hash ${langenv} 2>/dev/null; then eval "$(${langenv} init -)"; fi
+  fi
+done
 
 # gpg-agent setup
 if hash gpg-agent 2>/dev/null; then
