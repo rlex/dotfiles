@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Simple shell script for symlinking all files from .rc dir to home directory
 # Also upgrades, cleanups homebrew and similar stuff in single command
@@ -26,6 +26,14 @@ caskkegs=( alfred charles dropbox gns3 java netspot royal-tsx sequel-pro skype
            spectacle spotify atom teamspeak-client transmission visualvm vlc
            vmware-fusion xca xquartz wireshark )
 
+# pyenv, rbenv, nodenv. Can also install plugins.
+declare -A langenvs
+langenvs=( [rbenv]=https://github.com/sstephenson/rbenv.git
+           [rbenv/plugins/ruby-build]=https://github.com/sstephenson/ruby-build.git
+           [pyenv]=https://github.com/yyuu/pyenv.git
+           [nodenv]=https://github.com/OiNutter/nodenv.git
+           [nodenv/plugins/node-build]=https://github.com/OiNutter/node-build.git )
+
 # Not used ATM
 gems=( pry rubocop puppet-lint puppet )
 pypi=( ptpython yapf jsbeautifier )
@@ -33,7 +41,7 @@ pypi=( ptpython yapf jsbeautifier )
 # Function to symlink dotfiles
 # Checking if OS is Linux (GNU coreutils), if not, we assume OS uses BSD utils
 symlink() {
-  if [[ `uname` == "Linux" ]]; then
+  if [[ $(uname) == "Linux" ]]; then
     ln -sfvn $1 $2
   else
     ln -sfvh $1 $2
@@ -74,13 +82,10 @@ case "$1" in
 
   # Install rb/py/node-env. Used just one time.
   # I can do that manually in 5m, but i'm too lazy.
-  # And how i can make this more ugly? Associated arrays, maybe?
   devenv)
-    langenv https://github.com/sstephenson/rbenv.git rbenv
-    langenv https://github.com/sstephenson/ruby-build.git rbenv/plugins/ruby-build
-    langenv https://github.com/yyuu/pyenv.git pyenv
-    langenv https://github.com/OiNutter/nodenv nodenv
-    langenv https://github.com/OiNutter/node-build nodenv/plugins/node-build
+    for target in "${!langenvs[@]}"; do
+      langenv ${langenvs[$target]} $target
+    done
     source ~/.rc/sh.d/S01_env
     for devenv in nodenv rbenv; do
       latest_version=$(${devenv} install -l | sed 's/^  //' | grep '^\d' | grep --invert-match 'dev\|a\|b' | grep -v preview | tail -1)
@@ -157,11 +162,11 @@ case "$1" in
     echo "Done"
     fi
     # Update all langenvs
-    langenv https://github.com/sstephenson/rbenv.git rbenv
-    langenv https://github.com/sstephenson/ruby-build.git rbenv/plugins/ruby-build
-    langenv https://github.com/yyuu/pyenv.git pyenv
-    langenv https://github.com/OiNutter/nodenv nodenv
-    langenv https://github.com/OiNutter/node-build nodenv/plugins/node-build
+    for target in "${!langenvs[@]}"; do
+      if [ -d ~/.${target} ]; then
+        langenv ${langenvs[$target]} ${target}
+      fi
+    done
   ;;
 
   *)
