@@ -1,55 +1,54 @@
 # tag a directory in a command to come to it later
 tag() {
-    alias $1="cd $PWD";
+  alias $1="cd $PWD";
 }
 
 bu() {
-    for f in "$@"
-        do cp -a $f ~/.backup/${f}-`date +%Y%m%d%H%M`.backup ;
-    done
+  for f in "$@"; do
+    cp -a $f ~/.backup/${f}-`date +%Y%m%d%H%M`.backup ;
+  done
 }
 
 pk() {
-    if [ $1 ] ; then
-        case $1 in
-            tbz)    tar cjvf $2.tar.bz2 $2      ;;
-            tgz)    tar czvf $2.tar.gz  $2     ;;
-            tar)    tar cpvf $2.tar  $2       ;;
-            bz2)    bzip $2 ;;
-            gz)     gzip -c -9 -n $2 > $2.gz ;;
-            zip)    zip -r $2.zip $2   ;;
-            7z)     7z a $2.7z $2    ;;
-            *)      echo "'$1' cannot be packed via pk()" ;;
-        esac
-    else
-        echo "'$1' is not a valid file";
-    fi
+  if [ $1 ] ; then
+    case $1 in
+      tbz) tar cjvf $2.tar.bz2 $2 ;;
+      tgz) tar czvf $2.tar.gz  $2 ;;
+      tar) tar cpvf $2.tar  $2 ;;
+      bz2) bzip $2 ;;
+      gz)  gzip -c -9 -n $2 > $2.gz ;;
+      zip) zip -r $2.zip $2 ;;
+      7z)  7z a $2.7z $2 ;;
+      *)   echo "'$1' cannot be packed via pk()" ;;
+    esac
+  else
+    echo "'$1' is not a valid file";
+  fi
 }
 
 digg() {
-    case $1 in
-        bind) dig +nocmd $2 any +multiline +noall +answer ;;
-        *) dig -t $1 $2 +noall +answer +nocmd ;;
-    esac
+  case $1 in
+    bind) dig +nocmd $2 any +multiline +noall +answer ;;
+    *) dig -t $1 $2 +noall +answer +nocmd ;;
+  esac
 }
 
 grab() {
-    sudo chown -R ${USER} ${1:-.};
+  sudo chown -R ${USER} ${1:-.};
 }
 
 calc() {
-    gawk -v CONVFMT="%12.2f" -v OFMT="%.9g"  "BEGIN { print $* ; }";
+  gawk -v CONVFMT="%12.2f" -v OFMT="%.9g"  "BEGIN { print $* ; }";
 }
 
 ssh-send-id() {
-    if [ -z "$1" -o -z "$2" ]
+  if [ -z "$1" -o -z "$2" ]
     then
-        echo "Usage: ssh-send-id pubkey_name machine"
-        return 1
-    fi
-
-    cat ~/.ssh/keys/id_${1}.pub | ssh $2 'mkdir -p ~/.ssh; cat >> .ssh/authorized_keys'
-    return $?
+      echo "Usage: ssh-send-id pubkey_name machine"
+    return 1
+  fi
+  cat ~/.ssh/keys/id_${1}.pub | ssh $2 'mkdir -p ~/.ssh; cat >> .ssh/authorized_keys'
+  return $?
 }
 
 nss-manage() {
@@ -92,23 +91,22 @@ ram() {
 #TODO: move all OS-specific functions to one block
 if [[ "$OSTYPE" =~ ^linux ]]; then
   swapusage() {
-    SUM=0
-    OVERALL=0
-    for DIR in `find /proc/ -maxdepth 1 -type d -regex "^/proc/[0-9]+"`
+    sum=0
+    overall=0
+    for dir in `find /proc/ -maxdepth 1 -type d -regex "^/proc/[0-9]+"`
     do
-      PID=`echo $DIR | cut -d / -f 3`
-      PROGNAME=`ps -p $PID -o comm --no-headers`
-      for SWAP in `grep VmSwap $DIR/status 2>/dev/null | awk '{ print $2 }'`
-        do
-          let SUM=$SUM+$SWAP
-        done
-      if (( $SUM > 0 )); then
-        echo "PID=$PID swapped $SUM KB ($PROGNAME)"
+      pid=`echo $dir | cut -d / -f 3`
+      progname=`ps -p $pid -o comm --no-headers`
+      for swap in `grep VmSwap $dir/status 2>/dev/null | awk '{ print $2 }'`; do
+        let sum=$sum+$swap
+      done
+      if (( $sum > 0 )); then
+        echo "PID=$pid swapped $sum KB ($progname)"
       fi
-      let OVERALL=$OVERALL+$SUM
-      SUM=0
+      let overall=$overall+$sum
+      sum=0
   done
-  echo "Overall swap used: $OVERALL KB"
+  echo "Overall swap used: $overall KB"
   }
 
   fdusage() {
@@ -145,7 +143,7 @@ sshk() {
 
 # Tmux
 tm() {
-    if which tmux 2>&1 >/dev/null; then
-      test -z "$TMUX" && (tmux attach || tmux new-session)
-    fi
+  if hash tmux 2>/dev/null >/dev/null; then
+    test -z "$TMUX" && (tmux attach || tmux new-session)
+  fi
 }
