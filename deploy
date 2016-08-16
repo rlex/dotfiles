@@ -7,20 +7,24 @@
 # Array of all dotfiles, for example .bashrc
 # Put them in array without leading dot. Directories is fine too
 # All those arrays are used only one time (at initial deploy)
-dotfiles=( screenrc vimrc zshrc bashrc bash_profile gemrc htoprc gitconfig biewrc dircolors ackrc
-           muttrc toprc Xdefaults gvimrc vim mutt config/awesome config/mc config/htop tmux.conf
-           mailcap gitignore_global )
+dotfiles=( screenrc vimrc zshrc bashrc bash_profile gemrc htoprc gitconfig
+           biewrc dircolors ackrc muttrc toprc Xdefaults gvimrc vim mutt
+           config/awesome config/mc config/htop tmux.conf mailcap
+           gitignore_global )
 # homebrew packages
-brewkegs=( ack android-platform-tools bash curl dhcpdump dos2unix ettercap foremost git
-            git-extras git-lfs gnupg2 grep hadoop hashpump htop-osx arping httping dhcpdump
-            dhcping dnstracer httpie iperf3 john-jumbo lzo mitmproxy mobile-shell moreutils
-            mutt nmap p7zip pigz pngcheck pwgen sqlite sqlmap tcpreplay tcptrace tig graphicsmagick
-            sysdig tmux unrar vim wget zsh zsh-completions coreutils moreutils findutils openssh
-            screen foremost nmap pngcheck socat sqlmap xz pigz tree mtr docker-machine docker )
+brewkegs=( ack android-platform-tools bash curl dhcpdump dos2unix ettercap
+           foremost git git-extras git-lfs gnupg2 grep hadoop hashpump htop-osx
+           arping httping dhcpdump dhcping dnstracer httpie iperf3 john-jumbo
+           lzo mitmproxy mobile-shell moreutils mutt nmap p7zip pigz pngcheck
+           pwgen sqlite sqlmap tcpreplay tcptrace tig graphicsmagick sysdig
+           tmux unrar vim wget zsh zsh-completions coreutils moreutils findutils
+           openssh screen foremost nmap pngcheck socat sqlmap xz pigz tree mtr
+           docker-machine docker git-secrets )
 # homebrew-cask packages
 # Make sure that same cask-less app is not installed in /Applications
-caskkegs=( alfred charles dropbox gns3 java netspot royal-tsx sequel-pro skype spectacle spotify
-            atom teamspeak-client transmission visualvm vlc vmware-fusion xca xquartz wireshark )
+caskkegs=( alfred charles dropbox gns3 java netspot royal-tsx sequel-pro skype
+           spectacle spotify atom teamspeak-client transmission visualvm vlc
+           vmware-fusion xca xquartz wireshark )
 
 # Not used ATM
 gems=( pry rubocop puppet-lint puppet )
@@ -36,7 +40,7 @@ symlink() {
   fi
 }
 
-#Another ugly function for installing/updating py/nod/rb-envs. Still counts!
+# Another ugly function for installing/updating py/nod/rb-envs. Still counts!
 langenv() {
   if [ -d ~/.$2 ]; then
     echo "Updating $2"
@@ -68,21 +72,29 @@ case "$1" in
     cd - >&/dev/null
   ;;
 
-  #Probably need re-sourcing of S01_env after install
-  #Also, how i can make this more ugly? Associated arrays, maybe?
+  # Install rb/py/node-env. Used just one time.
+  # I can do that manually in 5m, but i'm too lazy.
+  # And how i can make this more ugly? Associated arrays, maybe?
   devenv)
     langenv https://github.com/sstephenson/rbenv.git rbenv
     langenv https://github.com/sstephenson/ruby-build.git rbenv/plugins/ruby-build
     langenv https://github.com/yyuu/pyenv.git pyenv
     langenv https://github.com/OiNutter/nodenv nodenv
     langenv https://github.com/OiNutter/node-build nodenv/plugins/node-build
-  ;;
-
-  #Probably run it just after deploy devenv?
-  devenv-latest)
-    for devenv in pyenv nodenv rbenv; do
-      $devenv install $($devenv install --list | sed 's/^  //' | grep '^\d' | grep --invert-match 'dev\|a\|b' | grep -v preview | tail -1)
+    source ~/.rc/sh.d/S01_env
+    for devenv in nodenv rbenv; do
+      latest_version=$(${devenv} install --l | sed 's/^  //' | grep '^\d' | grep --invert-match 'dev\|a\|b' | grep -v preview | tail -1)
+      ${devenv} install ${latest_version}
+      ${devenv} global ${latest_version}
     done
+    #pyenv is a little bit more tricky, since some apps still works only on 2.x. Yeah, i'm looking at you, fabric.
+    python_versions=( $(pyenv install -l | grep -e '2.[0-9].[0-9]' | grep -v - | grep --invert-match 'dev\|a\|b' |tail -1)
+                      $(pyenv install -l | grep -e '3.[0-9].[0-9]' | grep -v - | grep --invert-match 'dev\|a\|b' |tail -1) )
+    for python in ${python_versions[@]}; do
+      pyenv install $python
+    done
+    #defaults to 3.x
+    pyenv global ${python_versions[1]}
   ;;
 
   homebrew)
@@ -144,30 +156,12 @@ case "$1" in
     brew cask cleanup
     echo "Done"
     fi
-
-    #Probably migrate that to langenv as well.
-    if [ -d ~/.rbenv ]; then
-      echo "Updating rbenv"
-      cd ~/.rbenv && git pull
-      if [ -d ~/.rbenv/plugins/ruby-build ]; then
-        echo "Updating ruby-build"
-        cd ~/.rbenv/plugins/ruby-build && git pull
-      fi
-    fi
-
-    if [ -d ~/.pyenv ]; then
-      echo "Updating pyenv"
-      cd ~/.pyenv && git pull
-    fi
-
-    if [ -d ~/.nodenv ]; then
-      echo "Updating nodenv"
-      cd ~/.nodenv && git pull
-      if [ -d ~/.nodenv/plugins/node-build ]; then
-        echo "Updating node-build"
-        cd ~/.nodenv/plugins/node-build && git pull
-      fi
-    fi
+    # Update all langenvs
+    langenv https://github.com/sstephenson/rbenv.git rbenv
+    langenv https://github.com/sstephenson/ruby-build.git rbenv/plugins/ruby-build
+    langenv https://github.com/yyuu/pyenv.git pyenv
+    langenv https://github.com/OiNutter/nodenv nodenv
+    langenv https://github.com/OiNutter/node-build nodenv/plugins/node-build
   ;;
 
   *)
