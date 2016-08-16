@@ -112,10 +112,10 @@ zstyle ':completion:*' group-name ''
 
 local _myhosts
 if [[ -f $HOME/.ssh/known_hosts ]]; then
-    _myhosts=( ${${${${(f)"$(<$HOME/.ssh/known_hosts)"}:#[0-9]*}%%\ *}%%,*} )
-    zstyle ':completion:*' hosts $_myhosts
+  _myhosts=( ${${${${(f)"$(<$HOME/.ssh/known_hosts)"}:#[0-9]*}%%\ *}%%,*} )
+  zstyle ':completion:*' hosts $_myhosts
 else
-    zstyle ':completion:*:hosts' hosts
+  zstyle ':completion:*:hosts' hosts
 fi
 
 zstyle ':completion:*:*:*:users' ignored-patterns \
@@ -134,7 +134,7 @@ zstyle '*' single-ignored show
 
 #Homebrew zsh-only completion
 if [ -f /usr/local/share/zsh/site-functions ]; then
-  . /usr/local/share/zsh/site-functions
+  source /usr/local/share/zsh/site-functions
 fi
 
 if [ -f /usr/local/share/zsh-completions ]; then
@@ -165,7 +165,7 @@ zle -N zle-line-finish
 # Z* files for ZSH only
 # S* files for generic sh-compatible shells
 for envfile in ~/.rc/sh.d/[SZ][0-9][0-9]*[^~] ; do
-    source $envfile
+  source $envfile
 done
 
 #use fancy fonts only on proper terminal
