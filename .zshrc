@@ -42,7 +42,7 @@ function title() {
       print -Pn "\e]2;$a @ $2\a" # plain xterm title
       print -Pn "\ek$a\e\\"      # screen title (in ^A")
       print -Pn "\e_$2   \e\\"   # screen location
-      ;;
+    ;;
     xterm*)
       print -Pn "\e]2;$a @ $2\a" # plain xterm title
     ;;
@@ -177,20 +177,22 @@ else
   ssh_symbol=" <=>"
 fi
 
-if [[ -z "$SSH_CLIENT" ]]; then
+#there should be a better way to handle that...
+if [[ ! -z "$SSH_CLIENT" ]]; then
   unset ssh_symbol
 fi
 
-# Prompt settings
+# Right prompt
+RPS1='$(git_prompt_string)'
+
+# Left prompt settings
 function precmd {
  # different colors for different return status
  # green - ok, red - non-zero exit
-  if  [[ $? -eq 0 ]]; then
+  if [[ $? -eq 0 ]]; then
     prompt_status="%{$fg[green]%}${prompt_symbol} %{$reset_color%}"
   else
     prompt_status="%{$fg[red]%}${prompt_symbol} %{$reset_color%}"
   fi
-  PROMPT="%{$fg[green]%}%n%{$fg[cyan]%}@%M%{$fg[blue]%}${ssh_symbol} ${prompt_status}"
+  PROMPT="%{$fg[green]%}%n%{$fg[cyan]%}@%M%{$fg_bold[blue]%}${ssh_symbol} ${prompt_status}"
 }
-
-RPS1='$(git_prompt_string)'
