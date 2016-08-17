@@ -13,11 +13,11 @@ dotfiles=( ackrc bash_profile bashrc biewrc config/awesome config/htop config/mc
 # homebrew packages
 brewkegs=( ack android-platform-tools arping bash coreutils curl dhcpdump
            dhcping dnstracer docker docker-machine dos2unix ettercap findutils
-           foremost git git-extras git-lfs git-secrets gnupg2 graphicsmagick
-           grep hadoop hashpump htop-osx httpie httping iperf3 john-jumbo lzo
-           mitmproxy mobile-shell moreutils mtr mutt nmap openssh p7zip pigz
-           pngcheck pwgen screen socat sqlite sqlmap sysdig tcpreplay tcptrace
-           tig tmux tree unrar vim wget xz zsh zsh-completions )
+           foremost git git-extras git-lfs git-secrets gnu-sed gnupg2
+           graphicsmagick grep hadoop hashpump htop-osx httpie httping iperf3
+           john-jumbo lzo mitmproxy mobile-shell moreutils mtr mutt nmap openssh
+           p7zip pigz pngcheck pwgen screen socat sqlite sqlmap sysdig tcpreplay
+           tcptrace tig tmux tree unrar vim wget xz zsh zsh-completions )
 # homebrew-cask packages
 # Make sure that same cask-less app is not installed in /Applications
 caskkegs=( alfred atom charles dropbox gns3 java netspot royal-tsx sequel-pro
