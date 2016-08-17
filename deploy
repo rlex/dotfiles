@@ -88,7 +88,7 @@ case "$1" in
     done
     source ~/.rc/sh.d/S01_env
     for devenv in nodenv rbenv; do
-      latest_version=$(${devenv} install -l | sed 's/^  //' | grep '^\d' | grep --invert-match 'dev\|a\|b' | grep -v preview | tail -1)
+      latest_version=$(${devenv} install -l | sed 's/^  //' | grep -e '[0-9].[0-9].[0-9]' | grep -v - | tail -1)
       ${devenv} install ${latest_version}
       ${devenv} global ${latest_version}
     done
