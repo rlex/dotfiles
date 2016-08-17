@@ -26,11 +26,11 @@ caskkegs=( alfred atom charles dropbox gns3 java netspot royal-tsx sequel-pro
 
 # pyenv, rbenv, nodenv. Can also install plugins.
 declare -A langenvs
-langenvs=( [rbenv]=https://github.com/sstephenson/rbenv.git
-           [rbenv/plugins/ruby-build]=https://github.com/sstephenson/ruby-build.git
-           [pyenv]=https://github.com/yyuu/pyenv.git
-           [nodenv]=https://github.com/OiNutter/nodenv.git
-           [nodenv/plugins/node-build]=https://github.com/OiNutter/node-build.git )
+langenvs=( [rbenv]=https://github.com/sstephenson/rbenv
+           [rbenv/plugins/ruby-build]=https://github.com/sstephenson/ruby-build
+           [pyenv]=https://github.com/yyuu/pyenv
+           [nodenv]=https://github.com/OiNutter/nodenv
+           [nodenv/plugins/node-build]=https://github.com/OiNutter/node-build )
 
 # Not used ATM
 gems=( pry rubocop puppet-lint puppet )
