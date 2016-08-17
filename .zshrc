@@ -133,11 +133,11 @@ zstyle ':completion:*:functions' ignored-patterns '_*'
 zstyle '*' single-ignored show
 
 #Homebrew zsh-only completion
-if [ -f /usr/local/share/zsh/site-functions ]; then
+if [ -d /usr/local/share/zsh/site-functions ]; then
   source /usr/local/share/zsh/site-functions
 fi
 
-if [ -f /usr/local/share/zsh-completions ]; then
+if [ -d /usr/local/share/zsh-completions ]; then
   fpath=(/usr/local/share/zsh-completions $fpath)
 fi
 
@@ -170,28 +170,27 @@ done
 
 #use fancy fonts only on proper terminal
 if [[ $TERM =~ "(256color)" ]]; then
-  PROMPT_SYMBOL="❯"
-  SSH_SYMBOL="⇣⇡"
+  prompt_symbol="❯"
+  ssh_symbol=" ⇣⇡"
 else
-  PROMPT_SYMBOL=">"
-  SSH_SYMBOL="<==>"
+  prompt_symbol=">"
+  ssh_symbol=" <=>"
+fi
+
+if [[ -z "$SSH_CLIENT" ]]; then
+  unset ssh_symbol
 fi
 
 # Prompt settings
 function precmd {
  # different colors for different return status
  # green - ok, red - non-zero exit
- if  [[ $? -eq 0 ]]; then
-   PROMPT="%{$fg[green]%}%n%{$fg[cyan]%}@%M%{$fg[green]%}%{$fg[green]%} $PROMPT_SYMBOL %{$reset_color%}"
- else
-   PROMPT="%{$fg[green]%}%n%{$fg[cyan]%}@%M%{$fg[green]%}%{$fg[red]%} $PROMPT_SYMBOL %{$reset_color%}"
- fi
+  if  [[ $? -eq 0 ]]; then
+    prompt_status="%{$fg[green]%}${prompt_symbol} %{$reset_color%}"
+  else
+    prompt_status="%{$fg[red]%}${prompt_symbol} %{$reset_color%}"
+  fi
+  PROMPT="%{$fg[green]%}%n%{$fg[cyan]%}@%M%{$fg[blue]%}${ssh_symbol} ${prompt_status}"
 }
 
-# Indicate remote SSH session in right prompt
-# Use git status in right prompt when local
-if [[ ! -z "$SSH_CLIENT" ]]; then
-  RPS1="%{$fg[green]%}$SSH_SYMBOL%{$reset_color%}"
-else
-  RPS1='$(git_prompt_string)'
-fi
+RPS1='$(git_prompt_string)'
