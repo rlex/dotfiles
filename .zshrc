@@ -178,7 +178,7 @@ else
 fi
 
 #there should be a better way to handle that...
-if [[ ! -z "$SSH_CLIENT" ]]; then
+if [[ -z "$SSH_CLIENT" ]]; then
   unset ssh_symbol
 fi
 
