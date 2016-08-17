@@ -7,24 +7,22 @@
 # Array of all dotfiles, for example .bashrc
 # Put them in array without leading dot. Directories is fine too
 # All those arrays are used only one time (at initial deploy)
-dotfiles=( screenrc vimrc zshrc bashrc bash_profile gemrc htoprc gitconfig
-           biewrc dircolors ackrc muttrc toprc Xdefaults gvimrc vim mutt
-           config/awesome config/mc config/htop tmux.conf mailcap
-           gitignore_global )
+dotfiles=( ackrc bash_profile bashrc biewrc config/awesome config/htop config/mc
+           dircolors gemrc gitconfig gitignore_global gvimrc htoprc mailcap mutt
+           muttrc screenrc tmux conf toprc vim vimrc Xdefaults zshrc )
 # homebrew packages
-brewkegs=( ack android-platform-tools bash curl dhcpdump dos2unix ettercap
-           foremost git git-extras git-lfs gnupg2 grep hadoop hashpump htop-osx
-           arping httping dhcpdump dhcping dnstracer httpie iperf3 john-jumbo
-           lzo mitmproxy mobile-shell moreutils mutt nmap p7zip pigz pngcheck
-           pwgen sqlite sqlmap tcpreplay tcptrace tig graphicsmagick sysdig
-           tmux unrar vim wget zsh zsh-completions coreutils moreutils findutils
-           openssh screen foremost nmap pngcheck socat sqlmap xz pigz tree mtr
-           docker-machine docker git-secrets )
+brewkegs=( ack android-platform-tools arping bash coreutils curl dhcpdump
+           dhcping dnstracer docker docker-machine dos2unix ettercap findutils
+           foremost git git-extras git-lfs git-secrets gnupg2 graphicsmagick grep
+           hadoop hashpump htop-osx httpie httping iperf3 john-jumbo lzo
+           mitmproxy mobile-shell moreutils mtr mutt nmap openssh p7zip pigz
+           pngcheck pwgen screen socat sqlite sqlmap sysdig tcpreplay tcptrace
+           tig tmux tree unrar vim wget xz zsh zsh-completions )
 # homebrew-cask packages
 # Make sure that same cask-less app is not installed in /Applications
-caskkegs=( alfred charles dropbox gns3 java netspot royal-tsx sequel-pro skype
-           spectacle spotify atom teamspeak-client transmission visualvm vlc
-           vmware-fusion xca xquartz wireshark )
+caskkegs=( alfred atom charles dropbox gns3 java netspot royal-tsx sequel-pro
+           skype spectacle spotify teamspeak-client transmission visualvm vlc
+           vmware-fusion wireshark xca xquartz )
 
 # pyenv, rbenv, nodenv. Can also install plugins.
 declare -A langenvs
