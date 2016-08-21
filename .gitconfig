@@ -62,8 +62,8 @@
   s = status -sb
   wipe = reset --hard
   unstage = reset HEAD --
+  amend = commit --amend -C HEAD
   today = !git log --since=midnight --author=\"$(git config user.name)\" --oneline
-  amend = !git log -n 1 --pretty=tformat:%s%n%n%b | git commit -F - --amend
   aliases = !git config --list | grep 'alias\\.' | sed 's/alias\\.\\([^=]*\\)=\\(.*\\)/\\1\\ \t => \\2/' | sort
 [user]
   name = Lex Rivera
@@ -73,3 +73,7 @@
   default = matching
 [help]
   autocorrect = 1
+[filter "lfs"]
+  clean = git-lfs clean -- %f
+  smudge = git-lfs smudge -- %f
+  required = true
