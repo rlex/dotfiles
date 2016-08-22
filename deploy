@@ -25,7 +25,8 @@ caskkegs=( alfred atom charles dropbox gns3 java netspot royal-tsx sequel-pro
            skype spectacle spotify teamspeak-client transmission visualvm vlc
            vmware-fusion wireshark xca xquartz )
 
-# pyenv, rbenv, nodenv. Can also install plugins.
+# pyenv, rbenv, nodenv. Can also install their plugins.
+# In fact, it can clone anything to anywhere
 declare -A langenvs
 langenvs=( [rbenv]=https://github.com/sstephenson/rbenv
            [rbenv/plugins/ruby-build]=https://github.com/sstephenson/ruby-build
@@ -33,7 +34,7 @@ langenvs=( [rbenv]=https://github.com/sstephenson/rbenv
            [nodenv]=https://github.com/OiNutter/nodenv
            [nodenv/plugins/node-build]=https://github.com/OiNutter/node-build )
 
-# Not used ATM
+# TBD: install this stuff somewhere in devenv
 gems=( pry rubocop puppet-lint puppet )
 pypi=( ptpython yapf jsbeautifier )
 
@@ -50,10 +51,10 @@ symlink() {
 # Another ugly function for installing/updating py/nod/rb-envs. Still counts!
 langenv() {
   if [ -d ~/.$2 ]; then
-    echo "Updating $2"
+    echo "Updating ~/.$2"
     cd ~/.$2 && git pull
   else
-    echo "Installing $2"
+    echo "Installing ~/.$2"
     git clone $1 ~/.$2
   fi
 }
