@@ -194,5 +194,9 @@ function precmd {
   else
     prompt_status="%{$fg[red]%}${prompt_symbol} %{$reset_color%}"
   fi
-  PROMPT="%{$fg[green]%}%n%{$fg[cyan]%}@%M%{$fg_bold[blue]%}${ssh_symbol} ${prompt_status}"
+  if [[ -z "$SSH_CLIENT" ]]; then
+    PROMPT="${prompt_status}"
+  else
+    PROMPT="%{$fg[green]%}%n%{$fg[cyan]%}@%M%{$fg_bold[blue]%}${ssh_symbol} ${prompt_status}"
+  fi
 }
