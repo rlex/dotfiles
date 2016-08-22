@@ -60,7 +60,16 @@ function preexec() {
 }
 
 ## Zsh completion ##
-# New style completion system
+# Load external files
+#Homebrew zsh-only functions
+if [ -d /usr/local/share/zsh/site-functions ]; then
+  source /usr/local/share/zsh/site-functions
+fi
+
+#Homebrew zsh-only completions
+if [ -d /usr/local/share/zsh-completions ]; then
+  fpath=(/usr/local/share/zsh-completions $fpath)
+fi
 
 # add custom completion scripts
 autoload -U compinit && compinit
@@ -131,15 +140,6 @@ zstyle ':completion:*:*:*:users' ignored-patterns \
 # ignore completion functions (until the _ignored completer)
 zstyle ':completion:*:functions' ignored-patterns '_*'
 zstyle '*' single-ignored show
-
-#Homebrew zsh-only completion
-if [ -d /usr/local/share/zsh/site-functions ]; then
-  source /usr/local/share/zsh/site-functions
-fi
-
-if [ -d /usr/local/share/zsh-completions ]; then
-  fpath=(/usr/local/share/zsh-completions $fpath)
-fi
 
 ## Keybindings ##
 #Create zkbd compatible hash
