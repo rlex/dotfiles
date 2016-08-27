@@ -65,11 +65,11 @@ JSX, LESS, Lex, Limbo, LISP, LLVM intermediate language, Lua, Markdown,
 MATLAB, Mercury, NASM, Nix, Objective-C, Objective-C++, OCaml, Perl, Perl
 POD, PHP, gettext Portable Object, OS X and iOS property lists, Pug (formerly
 Jade), Puppet, Python, QML, R, Racket, RDF TriG, RDF Turtle, Relax NG,
-reStructuredText, RPM spec, Ruby, SASS/SCSS, Scala, Slim, SML, Sphinx, SQL,
-Stylus, Tcl, TeX, Texinfo, Twig, TypeScript, Vala, Verilog, VHDL, VimL, xHtml,
-XML, XSLT, XQuery, YACC, YAML, YANG data models, z80, Zope page templates, and
-Zsh. See the [manual][checkers] for details about the corresponding supported
-checkers (`:help syntastic-checkers` in Vim).
+reStructuredText, RPM spec, Ruby, SASS/SCSS, Scala, Slim, SML, Solidity,
+Sphinx, SQL, Stylus, Tcl, TeX, Texinfo, Twig, TypeScript, Vala, Verilog,
+VHDL, VimL, xHtml, XML, XSLT, XQuery, YACC, YAML, YANG data models, z80, Zope
+page templates, and Zsh. See the [manual][checkers] for details about the
+corresponding supported checkers (`:help syntastic-checkers` in Vim).
 
 A number of third-party Vim plugins also provide checkers for syntastic, for
 example: [merlin][merlin], [omnisharp-vim][omnisharp], [rust.vim][rust],
@@ -308,8 +308,8 @@ checker should be picked up automatically by syntastic.
 
 __4.7. Q. What happened to the `tsc` checker?__
 
-A. It didn't meet people's expectations and it has been removed. Please
-consider using the external checker [tsuquyomi][tsuquyomi] instead. If you
+A. It didn't meet people's expectations and it has been removed. A better
+checker for TypeScript comes with the plugin [tsuquyomi][tsuquyomi]. If you
 install this plugin the checker should be picked up automatically by syntastic.
 
 <a name="faqxcrun"></a>
