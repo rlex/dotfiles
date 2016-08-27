@@ -4,8 +4,8 @@ Xcursor.theme: Neutral_Plus
 
 !{{{ Urxvt
 URxvt.buffered: true
-URxvt.font: xft:Terminus:pixelsize=11:antialias=false
-URxvt.boldFont: xft:Terminus:bold:pixelsize=11:antialias=false
+URxvt.font: xft:PragmataPro:pixelsize=11:antialias=true
+URxvt.boldFont: xft:PragmataPro:bold:pixelsize=11:antialias=true
 URxvt.perl-ext-common: default,tabbed,searchable-scrollback
 URxvt.title: urxvt
 URxvt.scrollBar: false
@@ -13,7 +13,7 @@ URxvt.loginShell: true
 URxvt.saveLines: 10000
 URxvt.geometry: 75x25
 URxvt.boldMode: false
-URxvt.transparent:false
+URxvt.transparent: false
 URxvt.shading: 40
 URxvt.xftAntialias: false
 URxvt.jumpScroll: true
@@ -28,18 +28,18 @@ URxvt.borderless: true
 !}}}
 
 !{{{ Xterm rules
-XTerm*FaceName: PragmataPro Mono
+XTerm*FaceName: PragmataPro
 XTerm*FaceSize: 12
 !}}}
 
 !{{{ Yeahconsole rules
-yeahconsole*term:urxvt
-yeahconsole*consoleHeight:25
-yeahconsole*toggleKey:None+F12
-yeahconsole*restart:1
-yeahconsole*keyFull:Control+F11
-yeahconsole*keySmaller:Control+KP_Subtract
-yeahconsole*keyBigger:Control+KP_Add
+yeahconsole*term: urxvt
+yeahconsole*consoleHeight: 25
+yeahconsole*toggleKey: None+F12
+yeahconsole*restart: 1
+yeahconsole*keyFull: Control+F11
+yeahconsole*keySmaller: Control+KP_Subtract
+yeahconsole*keyBigger: Control+KP_Add
 yeahconsole*metaSendsEscape: true
 !}}}
 
