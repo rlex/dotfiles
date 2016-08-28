@@ -86,6 +86,10 @@ case "$1" in
   # Install rb/py/node-env. Used just one time.
   # I can do that manually in 5m, but i'm too lazy.
   devenv)
+    if [[ "$OSTYPE" =~ ^linux ]]; then
+      echo "Make sure that following packages are installed:"
+      echo "libssl-dev libreadline-dev zlib1g-dev libsqlite3-dev libbz2-dev"
+    fi
     for target in "${!langenvs[@]}"; do
       langenv ${langenvs[$target]} $target
     done
