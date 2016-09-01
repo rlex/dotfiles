@@ -8,7 +8,7 @@
 # Put them in array without leading dot. Directories is fine too
 # All those arrays are used only one time (at initial deploy)
 dotfiles=( ackrc bash_profile bashrc config/htop config/mc gemrc gitconfig
-           gitignore_global gvimrc htoprc mailcap mutt muttrc screenrc tmux.conf
+           gitignore_global htoprc mailcap mutt muttrc screenrc tmux.conf vim
            vim vimrc zshrc )
 
 # linux-only dotfiles
