@@ -1,5 +1,5 @@
 #source system files
-if [ -x /etc/profile ]; then
+if [[ -x /etc/profile ]]; then
     source "/etc/profile"
 fi
 
@@ -8,22 +8,22 @@ export PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:$HOME/
 
 #init rbenv & pyenv
 for langenv in pyenv rbenv nodenv; do
-  if [ -d "$HOME/.${langenv}" ]; then
+  if [[ -d "$HOME/.${langenv}" ]]; then
     export PATH="$HOME/.$langenv/bin:$PATH"
     if hash ${langenv} 2>/dev/null; then eval "$(${langenv} init -)"; fi
   fi
 done
 
-if [ $enable_gpg_agent == 1 ]; then
+if [[ $enable_gpg_agent == 1 ]]; then
   # gpg-agent setup
   if hash gpg-agent 2>/dev/null; then
     function _start_gpg_agent {
       gpg-agent --daemon --enable-ssh-support \
       --write-env-file "${HOME}/.gpg-agent-info" > /dev/null 2>&1
-      . "${HOME}/.gpg-agent-info"
+      source "${HOME}/.gpg-agent-info"
     }
-    if [ -f "${HOME}/.gpg-agent-info" ]; then
-      . "${HOME}/.gpg-agent-info"
+    if [[ -f "${HOME}/.gpg-agent-info" ]]; then
+      source "${HOME}/.gpg-agent-info"
       if $(! kill -0 ${SSH_AGENT_PID} > /dev/null 2>&1); then
         # gpg-agent not running, restarting
         _start_gpg_agent;

@@ -5,12 +5,12 @@ tag() {
 
 bu() {
   for f in "$@"; do
-    cp -a $f ~/.backup/${f}-`date +%Y%m%d%H%M`.backup ;
+    cp -a $f ~/.backup/${f}-$(date +%Y%m%d%H%M).backup ;
   done
 }
 
 pk() {
-  if [ $1 ] ; then
+  if [[ $1 ]]; then
     case $1 in
       tbz) tar cjvf $2.tar.bz2 $2 ;;
       tgz) tar czvf $2.tar.gz  $2 ;;
@@ -42,9 +42,8 @@ calc() {
 }
 
 ssh-send-id() {
-  if [ -z "$1" -o -z "$2" ]
-    then
-      echo "Usage: ssh-send-id pubkey_name machine"
+  if [[ -z "$1" -o -z "$2" ]]; then
+    echo "Usage: ssh-send-id pubkey_name machine"
     return 1
   fi
   cat ~/.ssh/keys/id_${1}.pub | ssh $2 'mkdir -p ~/.ssh; cat >> .ssh/authorized_keys'
@@ -52,31 +51,31 @@ ssh-send-id() {
 }
 
 nss-manage() {
-    case "$1" in
-        list)    certutil -d sql:$HOME/.pki/nssdb -L ;;
-        details) certutil -d sql:$HOME/.pki/nssdb -L -n "$2" ;;
-        add-ca)  certutil -d sql:$HOME/.pki/nssdb -A -t "$2" -n "$3" -i "$4" ;;
-        add)     pk12util -d sql:$HOME/.pki/nssdb -i "$2" ;;
-        del)     certutil -d sql:$HOME/.pki/nssdb -D -n "$2" ;;
-        *)
-        echo "Usage list|details|add-ca|add|del"
-        echo " \"details\" requires <nickname>"
-        echo " \"add-ca\" requires <trustargs> <nickname> <certificate filename>"
-        echo " \"add\" requires <filename>"
-        echo " \"del\" requires <nickname>"
-        ;;
-    esac
+  case "$1" in
+    list)    certutil -d sql:$HOME/.pki/nssdb -L ;;
+    details) certutil -d sql:$HOME/.pki/nssdb -L -n "$2" ;;
+    add-ca)  certutil -d sql:$HOME/.pki/nssdb -A -t "$2" -n "$3" -i "$4" ;;
+    add)     pk12util -d sql:$HOME/.pki/nssdb -i "$2" ;;
+    del)     certutil -d sql:$HOME/.pki/nssdb -D -n "$2" ;;
+    *)
+      echo "Usage list|details|add-ca|add|del"
+      echo " \"details\" requires <nickname>"
+      echo " \"add-ca\" requires <trustargs> <nickname> <certificate filename>"
+      echo " \"add\" requires <filename>"
+      echo " \"del\" requires <nickname>"
+    ;;
+  esac
 }
 
 ram() {
   local sum
   local items
   local app="$1"
-  if [ -z "$app" ]; then
+  if [[ -z "$app" ]]; then
     echo "First argument - pattern to grep from processes"
   else
     sum=0
-    for i in `ps aux | grep -i "$app" | grep -v "grep" | awk '{print $6}'`; do
+    for i in $(ps aux | grep -i "$app" | grep -v "grep" | awk '{print $6}'); do
       sum=$(($i + $sum))
     done
     sum=$(echo "scale=2; $sum / 1024.0" | bc)
@@ -93,11 +92,11 @@ if [[ "$OSTYPE" =~ ^linux ]]; then
   swapusage() {
     sum=0
     overall=0
-    for dir in `find /proc/ -maxdepth 1 -type d -regex "^/proc/[0-9]+"`
+    for dir in $(find /proc/ -maxdepth 1 -type d -regex "^/proc/[0-9]+")
     do
-      pid=`echo $dir | cut -d / -f 3`
-      progname=`ps -p $pid -o comm --no-headers`
-      for swap in `grep VmSwap $dir/status 2>/dev/null | awk '{ print $2 }'`; do
+      pid=$(echo $dir | cut -d / -f 3)
+      progname=$(ps -p $pid -o comm --no-headers)
+      for swap in $(grep VmSwap $dir/status 2>/dev/null | awk '{ print $2 }'); do
         let sum=$sum+$swap
       done
       if (( $sum > 0 )); then
@@ -110,14 +109,15 @@ if [[ "$OSTYPE" =~ ^linux ]]; then
   }
 
   fdusage() {
-    for x in `ps -eF | awk '{ print $2 }'`;
-    do echo `sudo ls /proc/$x/fd 2> /dev/null | wc -l` $x `sudo cat /proc/$x/cmdline 2> /dev/null`;
+    for x in $(ps -eF | awk '{ print $2 }');
+    do echo $(sudo ls /proc/$x/fd 2> /dev/null | wc -l) $x $(sudo cat /proc/$x/cmdline 2> /dev/null);
     done | sort -n -r | head -n 20
   }
 
   straceall() {
     sudo strace $(pidof "${1}" | sed 's/\([0-9]*\)/-p \1/g')
   }
+
 fi
 
 retry() {
@@ -128,14 +128,14 @@ retry() {
 }
 
 sshk() {
-  if [ "$1" = "load" ]; then
+  if [[ "$1" = "load" ]]; then
     ssh_keys=($(find ~/.ssh/keys -type f -depth 1 \( -iname "id_*" ! -iname "*.pub" \)))
     for ssh_key in ${ssh_keys[@]}; do
       ssh-add $ssh_key
     done
-  elif [ "$1" = "unload" ]; then
+  elif [[ "$1" = "unload" ]]; then
     ssh-add -D
-  elif [ -z $1 ]; then
+  elif [[ -z $1 ]]; then
     echo "Loaded keys:"
     ssh-add -l | awk {'print $3'}
   fi
