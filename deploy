@@ -55,7 +55,7 @@ symlink() {
 
 # Another ugly function for installing/updating py/nod/rb-envs. Still counts!
 langenv() {
-  if [ -d ~/.$2 ]; then
+  if [[ -d ~/.$2 ]]; then
     echo "Updating ~/.$2"
     cd ~/.$2 && git pull
   else
@@ -71,7 +71,7 @@ case "$1" in
     cd ~/.rc
     echo "Deploying dotfiles from `pwd` to ${HOME}"
     if [[ "$OSTYPE" =~ ^linux ]]; then
-      if [ ! -d ~/.config ]; then
+      if [[ ! -d ~/.config ]]; then
         mkdir ~/.config
       fi
       dotfiles=("${dotfiles[@]}" "${linuxenv[@]}")
@@ -113,7 +113,7 @@ case "$1" in
     echo "Installing homebrew and favourite packages"
     #probably i should migrate to manual install.
     #Running (even respected) scripts from interwebs is stupid.
-    if [ ! -f /usr/local/bin/brew ]; then
+    if hash brew 2>/dev/null; then
       ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
     fi
     for keg in ${brewkegs[@]}; do
@@ -146,7 +146,7 @@ case "$1" in
     git -C ~/.rc pull
     echo "Cleaning up outdated symlinks"
     find -L $HOME -maxdepth 1 -type l -exec rm -i {} +
-    if [ -f /usr/local/bin/brew ]; then
+    if hash brew 2>/dev/null; then
       echo "Updating & cleaning up homebrew"
       brew update
       brew upgrade
@@ -170,10 +170,14 @@ case "$1" in
     fi
     # Update all langenvs
     for target in "${!langenvs[@]}"; do
-      if [ -d ~/.${target} ]; then
+      if [[ -d ~/.${target} ]]; then
         langenv ${langenvs[$target]} ${target}
       fi
     done
+    echo "Updating atom packages"
+    if hash atom 2>/dev/null; then
+      apm upgrade -c false
+    fi
   ;;
 
   *)
