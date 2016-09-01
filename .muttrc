@@ -42,7 +42,7 @@ unset collapse_unread
 macro index C "<copy-message>" "copy a message to a mailbox"
 macro index M "<save-message>" "move a message to a mailbox"
 macro index M "<tag-pattern>.*\r<tag-prefix><clear-flag>N<untag-pattern>.*\r" "Mark all messages in this mailbox as read"
-macro index,pager   \Cb "|urlview\n"
+macro index,pager \Cb "|urlview\n"
 
 folder-hook . exec collapse-all
 bind pager s copy-message
@@ -59,8 +59,8 @@ alternative_order text/plain text/html text/enriched
 auto_view text/html text/enriched application/x-gunzip application/postscript image/gif application/x-tar-gz application/pdf image/jpeg image/jpg
 
 source `case $TERM in\
-        (xterm-256color|xterm|rxvt|rxvt-unicode)    echo '~/.mutt/.mutt_color_256'; break;;\
-        *)                      echo '~/.mutt/.mutt_color'; break;;\
-    esac`
+          (xterm-256color|xterm|rxvt|rxvt-unicode) echo '~/.mutt/.mutt_color_256'; break;;\
+          *) echo '~/.mutt/.mutt_color'; break;;\
+        esac`
 source ~/.mutt/.gpgrc
-source ~/.mutt/.localprofile
+source "gpg -d ~/.mutt/.localprofile |"

@@ -1,5 +1,15 @@
 ## Save this as ~/.mutt/.localprofile - this file will be sourced upon load
 ## It must contain machine-specific and private data, see below for example
+## Can (and should!) be encrypted with GPG:
+# gpg -r your_gpg_id -e ~/.mutt/.localprofile
+# mv ~/.mutt/.localprofile.gpg ~/.mutt/.localprofile
+
+# If you don't like full profile encrypton, at least encrypt your passwords:
+# create ~/.mutt/pwd file with set imap_pass = "pass" and set smtp_pass = "pass"
+# gpg -r id -e ~/.mutt/pwd
+# mv ~/.mutt/pwd.gpg ~/.mutt/pwd
+# add that line to .localprofile - source "gpg -d ~/.mutt/pwd |"
+# replace "source "gpg -d ~/.mutt/.localprofile |"" with "source ~/.mutt/.localprofile"
 
 ## Main settings - mailboxes
 
@@ -16,15 +26,9 @@
 #set smtp_pass = "password"
 ## end IMAP example
 
-#by default, mutt saves all sent messages to ~/sent, which is not really good. You can disable it with something like that...
+#by default, mutt saves all sent messages to ~/sent, which is not good
+#You can disable it with something like that:
 #set record = "/dev/null"
-
-## Encrypted passwords example:
-#create ~/.mutt/pwd file with set imap_pass and set smtp_pass
-#encrypt it with GPG: gpg -r id -e ~/.mutt/pwd
-#rm source file (~/.mutt/pwd)
-#move pwd.gpg to pwd
-#add that line to your localprofile - source "gpg -d ~/.mutt/pwd |"
 
 #caching settings, here we can cache headers:
 #set header_cache = "~/.mutt/.cache"
@@ -48,7 +52,7 @@
 
 
 ## Various settings
-#set pgp_sign_as=0x00000000
+#set pgp_sign_as=0x0000000000000000
 #set delete = yes
 
 ## Custom headers example
