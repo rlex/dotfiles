@@ -209,6 +209,7 @@ syntastic-about	syntastic.txt	/*syntastic-about*
 syntastic-actionscript-mxmlc	syntastic-checkers.txt	/*syntastic-actionscript-mxmlc*
 syntastic-ada-gcc	syntastic-checkers.txt	/*syntastic-ada-gcc*
 syntastic-aggregating-errors	syntastic.txt	/*syntastic-aggregating-errors*
+syntastic-airline	syntastic.txt	/*syntastic-airline*
 syntastic-ansible-ansible_lint	syntastic-checkers.txt	/*syntastic-ansible-ansible_lint*
 syntastic-apiblueprint-drafter	syntastic-checkers.txt	/*syntastic-apiblueprint-drafter*
 syntastic-applescript-osacompile	syntastic-checkers.txt	/*syntastic-applescript-osacompile*
@@ -310,6 +311,7 @@ syntastic-checkers-scss	syntastic-checkers.txt	/*syntastic-checkers-scss*
 syntastic-checkers-sh	syntastic-checkers.txt	/*syntastic-checkers-sh*
 syntastic-checkers-slim	syntastic-checkers.txt	/*syntastic-checkers-slim*
 syntastic-checkers-sml	syntastic-checkers.txt	/*syntastic-checkers-sml*
+syntastic-checkers-solidity	syntastic-checkers.txt	/*syntastic-checkers-solidity*
 syntastic-checkers-spec	syntastic-checkers.txt	/*syntastic-checkers-spec*
 syntastic-checkers-sql	syntastic-checkers.txt	/*syntastic-checkers-sql*
 syntastic-checkers-stylus	syntastic-checkers.txt	/*syntastic-checkers-stylus*
@@ -391,6 +393,7 @@ syntastic-erlang-syntaxerl	syntastic-checkers.txt	/*syntastic-erlang-syntaxerl*
 syntastic-error-signs	syntastic.txt	/*syntastic-error-signs*
 syntastic-error-window	syntastic.txt	/*syntastic-error-window*
 syntastic-eruby-ruby	syntastic-checkers.txt	/*syntastic-eruby-ruby*
+syntastic-ferret	syntastic.txt	/*syntastic-ferret*
 syntastic-filetype-checkers	syntastic.txt	/*syntastic-filetype-checkers*
 syntastic-filtering-errors	syntastic.txt	/*syntastic-filtering-errors*
 syntastic-fish	syntastic.txt	/*syntastic-fish*
@@ -533,6 +536,7 @@ syntastic-shellslash	syntastic.txt	/*syntastic-shellslash*
 syntastic-slim-slim_lint	syntastic-checkers.txt	/*syntastic-slim-slim_lint*
 syntastic-slim-slimrb	syntastic-checkers.txt	/*syntastic-slim-slimrb*
 syntastic-sml-smlnj	syntastic-checkers.txt	/*syntastic-sml-smlnj*
+syntastic-solidity-solc	syntastic-checkers.txt	/*syntastic-solidity-solc*
 syntastic-spec-rpmlint	syntastic-checkers.txt	/*syntastic-spec-rpmlint*
 syntastic-sql-sqlint	syntastic-checkers.txt	/*syntastic-sql-sqlint*
 syntastic-statusline-flag	syntastic.txt	/*syntastic-statusline-flag*
