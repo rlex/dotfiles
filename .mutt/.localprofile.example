@@ -17,11 +17,9 @@
 #if your mutt supports gpgme (you can check with "mutt -v | grep gpgme")
 #source ~/.mutt/.gpgme
 
-## Main settings - mailboxes
-
 ## IMAP example (gmail)
 #set from = "user@example.org"
-#set realname = "IMAP USER"
+#set realname = "John Doe"
 #set imap_user = "user@example.org"
 #set imap_pass = "password"
 #set folder = "imaps://imap.gmail.com:993"
@@ -30,16 +28,21 @@
 #set trash = "imaps://imap.gmail.com/[Gmail]/Trash"
 #set smtp_url = "smtp://user@example.org@smtp.gmail.com:587/"
 #set smtp_pass = "password"
-## end IMAP example
+## end 
 
-#by default, mutt saves all sent messages to ~/sent, which is not good
-#You can disable it with something like that:
-#set record = "/dev/null"
-
-#caching settings, here we can cache headers:
-#set header_cache = "~/.mutt/.cache"
-#and messages body:
-#set message_cachedir = "~/.mutt/.cache"
+## IMAP example (fastmail)
+#set from = "user@example.com"
+#set realname = "John Doe"
+#set imap_user = "johndoe@fastmail.com"
+#set folder = "imaps://imap.fastmail.com:993/"
+#set smtp_url = "smtps://johndoe@fastmail.com@smtp.fastmail.com:465/"
+#set ssl_starttls = yes
+#set delete = yes
+#set spoolfile = "=Inbox"
+#set postponed = "=Drafts"
+#set trash = "=Trash
+#set record = "=Sent"
+## end
 
 ## Local mailbox example (in maildir format)
 #set mbox_type=Maildir
@@ -48,17 +51,17 @@
 #set mask="!^\\.[^.]"
 #set record="+.Sent"
 #set postponed="+.Drafts"
-
 #mailboxes `echo -n "+ "; find ~/Maildir -maxdepth 1 -type d -name ".*" -printf "+'%f' "`
-
 #macro index c "<change-folder>?<toggle-mailboxes>" "open a different folder"
 #macro pager c "<change-folder>?<toggle-mailboxes>" "open a different folder"
+## end
 
-## end local mailbox example
+##caching settings, you can redirect it to /dev/null for example
+#set header_cache = "~/.mutt/.cache"
+#set message_cachedir = "~/.mutt/.cache"
 
-## Various settings
+##GPG default key
 #set pgp_sign_as=0x0000000000000000
-#set delete = yes
 
 ## Custom headers example
 #my_hdr X-Homepage: http://example.org
