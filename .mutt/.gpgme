@@ -1,0 +1,10 @@
+set pgp_autosign=yes
+set pgp_auto_decode=yes
+set pgp_replysign=yes
+set pgp_replyencrypt=yes
+set pgp_timeout=1800
+set pgp_use_gpg_agent=yes
+set crypt_use_gpgme=yes
+set crypt_replyencrypt=yes
+set crypt_replysignencrypted=yes
+set crypt_verify_sig=yes

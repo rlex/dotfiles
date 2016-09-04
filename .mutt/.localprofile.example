@@ -11,6 +11,12 @@
 # add that line to .localprofile - source "gpg -d ~/.mutt/pwd |"
 # replace "source "gpg -d ~/.mutt/.localprofile |"" with "source ~/.mutt/.localprofile"
 
+# Setup GPG if needed
+#for classic GPG encryption
+#source ~/.mutt/.gpgrc
+#if your mutt supports gpgme (you can check with "mutt -v | grep gpgme")
+#source ~/.mutt/.gpgme
+
 ## Main settings - mailboxes
 
 ## IMAP example (gmail)
@@ -49,7 +55,6 @@
 #macro pager c "<change-folder>?<toggle-mailboxes>" "open a different folder"
 
 ## end local mailbox example
-
 
 ## Various settings
 #set pgp_sign_as=0x0000000000000000

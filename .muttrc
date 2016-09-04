@@ -62,5 +62,6 @@ source `case $TERM in\
           (xterm-256color|xterm|rxvt|rxvt-unicode) echo '~/.mutt/.mutt_color_256'; break;;\
           *) echo '~/.mutt/.mutt_color'; break;;\
         esac`
-source ~/.mutt/.gpgrc
+
+#load profile
 source "gpg -d ~/.mutt/.localprofile |"
