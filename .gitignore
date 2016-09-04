@@ -8,9 +8,8 @@
 ### MUTT ###
 .mutt/.localprofile
 .mutt/certificates
-.mutt/pwd
-.mutt/pwd.gpg
-.mutt/.cache/*
+.mutt/*.gpg
+.mutt/cache
 
 ### MC ###
 .config/mc/panels.ini
