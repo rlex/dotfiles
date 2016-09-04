@@ -1,4 +1,3 @@
-set certificate_file=~/.mutt/certificates
 set abort_nosubject=no
 set alias_file = ~/.mutt/.aliases
 set attach_format = "%u%D%I %t[%1.2n] %.40d %> [ %.10m/%.14M, %s ] "
@@ -32,6 +31,11 @@ set sort_browser="alpha"
 set strict_threads="yes"
 set timeout=15
 set use_envelope_from
+
+#cache settings
+set header_cache = "~/.mutt/cache/headers"
+set message_cachedir = "~/.mutt/cache/bodies"
+set certificate_file = "~/.mutt/cache/certificates"
 
 unset maildir_header_cache_verify
 unset arrow_cursor
