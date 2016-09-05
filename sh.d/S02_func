@@ -42,7 +42,7 @@ calc() {
 }
 
 ssh-send-id() {
-  if [[ -z "$1" -o -z "$2" ]]; then
+  if [[ -z "$1" ]] || [[ -z "$2" ]]; then
     echo "Usage: ssh-send-id pubkey_name machine"
     return 1
   fi
