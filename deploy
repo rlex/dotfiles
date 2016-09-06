@@ -71,9 +71,12 @@ case "$1" in
     cd ~/.rc
     echo "Deploying dotfiles from `pwd` to ${HOME}"
     if [[ "$OSTYPE" =~ ^linux ]]; then
-      if [[ ! -d ~/.config ]]; then
-        mkdir ~/.config
-      fi
+      dotdirs=( .config .local/share )
+      for dir in ${dotdirs[@]}; do
+        if [[ ! -d ~/${dir} ]]; then
+          mkdir -p ~/${dir}
+        fi
+      done
       dotfiles=("${dotfiles[@]}" "${linuxenv[@]}")
     fi
     for file in ${dotfiles[@]}; do
