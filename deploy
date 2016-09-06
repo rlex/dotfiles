@@ -177,8 +177,8 @@ case "$1" in
         langenv ${langenvs[$target]} ${target}
       fi
     done
-    echo "Updating atom packages"
     if hash atom 2>/dev/null; then
+      echo "Updating atom plugins"
       apm upgrade -c false
     fi
   ;;
