@@ -18,11 +18,11 @@ linuxenv=( config/awesome config/openbox config/tint2 dircolors gvimrc
 # homebrew packages
 brewkegs=( ack android-platform-tools arping bash coreutils curl dhcpdump
            dnstracer docker docker-machine dos2unix ettercap findutils foremost
-           git git-extras git-lfs git-secrets gnu-sed gnupg2 grep hadoop
-           hashpump htop-osx httperf httpie httping httpry iperf3 john-jumbo lzo
-           m-cli mitmproxy mobile-shell moreutils mtr mutt nmap openssh p7zip
-           pwgen screen socat sqlite sqlmap sysdig tcpreplay tcptrace tig tmux
-           unrar vim wget whois xz zsh zsh-completions )
+           freesmug-chromium git git-extras git-lfs git-secrets gnu-sed gnupg2
+           grep hadoop hashpump htop-osx httperf httpie httping httpry iperf3
+           john-jumbo lzo m-cli mitmproxy mobile-shell mtr mutt nmap openssh
+           p7zip pwgen screen socat sqlite sqlmap sysdig tcpreplay tcptrace tig
+           tmux unrar vim wget whois xz zsh zsh-completions )
 
 # homebrew-cask packages
 # Make sure that same cask-less app is not installed in /Applications
@@ -155,16 +155,16 @@ case "$1" in
       brew upgrade
       brew cleanup
       brew prune
+      echo "Updating homebrew casks"
       for app in $(brew cask list); do
         cver="$(brew cask info "${app}" | head -n 1 | cut -d " " -f 2)";
         ivers=$(ls -1 "/usr/local/Caskroom/${app}/.metadata/" | tr '\n' ' ' | sed -e 's/ $//');
         aivers=(${ivers});
         nvers=$(echo ${#aivers[@]});
-        echo "[x] Found ${app} in cask list. Latest available version is ${cver}. You have installed version(s): ${ivers}";
         if [[ ${nvers} -eq 1 ]]; then
-          echo "${ivers}" | grep -q "^${cver}$" && { echo "[x] Latest version already installed, skipping changes ..."; continue; };
+          echo "${ivers}" | grep -q "^${cver}$" && { continue; };
         fi;
-        echo "[+] Fixing from ${ivers} to ${cver} ...";
+        echo "Updating ${app} from ${ivers} to ${cver} ...";
         brew cask uninstall "${app}" --force;
         brew cask install "${app}";
     done
