@@ -14,6 +14,9 @@
 ### MC ###
 .config/mc/panels.ini
 
+### Envmgr ###
+.bin/envmgr
+
 ### AWESOME AUTORUN ###
 .config/awesome/autorun/*
 
