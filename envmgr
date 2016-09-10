@@ -33,14 +33,23 @@ caskkegs=( alfred atom charles dropbox gns3 java netspot royal-tsx sequel-pro
 # pyenv, rbenv, nodenv. Can also install their plugins.
 # In fact, it can clone anything to anywhere
 declare -A langenvs
-langenvs=( [rbenv]=https://github.com/sstephenson/rbenv
-           [rbenv/plugins/ruby-build]=https://github.com/sstephenson/ruby-build
-           [rbenv/plugins/rbenv-default-gems]=https://github.com/rbenv/rbenv-default-gems
-           [pyenv]=https://github.com/yyuu/pyenv
-           [pyenv/plugins/pyenv-default-packages]=https://github.com/jawshooah/pyenv-default-packages
-           [nodenv]=https://github.com/OiNutter/nodenv
-           [nodenv/plugins/node-build]=https://github.com/OiNutter/node-build )
+langenvs=(
+  [rbenv]=https://github.com/sstephenson/rbenv
+  [pyenv]=https://github.com/yyuu/pyenv
+  [nodenv]=https://github.com/OiNutter/nodenv
+)
 
+#plugins should be installed after env, so they are installed in separate loop
+#this is ugly, but since associative arrays are stored unordered...
+declare -A langenvs_plugins
+langenvs_plugins=(
+  [rbenv/plugins/ruby-build]=https://github.com/sstephenson/ruby-build
+  [nodenv/plugins/node-build]=https://github.com/OiNutter/node-build
+  [pyenv/plugins/pyenv-default-packages]=https://github.com/jawshooah/pyenv-default-packages
+  [rbenv/plugins/rbenv-default-gems]=https://github.com/rbenv/rbenv-default-gems
+)
+
+#default packages to install with respective env
 gems=( pry rubocop puppet-lint puppet )
 eggs=( ptpython yapf jsbeautifier )
 
@@ -99,6 +108,9 @@ case "$1" in
     for target in "${!langenvs[@]}"; do
       langenv ${langenvs[$target]} $target
     done
+    for target in "${!langenvs_plugins[@]}"; do
+      langenv ${langenvs_plugins[$target]} $target
+    done
     #init envs
     source ~/.rc/sh.d/S01_env
     #setup default packages
@@ -114,7 +126,7 @@ case "$1" in
       ${devenv} install -s ${latest_version}
       ${devenv} global ${latest_version}
     done
-    #pyenv is a little bit more tricky, since some apps still works only on 2.x. Yeah, i'm looking at you, fabric.
+    #pyenv is a little bit more tricky, since some apps still works only on 2.x.
     python_versions=( $(pyenv install -l | grep -e '2.[0-9].[0-9]' | grep -v - | grep --invert-match 'dev\|a\|b' |tail -1)
                       $(pyenv install -l | grep -e '3.[0-9].[0-9]' | grep -v - | grep --invert-match 'dev\|a\|b' |tail -1) )
     for python in ${python_versions[@]}; do
@@ -196,10 +208,10 @@ case "$1" in
   ;;
 
   *)
-    echo "Possible args:"
-    echo "env - deploy basic dotfiles"
-    echo "devenv - deploy pyenv/rbenv/nodenv"
+    echo "Command list:"
+    echo "env - symlink dotfiles"
+    echo "devenv - install pyenv + rbenv + nodenv"
     echo "homebrew - install homebrew and favourite packages"
-    echo "nuke - remove all symlinks, devenv and shell history"
+    echo "nuke - remove (almost) everything installed by envmgr"
     echo "housekeeper - upgrade homebrew and devenv"
 esac
