@@ -35,13 +35,14 @@ caskkegs=( alfred atom charles dropbox gns3 java netspot royal-tsx sequel-pro
 declare -A langenvs
 langenvs=( [rbenv]=https://github.com/sstephenson/rbenv
            [rbenv/plugins/ruby-build]=https://github.com/sstephenson/ruby-build
+           [rbenv/plugins/rbenv-default-gems]=https://github.com/rbenv/rbenv-default-gems
            [pyenv]=https://github.com/yyuu/pyenv
+           [pyenv/plugins/pyenv-default-packages]=https://github.com/jawshooah/pyenv-default-packages
            [nodenv]=https://github.com/OiNutter/nodenv
            [nodenv/plugins/node-build]=https://github.com/OiNutter/node-build )
 
-# TBD: install this stuff somewhere in devenv
 gems=( pry rubocop puppet-lint puppet )
-pypi=( ptpython yapf jsbeautifier )
+eggs=( ptpython yapf jsbeautifier )
 
 # Function to symlink dotfiles
 # Checking if OS is Linux (GNU coreutils), if not, we assume OS uses BSD utils
@@ -82,6 +83,7 @@ case "$1" in
     for file in ${dotfiles[@]}; do
       symlink ~/.rc/.${file} ~/.${file}
     done
+    ln -s ~/.rc/envmgr ~/.rc/.bin/envmgr
     cd - >&/dev/null
     echo "Finished!"
   ;;
@@ -93,10 +95,20 @@ case "$1" in
       echo "Make sure that following packages are installed:"
       echo "libssl-dev libreadline-dev zlib1g-dev libsqlite3-dev libbz2-dev"
     fi
+    #install envs
     for target in "${!langenvs[@]}"; do
       langenv ${langenvs[$target]} $target
     done
+    #init envs
     source ~/.rc/sh.d/S01_env
+    #setup default packages
+    for gem in ${gems[@]}; do
+      grep -sq ${gem} ~/.rbenv/default-gems || echo ${gem} >> ~/.rbenv/default-gems
+    done
+    for egg in ${eggs[@]}; do
+      grep -sq ${egg} ~/.pyenv/default-packages || echo ${egg} >> ~/.pyenv/default-packages
+    done
+    #install latest versions of node and ruby
     for devenv in nodenv rbenv; do
       latest_version=$(${devenv} install -l | sed 's/^  //' | grep -e '[0-9].[0-9].[0-9]' | grep -v - | tail -1)
       ${devenv} install -s ${latest_version}
