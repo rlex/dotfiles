@@ -65,6 +65,8 @@ function! airline#switch_theme(name)
   let w:airline_lastmode = ''
   call airline#load_theme()
 
+  silent doautocmd User AirlineAfterTheme
+
   " this is required to prevent clobbering the startup info message, i don't know why...
   call airline#check_mode(winnr())
 endfunction
@@ -186,7 +188,7 @@ function! airline#check_mode(winnr)
   let mode_string = join(l:mode)
   if get(w:, 'airline_lastmode', '') != mode_string
     call airline#highlighter#highlight_modified_inactive(context.bufnr)
-    call airline#highlighter#highlight(l:mode)
+    call airline#highlighter#highlight(l:mode, context.bufnr)
     let w:airline_lastmode = mode_string
   endif
 

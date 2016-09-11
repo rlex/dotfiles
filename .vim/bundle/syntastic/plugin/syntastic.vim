@@ -19,7 +19,7 @@ if has('reltime')
     lockvar! g:_SYNTASTIC_START
 endif
 
-let g:_SYNTASTIC_VERSION = '3.7.0-214'
+let g:_SYNTASTIC_VERSION = '3.7.0-220'
 lockvar g:_SYNTASTIC_VERSION
 
 " Sanity checks {{{1
@@ -135,12 +135,16 @@ let s:_DEBUG_DUMP_OPTIONS = [
         \ 'shelltemp',
         \ 'shellxquote'
     \ ]
-if exists('+shellxescape')
-    call add(s:_DEBUG_DUMP_OPTIONS, 'shellxescape')
-endif
-if exists('+shellslash')
-    call add(s:_DEBUG_DUMP_OPTIONS, 'shellslash')
-endif
+for s:feature in [
+        \ 'shellxescape',
+        \ 'shellslash',
+        \ 'autochdir',
+    \ ]
+
+    if exists('+' . s:feature)
+        call add(s:_DEBUG_DUMP_OPTIONS, s:feature)
+    endif
+endfor
 lockvar! s:_DEBUG_DUMP_OPTIONS
 
 " debug constants
@@ -229,6 +233,15 @@ endfunction " }}}2
 function! SyntasticReset() abort " {{{2
     call s:ClearCache(bufnr(''))
     call s:notifiers.refresh(g:SyntasticLoclist.New([]))
+    if !empty(get(w:, 'syntastic_loclist_set', []))
+        let w:syntastic_loclist_set = []
+        try
+            " Vim 7.4.2200 or later
+            call setloclist(0, [], 'r', { 'title': '' })
+        catch /\m^Vim\%((\a\+)\)\=:E\%(118\|731\)/
+            " do nothing
+        endtry
+    endif
 endfunction " }}}2
 
 function! SyntasticToggleMode() abort " {{{2
@@ -239,7 +252,7 @@ function! SyntasticToggleMode() abort " {{{2
 endfunction " }}}2
 
 function! SyntasticSetLoclist() abort " {{{2
-    call g:SyntasticLoclist.current().setloclist()
+    call g:SyntasticLoclist.current().setloclist(0)
 endfunction " }}}2
 
 " }}}1
@@ -301,7 +314,7 @@ function! s:BufEnterHook(fname) abort " {{{2
                 call remove(s:_check_stack, -idx - 1)
                 call s:UpdateErrors(buf, 1, [])
             endif
-        else
+        elseif &buftype ==# ''
             call s:notifiers.refresh(g:SyntasticLoclist.current())
         endif
     elseif &buftype ==# 'quickfix'
@@ -383,14 +396,14 @@ function! s:UpdateErrors(buf, auto_invoked, checker_names) abort " {{{2
     let run_checks = !a:auto_invoked || s:modemap.doAutoChecking()
     if run_checks
         call s:CacheErrors(a:buf, a:checker_names)
-        call syntastic#util#setChangedtick(a:buf)
+        call syntastic#util#setLastTick(a:buf)
     else
         if a:auto_invoked
             return
         endif
     endif
 
-    let loclist = g:SyntasticLoclist.current()
+    let loclist = g:SyntasticLoclist.current(a:buf)
 
     if exists('*SyntasticCheckHook')
         call SyntasticCheckHook(loclist.getRaw())
@@ -408,12 +421,7 @@ function! s:UpdateErrors(buf, auto_invoked, checker_names) abort " {{{2
 
     let w:syntastic_loclist_set = []
     if syntastic#util#var('always_populate_loc_list') || do_jump
-        call syntastic#log#debug(g:_SYNTASTIC_DEBUG_NOTIFICATIONS, 'loclist: setloclist (new)')
-        call setloclist(0, loclist.getRaw())
-        if !exists('b:syntastic_changedtick')
-            call syntastic#util#setChangedtick(a:buf)
-        endif
-        let w:syntastic_loclist_set = [a:buf, b:syntastic_changedtick]
+        call loclist.setloclist(1)
         if run_checks && do_jump && !loclist.isEmpty()
             call syntastic#log#debug(g:_SYNTASTIC_DEBUG_NOTIFICATIONS, 'loclist: jump')
             execute 'silent! lrewind ' . do_jump
@@ -434,11 +442,9 @@ endfunction " }}}2
 
 "clear the loc list for the buffer
 function! s:ClearCache(buf) abort " {{{2
-    call s:notifiers.reset(g:SyntasticLoclist.current())
-    let loclist = getbufvar(a:buf, 'syntastic_loclist')
-    if type(loclist) == type({})
-        call loclist.destroy()
-    endif
+    let loclist = g:SyntasticLoclist.current(a:buf)
+    call s:notifiers.reset(loclist)
+    call loclist.destroy()
 endfunction " }}}2
 
 "detect and cache all syntax errors in this buffer
@@ -447,6 +453,7 @@ function! s:CacheErrors(buf, checker_names) abort " {{{2
         \ (len(a:checker_names) ? join(a:checker_names) : 'default checkers'))
     call s:ClearCache(a:buf)
     let newLoclist = g:SyntasticLoclist.New([])
+    call newLoclist.setOwner(a:buf)
 
     if !s:_skip_file(a:buf)
         " debug logging {{{3
@@ -490,7 +497,7 @@ function! s:CacheErrors(buf, checker_names) abort " {{{2
                     call syntastic#log#debug(g:_SYNTASTIC_DEBUG_LOCLIST, 'sorted:', loclist)
                 endif
 
-                let newLoclist = newLoclist.extend(loclist)
+                call newLoclist.extend(loclist)
 
                 if !aggregate_errors
                     break
@@ -623,6 +630,12 @@ function! SyntasticMake(options) abort " {{{2
         catch /\m^Vim\%((\a\+)\)\=:E380/
             " E380: At bottom of quickfix stack
             call setloclist(0, [], 'r')
+            try
+                " Vim 7.4.2200 or later
+                call setloclist(0, [], 'r', { 'title': '' })
+            catch /\m^Vim\%((\a\+)\)\=:E\%(118\|731\)/
+                " do nothing
+            endtry
         catch /\m^Vim\%((\a\+)\)\=:E776/
             " E776: No location list
             " do nothing
