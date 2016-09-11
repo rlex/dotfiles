@@ -76,6 +76,7 @@ Bundle "ghewgill/vim-scmdiff"
 Bundle "0rca/vim-mikrotik"
 Bundle "bling/vim-airline"
 Bundle "bling/vim-bufferline"
+Bundle "darfink/vim-plist"
 Plugin 'airblade/vim-gitgutter'
 Plugin 'tpope/vim-fugitive'
 Plugin 'kien/ctrlp.vim'
@@ -93,22 +94,22 @@ filetype plugin indent on
 " {{{ Functions
 " Map key in all modes
 function SMap(key, action, ...)
-    let modes = " vi"
-    if (a:0 > 0)
-        let modes = a:{1}
-    endif
-    if (match(modes, '\Ii') != -1)
-        execute 'imap ' . a:key . ' <Esc>' . a:action
-    endif
-    if (match(modes, '\Nn') != -1)
-        execute 'nmap ' . a:key . ' <Esc>' . a:action
-    endif
-    if (match(modes, ' ') != -1)
-        execute 'map ' . a:key . ' <Esc>' . a:action
-    endif
-    if (match(modes, '\Vv') != -1)
-        execute 'vmap ' . a:key . ' <Esc>' . a:action
-    endif
+  let modes = " vi"
+  if (a:0 > 0)
+    let modes = a:{1}
+  endif
+  if (match(modes, '\Ii') != -1)
+    execute 'imap ' . a:key . ' <Esc>' . a:action
+  endif
+  if (match(modes, '\Nn') != -1)
+    execute 'nmap ' . a:key . ' <Esc>' . a:action
+  endif
+  if (match(modes, ' ') != -1)
+    execute 'map ' . a:key . ' <Esc>' . a:action
+  endif
+  if (match(modes, '\Vv') != -1)
+    execute 'vmap ' . a:key . ' <Esc>' . a:action
+  endif
 endfunction
 
 function! Resize(dir)
@@ -298,9 +299,9 @@ let g:ctrlp_mruf_max = 250           " number of recently opened files
 " {{{ NeoComplCache
 
 let g:neocomplcache_enable_at_startup = 0                 " Enable NeoComplCache
-let g:neocomplcache_enable_smart_case = 1                       " Use smartcase
-let g:neocomplcache_enable_camel_case_completion = 1       " Camel case completion
-let g:neocomplcache_enable_underbar_completion = 1        " Underbar completion
+let g:neocomplcache_enable_smart_case = 1                " Use smartcase
+let g:neocomplcache_enable_camel_case_completion = 1     " Camel case completion
+let g:neocomplcache_enable_underbar_completion = 1       " Underbar completion
 let g:neocomplcache_min_syntax_length = 3                 " Minimum syntax keywork length
 let g:neocomplcache_manual_completion_start_length = 0     " Manual completion length
 let g:neocomplcache_min_keyword_length = 3                " Minimal keyword length
@@ -312,25 +313,25 @@ smap <silent><C-l>     <Plug>(neocomplcache_snippets_expand)
 
 " {{{ Colorscheme based on $TERM
 if $TERM =~ "xterm" || $TERM =~ "rxvt" || $TERM =~ "screen" || &term =~ "builtin_gui" || $TERM == "dumb"
-    set t_Co=256
-    colorscheme xoria256
-    let &t_SI = "\<Esc>]12;green\x7"
-    let &t_EI = "\<Esc>]12;blue\x7"
+  set t_Co=256
+  colorscheme xoria256
+  let &t_SI = "\<Esc>]12;green\x7"
+  let &t_EI = "\<Esc>]12;blue\x7"
 else
-    colorscheme desert
+  colorscheme desert
 endif
 " }}}
 
-  " {{{ Vim-airline settings
-  if $TERM =~ "xterm" || $TERM =~ "rxvt" || $TERM =~ "screen" || &term =~ "builtin_gui" || $TERM == "dumb"
-    let g:airline_powerline_fonts = 1
-    let g:airline#extensions#tabline#enabled = 0
-    let g:airline_theme='behelit'
-  else
-    let g:airline_theme='base16'
-    let g:airline_powerline_fonts = 0
-  endif
-  " }}}
+" {{{ Vim-airline settings
+if $TERM =~ "xterm" || $TERM =~ "rxvt" || $TERM =~ "screen" || &term =~ "builtin_gui" || $TERM == "dumb"
+  let g:airline_powerline_fonts = 1
+  let g:airline#extensions#tabline#enabled = 0
+  let g:airline_theme='behelit'
+else
+  let g:airline_theme='base16'
+  let g:airline_powerline_fonts = 0
+endif
+" }}}
 
 " {{{ srcexpl
 let g:SrcExpl_winHeight = 8 " Set Source explorer height
@@ -359,10 +360,10 @@ set csto=1
 
 " add any cscope database in current directory
 if filereadable("cscope.out")
-        cs add cscope.out
+  cs add cscope.out
 " else add the database pointed to by environment variable
 elseif $CSCOPE_DB != ""
-        cs add $CSCOPE_DB
+  cs add $CSCOPE_DB
 endif
 
 " show msg when any other cscope db added
@@ -381,11 +382,11 @@ autocmd FileType rb,rake,ruby set noexpandtab
 
 " {{{ Various fixes
 if has("multi_lang")
-    if has("unix")
-        language messages C
-    else
-        language messages en
-    endif
+  if has("unix")
+    language messages C
+  else
+    language messages en
+  endif
 endif
 
 " Disable mouse on non-gui
