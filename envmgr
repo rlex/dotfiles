@@ -201,6 +201,11 @@ case "$1" in
         langenv ${langenvs[$target]} ${target}
       fi
     done
+    for target in "${!langenvs_plugins[@]}"; do
+      if [[ -d ~/.${target} ]]; then
+        langenv ${langenvs_plugins[$target]} ${target}
+      fi
+    done
     if hash atom 2>/dev/null; then
       echo "Updating atom plugins"
       apm upgrade -c false
