@@ -45,6 +45,7 @@ declare -A langenvs_plugins
 langenvs_plugins=(
   [rbenv/plugins/ruby-build]=https://github.com/sstephenson/ruby-build
   [nodenv/plugins/node-build]=https://github.com/OiNutter/node-build
+  [nodenv/plugins/nodenv-default-packages]=https://github.com/nodenv/nodenv-default-packages
   [pyenv/plugins/pyenv-default-packages]=https://github.com/jawshooah/pyenv-default-packages
   [rbenv/plugins/rbenv-default-gems]=https://github.com/rbenv/rbenv-default-gems
 )
@@ -52,6 +53,7 @@ langenvs_plugins=(
 #default packages to install with respective env
 gems=( pry rubocop puppet-lint puppet )
 eggs=( ptpython yapf jsbeautifier )
+npms=( standard )
 
 # Function to symlink dotfiles
 # Checking if OS is Linux (GNU coreutils), if not, we assume OS uses BSD utils
@@ -119,6 +121,9 @@ case "$1" in
     done
     for egg in ${eggs[@]}; do
       grep -sq ${egg} ~/.pyenv/default-packages || echo ${egg} >> ~/.pyenv/default-packages
+    done
+    for npm_package in ${npms[@]}; do
+      grep -sq ${npm_package} ~/.nodenv/default-packages || echo ${npm_package} >> ~/.nodenv/default-packages
     done
     #install latest versions of node and ruby
     for devenv in nodenv rbenv; do
