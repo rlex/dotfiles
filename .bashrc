@@ -4,12 +4,12 @@ if [[ $- != *i* ]]; then
 fi
 
 #system-wide bash completion
-if [ -f /etc/bash_completion.d ]; then
+if [[ -f /etc/bash_completion.d ]]; then
   source /etc/bash_completion.d
 fi
 
 #homebrew bash completion
-if [ -f /usr/local/etc/bash_completion.d ]; then
+if [[ -f /usr/local/etc/bash_completion.d ]]; then
   source /usr/local/etc/bash_completion.d
 fi
 
@@ -33,7 +33,7 @@ set completion-ignore-case on
 set match-hidden-files on
 set show-all-if-ambiguous on
 # using tty1-6, log out after 5 minutes of inactivity
-if vt=`/bin/fgconsole 2>/dev/null`; then
+if vt=$(/bin/fgconsole 2>/dev/null); then
   (($vt > 0)) && (($vt <= 6)) && TMOUT=300
 fi
 
