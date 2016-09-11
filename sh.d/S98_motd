@@ -1,13 +1,4 @@
-operating_system=`uname`
-clear
-if [ "$operating_system" = "Linux" ]; then
-echo -e "I am: "`whoami` on `hostname`;
-echo -e "ID: "`id`;
-echo -e "Sysinfo:" `uname -o` - "Kernel" `uname -r`
-echo -e "Status:" `uptime`
-elif [ "$operating_system" = "Darwin" -o "$operating_system" = "FreeBSD" ]; then
-echo -e "I am: "`whoami` on `hostname`
-echo -e "ID: "`id`;
-echo -e "Sysinfo:" `uname` - "Kernel" `uname -r`
-echo -e "Status:" `uptime`
-fi
+echo -e "I am: "$(whoami) on $(hostname);
+echo -e "ID: "$(id);
+echo -e "Sysinfo:" $(uname) - "Kernel" $(uname -r)
+echo -e "Status:" $(uptime)
