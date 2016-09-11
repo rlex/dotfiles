@@ -18,17 +18,17 @@ linuxenv=( config/awesome config/openbox config/tint2 dircolors gvimrc
 # homebrew packages
 brewkegs=( ack android-platform-tools arping bash coreutils curl dhcpdump
            dnstracer docker docker-machine dos2unix ettercap findutils foremost
-           freesmug-chromium git git-extras git-lfs git-secrets gnu-sed gnupg2
-           grep hadoop hashpump htop-osx httperf httpie httping httpry iperf3
-           john-jumbo lzo m-cli mitmproxy mobile-shell mtr mutt nmap openssh
-           p7zip pwgen screen socat sqlite sqlmap sysdig tcpreplay tcptrace tig
-           tmux unrar vim wget whois xz zsh zsh-completions )
+           git git-extras git-lfs git-secrets gnu-sed gnupg2 grep hadoop
+           hashpump htop httperf httpie httping httpry iperf3 john-jumbo lzo
+           m-cli mitmproxy mobile-shell mtr mutt nmap openssh p7zip pwgen screen
+           socat sqlite sqlmap sysdig tcpreplay tcptrace tig tmux unrar vim wget
+           whois xz zsh zsh-completions )
 
 # homebrew-cask packages
 # Make sure that same cask-less app is not installed in /Applications
-caskkegs=( alfred atom charles dropbox gns3 java netspot royal-tsx sequel-pro
-           skype spectacle spotify teamspeak-client transmission visualvm vlc
-           vmware-fusion wireshark xca xquartz )
+caskkegs=( alfred atom charles dropbox freesmug-chromium gns3 java netspot
+           royal-tsx sequel-pro skype spectacle spotify teamspeak-client
+           transmission visualvm vlc vmware-fusion wireshark xca xquartz )
 
 # pyenv, rbenv, nodenv. Can also install their plugins.
 # In fact, it can clone anything to anywhere
