@@ -15,6 +15,9 @@ dotfiles=( ackrc bash_profile bashrc config/htop config/mc gemrc gitconfig
 linuxenv=( config/awesome config/openbox config/tint2 dircolors gvimrc
            local/share/themes toprc Xdefaults )
 
+brewtaps=( caskroom/cask homebrew/core homebrew/dupes homebrew/services
+           homebrew/versions )
+
 # homebrew packages
 brewkegs=( ack android-platform-tools arping bash coreutils curl dhcpdump
            dnstracer docker docker-machine dos2unix ettercap findutils foremost
@@ -148,6 +151,9 @@ case "$1" in
     if hash brew 2>/dev/null; then
       ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
     fi
+    for tap in ${brewtaps[@]}; do
+      brew tap ${tap}
+    done
     for keg in ${brewkegs[@]}; do
       brew install ${keg}
     done
