@@ -194,7 +194,7 @@ case "$1" in
       echo "Updating homebrew casks"
       for app in $(brew cask list); do
         cver="$(brew cask info "${app}" | head -n 1 | cut -d " " -f 2)";
-        ivers=$(ls -1 "/usr/local/Homebrew/Caskroom/${app}/.metadata/" | tr '\n' ' ' | sed -e 's/ $//');
+        ivers=$(ls -1 "/usr/local/Caskroom/${app}/.metadata/" | tr '\n' ' ' | sed -e 's/ $//');
         aivers=(${ivers});
         nvers=$(echo ${#aivers[@]});
         if [[ ${nvers} -eq 1 ]]; then
