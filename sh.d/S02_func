@@ -50,22 +50,38 @@ ssh-send-id() {
   return $?
 }
 
-nss-manage() {
-  case "$1" in
-    list)    certutil -d sql:$HOME/.pki/nssdb -L ;;
-    details) certutil -d sql:$HOME/.pki/nssdb -L -n "$2" ;;
-    add-ca)  certutil -d sql:$HOME/.pki/nssdb -A -t "$2" -n "$3" -i "$4" ;;
-    add)     pk12util -d sql:$HOME/.pki/nssdb -i "$2" ;;
-    del)     certutil -d sql:$HOME/.pki/nssdb -D -n "$2" ;;
-    *)
-      echo "Usage list|details|add-ca|add|del"
-      echo " \"details\" requires <nickname>"
-      echo " \"add-ca\" requires <trustargs> <nickname> <certificate filename>"
-      echo " \"add\" requires <filename>"
-      echo " \"del\" requires <nickname>"
-    ;;
-  esac
-}
+if hash certutil 2>/dev/null; then
+  nss-manage() {
+    case "$1" in
+      list)    certutil -d sql:$HOME/.pki/nssdb -L ;;
+      details) certutil -d sql:$HOME/.pki/nssdb -L -n "$2" ;;
+      add-ca)  certutil -d sql:$HOME/.pki/nssdb -A -t "$2" -n "$3" -i "$4" ;;
+      add)     pk12util -d sql:$HOME/.pki/nssdb -i "$2" ;;
+      del)     certutil -d sql:$HOME/.pki/nssdb -D -n "$2" ;;
+      *)
+        echo "Usage list|details|add-ca|add|del"
+        echo " \"details\" requires <nickname>"
+        echo " \"add-ca\" requires <trustargs> <nickname> <certificate filename>"
+        echo " \"add\" requires <filename>"
+        echo " \"del\" requires <nickname>"
+      ;;
+    esac
+  }
+fi
+
+if hash docker-machine 2>/dev/null; then
+  dma() {
+    case "$1" in
+      create)  docker-machine create ${2} --driver ${3} ;;
+      start)   docker-machine start ${2} ;;
+      stop)    docker-machine stop ${2} ;;
+      destroy) docker-machine rm ${2} ;;
+      eval)    eval $(docker-machine env ${2}) ;;
+      ls)      docker-machine ls ;;
+      *)       echo "Usage create|start|stop|destory|eval" ;;
+    esac
+  }
+fi
 
 ram() {
   local sum
