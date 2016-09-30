@@ -1,6 +1,8 @@
 " MIT License. Copyright (c) 2013-2016 Bailey Ling.
 " vim: et ts=2 sts=2 sw=2
 
+scriptencoding utf-8
+
 let s:ext = {}
 let s:ext._theme_funcrefs = []
 
@@ -212,6 +214,10 @@ function! airline#extensions#load()
 
   if get(g:, 'airline#extensions#whitespace#enabled', 1)
     call airline#extensions#whitespace#init(s:ext)
+  endif
+
+  if (get(g:, 'airline#extensions#neomake#enabled', 1) && exists(':Neomake'))
+    call airline#extensions#neomake#init(s:ext)
   endif
 
   if get(g:, 'airline#extensions#po#enabled', 1) && executable('msgfmt')

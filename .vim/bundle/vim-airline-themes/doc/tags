@@ -6,4 +6,5 @@ airline-themes-license	airline-themes.txt	/*airline-themes-license*
 airline-themes-list	airline-themes.txt	/*airline-themes-list*
 airline-themes.txt	airline-themes.txt	/*airline-themes.txt*
 g:airline_solarized_normal_green	airline-themes.txt	/*g:airline_solarized_normal_green*
+g:airline_theme	airline-themes.txt	/*g:airline_theme*
 g:solarized_base16	airline-themes.txt	/*g:solarized_base16*
