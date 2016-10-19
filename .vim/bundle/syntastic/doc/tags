@@ -386,6 +386,7 @@ syntastic-docbk-igor	syntastic-checkers.txt	/*syntastic-docbk-igor*
 syntastic-docbk-xmllint	syntastic-checkers.txt	/*syntastic-docbk-xmllint*
 syntastic-dockerfile-dockerfile_lint	syntastic-checkers.txt	/*syntastic-dockerfile-dockerfile_lint*
 syntastic-dustjs-swiffer	syntastic-checkers.txt	/*syntastic-dustjs-swiffer*
+syntastic-easygrep	syntastic.txt	/*syntastic-easygrep*
 syntastic-eclim	syntastic.txt	/*syntastic-eclim*
 syntastic-elixir-elixir	syntastic-checkers.txt	/*syntastic-elixir-elixir*
 syntastic-erlang-escript	syntastic-checkers.txt	/*syntastic-erlang-escript*
@@ -421,6 +422,7 @@ syntastic-highlighting	syntastic.txt	/*syntastic-highlighting*
 syntastic-hss-hss	syntastic-checkers.txt	/*syntastic-hss-hss*
 syntastic-html-eslint	syntastic-checkers.txt	/*syntastic-html-eslint*
 syntastic-html-gjslint	syntastic-checkers.txt	/*syntastic-html-gjslint*
+syntastic-html-htmlhint	syntastic-checkers.txt	/*syntastic-html-htmlhint*
 syntastic-html-jshint	syntastic-checkers.txt	/*syntastic-html-jshint*
 syntastic-html-textlint	syntastic-checkers.txt	/*syntastic-html-textlint*
 syntastic-html-tidy	syntastic-checkers.txt	/*syntastic-html-tidy*
