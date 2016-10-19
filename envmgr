@@ -46,7 +46,7 @@ case "$1" in
     for file in ${dotfiles[@]}; do
       symlink ~/.rc/.${file} ~/.${file}
     done
-    ln -s ~/.rc/envmgr ~/.rc/.bin/envmgr
+    symlink ~/.rc/envmgr ~/.rc/.bin/envmgr
     cd - >&/dev/null
     echo "Finished!"
   ;;
