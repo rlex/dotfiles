@@ -214,6 +214,7 @@ syntastic-ansible-ansible_lint	syntastic-checkers.txt	/*syntastic-ansible-ansibl
 syntastic-apiblueprint-drafter	syntastic-checkers.txt	/*syntastic-apiblueprint-drafter*
 syntastic-applescript-osacompile	syntastic-checkers.txt	/*syntastic-applescript-osacompile*
 syntastic-asciidoc-asciidoc	syntastic-checkers.txt	/*syntastic-asciidoc-asciidoc*
+syntastic-asciidoc-proselint	syntastic-checkers.txt	/*syntastic-asciidoc-proselint*
 syntastic-asl-iasl	syntastic-checkers.txt	/*syntastic-asl-iasl*
 syntastic-asm-gcc	syntastic-checkers.txt	/*syntastic-asm-gcc*
 syntastic-bemhtml-bemhtmllint	syntastic-checkers.txt	/*syntastic-bemhtml-bemhtmllint*
@@ -270,6 +271,7 @@ syntastic-checkers-haml	syntastic-checkers.txt	/*syntastic-checkers-haml*
 syntastic-checkers-handlebars	syntastic-checkers.txt	/*syntastic-checkers-handlebars*
 syntastic-checkers-haskell	syntastic-checkers.txt	/*syntastic-checkers-haskell*
 syntastic-checkers-haxe	syntastic-checkers.txt	/*syntastic-checkers-haxe*
+syntastic-checkers-help	syntastic-checkers.txt	/*syntastic-checkers-help*
 syntastic-checkers-hss	syntastic-checkers.txt	/*syntastic-checkers-hss*
 syntastic-checkers-html	syntastic-checkers.txt	/*syntastic-checkers-html*
 syntastic-checkers-java	syntastic-checkers.txt	/*syntastic-checkers-java*
@@ -418,12 +420,14 @@ syntastic-haskell-hdevtools	syntastic-checkers.txt	/*syntastic-haskell-hdevtools
 syntastic-haskell-hlint	syntastic-checkers.txt	/*syntastic-haskell-hlint*
 syntastic-haskell-scan	syntastic-checkers.txt	/*syntastic-haskell-scan*
 syntastic-haxe-haxe	syntastic-checkers.txt	/*syntastic-haxe-haxe*
+syntastic-help-proselint	syntastic-checkers.txt	/*syntastic-help-proselint*
 syntastic-highlighting	syntastic.txt	/*syntastic-highlighting*
 syntastic-hss-hss	syntastic-checkers.txt	/*syntastic-hss-hss*
 syntastic-html-eslint	syntastic-checkers.txt	/*syntastic-html-eslint*
 syntastic-html-gjslint	syntastic-checkers.txt	/*syntastic-html-gjslint*
 syntastic-html-htmlhint	syntastic-checkers.txt	/*syntastic-html-htmlhint*
 syntastic-html-jshint	syntastic-checkers.txt	/*syntastic-html-jshint*
+syntastic-html-proselint	syntastic-checkers.txt	/*syntastic-html-proselint*
 syntastic-html-textlint	syntastic-checkers.txt	/*syntastic-html-textlint*
 syntastic-html-tidy	syntastic-checkers.txt	/*syntastic-html-tidy*
 syntastic-html-validator	syntastic-checkers.txt	/*syntastic-html-validator*
@@ -456,6 +460,7 @@ syntastic-loclist-callback	syntastic.txt	/*syntastic-loclist-callback*
 syntastic-lua-luac	syntastic-checkers.txt	/*syntastic-lua-luac*
 syntastic-lua-luacheck	syntastic-checkers.txt	/*syntastic-lua-luacheck*
 syntastic-markdown-mdl	syntastic-checkers.txt	/*syntastic-markdown-mdl*
+syntastic-markdown-proselint	syntastic-checkers.txt	/*syntastic-markdown-proselint*
 syntastic-markdown-textlint	syntastic-checkers.txt	/*syntastic-markdown-textlint*
 syntastic-matlab-mlint	syntastic-checkers.txt	/*syntastic-matlab-mlint*
 syntastic-mercury-mmc	syntastic-checkers.txt	/*syntastic-mercury-mmc*
@@ -465,6 +470,7 @@ syntastic-nix-nix	syntastic-checkers.txt	/*syntastic-nix-nix*
 syntastic-notes	syntastic.txt	/*syntastic-notes*
 syntastic-nroff-igor	syntastic-checkers.txt	/*syntastic-nroff-igor*
 syntastic-nroff-mandoc	syntastic-checkers.txt	/*syntastic-nroff-mandoc*
+syntastic-nroff-proselint	syntastic-checkers.txt	/*syntastic-nroff-proselint*
 syntastic-objc-gcc	syntastic-checkers.txt	/*syntastic-objc-gcc*
 syntastic-objc-oclint	syntastic-checkers.txt	/*syntastic-objc-oclint*
 syntastic-objcpp-gcc	syntastic-checkers.txt	/*syntastic-objcpp-gcc*
@@ -479,6 +485,7 @@ syntastic-php-phplint	syntastic-checkers.txt	/*syntastic-php-phplint*
 syntastic-php-phpmd	syntastic-checkers.txt	/*syntastic-php-phpmd*
 syntastic-po-msgfmt	syntastic-checkers.txt	/*syntastic-po-msgfmt*
 syntastic-pod-podchecker	syntastic-checkers.txt	/*syntastic-pod-podchecker*
+syntastic-pod-proselint	syntastic-checkers.txt	/*syntastic-pod-proselint*
 syntastic-powerline	syntastic.txt	/*syntastic-powerline*
 syntastic-powershell	syntastic.txt	/*syntastic-powershell*
 syntastic-profiling	syntastic.txt	/*syntastic-profiling*
@@ -507,6 +514,7 @@ syntastic-racket-racket	syntastic-checkers.txt	/*syntastic-racket-racket*
 syntastic-recommended	syntastic.txt	/*syntastic-recommended*
 syntastic-rmd-lintr	syntastic-checkers.txt	/*syntastic-rmd-lintr*
 syntastic-rnc-rnv	syntastic-checkers.txt	/*syntastic-rnc-rnv*
+syntastic-rst-proselint	syntastic-checkers.txt	/*syntastic-rst-proselint*
 syntastic-rst-rst2pseudoxml	syntastic-checkers.txt	/*syntastic-rst-rst2pseudoxml*
 syntastic-rst-rstcheck	syntastic-checkers.txt	/*syntastic-rst-rstcheck*
 syntastic-rst-sphinx	syntastic-checkers.txt	/*syntastic-rst-sphinx*
@@ -546,10 +554,13 @@ syntastic-stylus-stylint	syntastic-checkers.txt	/*syntastic-stylus-stylint*
 syntastic-tcl-nagelfar	syntastic-checkers.txt	/*syntastic-tcl-nagelfar*
 syntastic-tex-chktex	syntastic-checkers.txt	/*syntastic-tex-chktex*
 syntastic-tex-lacheck	syntastic-checkers.txt	/*syntastic-tex-lacheck*
+syntastic-tex-proselint	syntastic-checkers.txt	/*syntastic-tex-proselint*
 syntastic-texinfo-makeinfo	syntastic-checkers.txt	/*syntastic-texinfo-makeinfo*
+syntastic-texinfo-proselint	syntastic-checkers.txt	/*syntastic-texinfo-proselint*
 syntastic-text-atdtool	syntastic-checkers.txt	/*syntastic-text-atdtool*
 syntastic-text-igor	syntastic-checkers.txt	/*syntastic-text-igor*
 syntastic-text-language_check	syntastic-checkers.txt	/*syntastic-text-language_check*
+syntastic-text-proselint	syntastic-checkers.txt	/*syntastic-text-proselint*
 syntastic-text-textlint	syntastic-checkers.txt	/*syntastic-text-textlint*
 syntastic-trig-rapper	syntastic-checkers.txt	/*syntastic-trig-rapper*
 syntastic-turtle-rapper	syntastic-checkers.txt	/*syntastic-turtle-rapper*
@@ -568,6 +579,7 @@ syntastic-vim-vimlint	syntastic-checkers.txt	/*syntastic-vim-vimlint*
 syntastic-vim-vint	syntastic-checkers.txt	/*syntastic-vim-vint*
 syntastic-vim-virtualenv	syntastic.txt	/*syntastic-vim-virtualenv*
 syntastic-xhtml-jshint	syntastic-checkers.txt	/*syntastic-xhtml-jshint*
+syntastic-xhtml-proselint	syntastic-checkers.txt	/*syntastic-xhtml-proselint*
 syntastic-xhtml-tidy	syntastic-checkers.txt	/*syntastic-xhtml-tidy*
 syntastic-xml-plutil	syntastic-checkers.txt	/*syntastic-xml-plutil*
 syntastic-xml-xmllint	syntastic-checkers.txt	/*syntastic-xml-xmllint*

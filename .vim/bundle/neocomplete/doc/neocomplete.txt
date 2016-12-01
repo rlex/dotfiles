@@ -353,6 +353,7 @@ g:neocomplete#auto_complete_delay
 		It is the auto completion delay time after your input.
 		The unit is ms.
 		Note: It requires |+timers| feature.
+		Note: It is disabled in MacVim.
 
 		Default value is 50.
 
@@ -846,7 +847,6 @@ EXAMPLES					*neocomplete-examples*
 	let g:neocomplete#enable_at_startup = 1
 	" Use smartcase.
 	let g:neocomplete#enable_smart_case = 1
-	let g:neocomplete#lock_buffer_name_pattern = '\*ku\*'
 
 	" Define dictionary.
 	let g:neocomplete#sources#dictionary#dictionaries = {

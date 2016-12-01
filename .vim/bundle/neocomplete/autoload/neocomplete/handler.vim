@@ -129,6 +129,7 @@ function! neocomplete#handler#_do_auto_complete(event) abort "{{{
   endif
 
   if g:neocomplete#auto_complete_delay > 0 && has('timers')
+        \ && (!has('gui_macvim') || has('patch-8.0.95'))
     if exists('s:timer')
       call timer_stop(s:timer.id)
     endif
@@ -222,6 +223,7 @@ function! s:check_in_do_auto_complete(event) abort "{{{
   if (&l:foldmethod ==# 'expr' || &l:foldmethod ==# 'syntax')
         \ && !neocomplete.detected_foldmethod
         \ && a:event !=# 'InsertEnter'
+        \ && line('.') > 1000
     let neocomplete.detected_foldmethod = 1
     call neocomplete#print_error(
           \ printf('foldmethod = "%s" is detected.', &foldmethod))
