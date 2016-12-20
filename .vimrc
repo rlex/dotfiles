@@ -74,7 +74,7 @@ Bundle "MarcWeber/vim-addon-mw-utils"
 Bundle "honza/vim-snippets"
 Bundle "ghewgill/vim-scmdiff"
 Bundle "0rca/vim-mikrotik"
-Bundle "bling/vim-airline"
+Bundle "vim-airline/vim-airline"
 Bundle "bling/vim-bufferline"
 Bundle "darfink/vim-plist"
 Plugin 'airblade/vim-gitgutter'
