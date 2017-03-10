@@ -84,8 +84,8 @@ case "$1" in
       ${devenv} global ${latest_version}
     done
     #pyenv is a little bit more tricky, since some apps still works only on 2.x.
-    python_versions=( $(pyenv install -l | grep -e '2.[0-9].[0-9]' | grep -v - | grep --invert-match 'dev\|a\|b' |tail -1)
-                      $(pyenv install -l | grep -e '3.[0-9].[0-9]' | grep -v - | grep --invert-match 'dev\|a\|b' |tail -1) )
+    python_versions=( $(pyenv install -l | grep -e '2.[0-9].[0-9]' | grep -v - | grep --invert-match 'dev\|a\|b\|rc' |tail -1)
+                      $(pyenv install -l | grep -e '3.[0-9].[0-9]' | grep -v - | grep --invert-match 'dev\|a\|b\|rc' |tail -1) )
     for python in ${python_versions[@]}; do
       pyenv install -s $python
     done
